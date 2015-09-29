@@ -32,10 +32,10 @@ public class Conversion {
          for (Departamentos d : dep) {
              List<String> l=new ArrayList<>();
              for (Municipios m : d.getMunicipiosCollection()) {
-                     l.add(m.getCodigodane());
+                     l.add("\""+m.getCodigodane()+"\"");
                      //este bloque de codigo se utiliza para no tener que recorrer de nuevo
                      // el arreglo de municipos mas adelante
-                     String tmp="\"ext\":"+m.getExt()+",";
+                     String tmp="\"ext\":\""+m.getExt()+"\",";
                      tmp+="\"nomCorto\":\""+m.getNomcorto()+"\",";
                      tmp+="\"nom\":\""+m.getNombre()+"\",";
                      tmp+="\"nomLargo\":\""+m.getNomlargo()+"\"";
@@ -45,7 +45,7 @@ public class Conversion {
              json="\"dats\":{\"ens\":{\"muns\":["+addComma(l)+"]}},";
              System.out.println(json);
              //
-             json=json+"\"ext\":["+d.getExt()+"],";
+             json=json+"\"ext\":\""+d.getExt()+"\",";
              json=json+"\"nomCorto\":\""+d.getNomcorto()+"\",";
              json=json+"\"nom\":\""+d.getNombre()+"\",";
              json=json+"\"nomLargo\":\""+d.getNomlargo()+"\"";
@@ -56,10 +56,10 @@ public class Conversion {
          json="\"dats\":{"+addComma(dep1)+"},";
          json+="\"nom\":\"Departamentos\"";
          json="\"deps\":{"+json+"},";
-         System.out.println(json);
+         //System.out.println(json);
          json+="\"muns\":{\"dats\":{"+addComma(mun)+"}, \"nom\":\"Municipios\"}";
          json="\"ens\":{"+json+"},";
-         System.out.println(json);
+         //System.out.println(json);
          List<String> sMenu=new ArrayList<>();
          String men="";
          for (Menuconsultas m : menuconsultas) {
@@ -79,7 +79,7 @@ public class Conversion {
         }
          men="\"dats\":{"+addComma(sMenu)+"}";
          men="\"mcsPpl\":{"+men+"}";
-         json="resp={"+json+men+"};";
+         json="resp={"+json+men+"}";
          return json;
      }
      
