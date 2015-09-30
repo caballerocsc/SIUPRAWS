@@ -71,10 +71,10 @@ public class TablacontenidoFacadeREST {
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     /**
-     * El método busca todos los registros en la tabla "tablacontenido" 
-     * @return List<tablacontenido> Lista de objetos de tipo "tablacontenido" con la información procedente de la base de datos
+     * El método que  recibe la petición de buscar la tabla de contenido  
+     * @return String en formato Json con la tabla de contenido
      */
-    public String findAllJson() {
+    public String findAllTablaContenido() {
         Operaciones op=new Operaciones();
         return op.getTablaContenido();
     }

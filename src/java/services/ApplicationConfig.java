@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
- *
+ * Clase que se encarga de definir los  servicios web que estaran visibles
  * @author cesar.solano
  */
 @javax.ws.rs.ApplicationPath("webresources")
@@ -29,12 +29,8 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-//        resources.add(servicios.CapasFacadeREST.class);
         resources.add(services.CapasFacadeREST.class);
-//        resources.add(servicios.MenuconsultasFacadeREST.class);
         resources.add(services.DepartamentosFacadeREST.class);
-//        resources.add(servicios.ServiciosFacadeREST.class);
-//        resources.add(servicios.TablacontenidoFacadeREST.class);
         resources.add(services.MunicipiosFacadeREST.class);
         resources.add(services.ServiciosFacadeREST.class);
         resources.add(services.TablacontenidoFacadeREST.class);

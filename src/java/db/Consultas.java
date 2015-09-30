@@ -6,7 +6,6 @@
 
 package db;
 
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,14 +20,19 @@ import obj.Servicios;
 import obj.Tablacontenido;
 
 /**
- *
- * @author Usuario
+ * Clase encargada de generar las consultas a la base de datos 
+ * 
+ * @author Cesar.Solano
  */
 public class Consultas {
 
     public Consultas() {
     }
     
+    /**
+     * Método que obtinen los departamentos con municipios 
+     * @return Lista de tipo Departamentos
+     */
     public List<Departamentos> getDepartamentosMun(){
         Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -62,6 +66,11 @@ public class Consultas {
         return depar;
     }
     
+    /**
+     * Método que obtiene los municipios de un departamento
+     * @param idDepart id del departamento al cual se le consultan los municipios
+     * @return Lista de tipo Municipios
+     */
     public List<Municipios> getMunicipios(int idDepart){
         Conexion con=new Conexion();
         PreparedStatement ps=null;
@@ -95,6 +104,10 @@ public class Consultas {
         return mun;
     }
     
+    /**
+     * Método que obtiene la tabla de contenido de la aplicación
+     * @return Lista de tipo Tablacontenido
+     */
     public List<Tablacontenido> getTabladeContenido(){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -103,7 +116,7 @@ public class Consultas {
         List<Tablacontenido> tablaContenido=new ArrayList<>();
         try{
             ps=cn.prepareStatement("SELECT tablacontenidoupraid, alias, descripcion, imagen, nombre, palabrasclave," +
-                "capas, orden  FROM adminsiupra.tablacontenido order by orden;");
+                "orden  FROM adminsiupra.tablacontenido order by orden;");
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -114,7 +127,6 @@ public class Consultas {
                 tb.setImagen(rs.getString(i++));
                 tb.setNombre(rs.getString(i++));
                 tb.setPalabrasclave(rs.getString(i++));
-                tb.setCapas(rs.getString(i++));
                 tb.setOrden(rs.getInt(i++));
                 tablaContenido.add(tb);
             }
@@ -128,6 +140,10 @@ public class Consultas {
         return tablaContenido;
     }
     
+    /**
+     * Método que obtiene la lista de servicios geográficos
+     * @return Lista de tipo Servicios 
+     */
     public List<Servicios> getServicios(){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -135,7 +151,7 @@ public class Consultas {
         PreparedStatement ps=null;
         List<Servicios> servicios=new ArrayList<>();
         try{
-            ps=cn.prepareStatement("SELECT serviciosupraid, alias, capas, tiposervidor, url, versionservicio," +
+            ps=cn.prepareStatement("SELECT serviciosupraid, alias, tiposervidor, url, versionservicio," +
             "estado, importado, descripcion, nombre, palabrasclave, orden, " +
             "accesofkid FROM adminsiupra.servicios;");
             rs=ps.executeQuery();
@@ -144,7 +160,6 @@ public class Consultas {
                 Servicios s=new Servicios();
                 s.setId(rs.getInt(i++));
                 s.setAlias(rs.getString(i++));
-                s.setCapas(rs.getString(i++));
                 s.setTipoServidor(rs.getString(i++));
                 s.setUrl(rs.getString(i++));
                 s.setVersion(rs.getString(i++));
@@ -168,6 +183,10 @@ public class Consultas {
         return servicios;
     }
     
+    /**
+     * Método que obtiene las capas de la base de datos 
+     * @return Lista de tipo Capas
+     */
     public List<Capas> getCapas(){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -182,7 +201,7 @@ public class Consultas {
 "       C.fuente, C.imagen, C.nombre, C.palabrasclave, C.orden, C.servicioid, C.accesofkid, \n" +
 "       C.formatofkid, C.crsfkid, C.tiposerviciofkid, C.tipocapafkid, C.vistageneral,tc.alias\n" +
 "  FROM adminsiupra.capas C inner join adminsiupra.tablacontenido_capas tcc on C.capasupraid=tcc.capasupraid\n" +
-"  inner join adminsiupra.tablacontenido tc on tcc.tablacontenidoupraid=tcc.tablacontenidoupraid;");
+"  inner join adminsiupra.tablacontenido tc on tcc.tablacontenidoupraid=tc.tablacontenidoupraid;");
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -235,6 +254,10 @@ public class Consultas {
         
     }
     
+    /**
+     * Método que obtiene el menu de consultas de la aplicación
+     * @return Lista de tipo Menuconsultas
+     */
     public List<Menuconsultas> getMenuConsultas(){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();

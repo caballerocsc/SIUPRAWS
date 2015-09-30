@@ -16,7 +16,7 @@ import obj.Servicios;
 import obj.Tablacontenido;
 
 /**
- *
+ * Clase que se encarga de tomar los objetos y convertirlos a Json
  * @author Usuario
  */
 public class Conversion {
@@ -25,6 +25,12 @@ public class Conversion {
         
     }
     
+    /**
+     * Método que convierte en json las lista del menú de consultas, y los departamentos con municipios
+     * @param dep List<Departamentos> de departamentos con municipios
+     * @param menuconsultas List<Menuconsultas> del menu de consultas
+     * @return String con texto en formato json
+     */
     public String DepartMuntoJson(List<Departamentos> dep, List<Menuconsultas> menuconsultas){
          String json="";
          List<String> dep1=new ArrayList<>();
@@ -56,10 +62,8 @@ public class Conversion {
          json="\"dats\":{"+addComma(dep1)+"},";
          json+="\"nom\":\"Departamentos\"";
          json="\"deps\":{"+json+"},";
-         //System.out.println(json);
          json+="\"muns\":{\"dats\":{"+addComma(mun)+"}, \"nom\":\"Municipios\"}";
          json="\"ens\":{"+json+"},";
-         //System.out.println(json);
          List<String> sMenu=new ArrayList<>();
          String men="";
          for (Menuconsultas m : menuconsultas) {
@@ -79,10 +83,15 @@ public class Conversion {
         }
          men="\"dats\":{"+addComma(sMenu)+"}";
          men="\"mcsPpl\":{"+men+"}";
-         json="resp={"+json+men+"}";
+         json="{"+json+men+"}";
          return json;
      }
      
+    /**
+     * Método toma una lista de objetos y los concatena separados por comas
+     * @param lista List<String> objetos 
+     * @return texto concatenado
+     */
      public String addComma(List<String> lista){
          int cont=lista.size();
          String json="";
@@ -93,6 +102,11 @@ public class Conversion {
          return json;
      }
      
+     /**
+      * Método que convierte en json la tabla de contendio
+      * @param tc List<Tablacontenido> lista con la tabla de contenido
+      * @return String en formato json
+      */
      public String TablaContenidotoJson( List<Tablacontenido> tc){
         String json="";
         List<String> sub2=new ArrayList<String>();
@@ -128,13 +142,18 @@ public class Conversion {
             for (int i = 0; i < cont-1; i++) {// este for se puede rehusar en un metodo
                 json=json+sub2.get(i)+",";
             }
-            json="{\"acsgs\":{"+json+sub2.get(cont-1)+"}}";
+            json="\"acsgs\":{"+json+sub2.get(cont-1)+"}";
         }if(cont==1)
-            json="{\"acsgs\":{"+json+sub2.get(cont-1)+"}}";
+            json="\"acsgs\":{"+json+sub2.get(cont-1)+"}";
         System.out.println("ultimo paso: "+json);
-        return "resp="+json;
+        return json;
     }
      
+     /**
+      * Método que convierte en json los servicios
+      * @param serv List<Servicios> con los servicios geográficos
+      * @return String en formato json
+      */
     public String ServiciostoJson(List<Servicios> serv){
         String json="";
         int cont;
@@ -190,13 +209,18 @@ public class Conversion {
             for (int i = 0; i < cont-1; i++) {// este for se puede rehusar en un metodo
                 json=json+al.get(i)+",";
             }
-            json="{\"ssgs\":{"+json+al.get(cont-1)+"}}";
+            json="\"ssgs\":{"+json+al.get(cont-1)+"}";
         }if(cont==1)
-            json="{\"ssgs\":{"+json+al.get(cont-1)+"}}";
+            json="\"ssgs\":{"+json+al.get(cont-1)+"}";
         System.out.println("ultimo paso: "+json);
-        return "resp="+json;
+        return json;
     }
     
+    /**
+     * Método que convierte en json las capas
+     * @param capas List<Capas>
+     * @return String en formato json
+     */
     public String capastoJson(List<Capas> capas){
          List<String> json=new ArrayList<>();
          String resul;
@@ -291,6 +315,12 @@ public class Conversion {
              System.out.println(nivel2);
              nivel1="{\"csgs\":{"+nivel2+"}";
              json.add(nivel1);
+             //limpieza de variables
+             nivel1="";
+             nivel2="";
+             nivel3="";
+             nivel4="";
+             tmp=new ArrayList<>();
          }
         cont=json.size();
         resul="";
@@ -299,8 +329,19 @@ public class Conversion {
                  resul=resul+json.get(i)+",";
             }
         }
-        resul="{"+resul+json.get(cont-1)+"}";
+        resul=resul+json.get(cont-1);
         System.out.println(resul);
-        return "resp="+resul;
+        return resul;
      }
+    
+    /**
+     * Método que se encarga de generar un json con la tabla de contenido, servicios y capas
+     * @param sCapas String json de capas
+     * @param sServ String json de servicios
+     * @param sTc   String json de tabla de contenido
+     * @return String en formato json 
+     */
+    public String tablasServiciosCapas(String sCapas, String sServ, String sTc){
+        return "resp={"+sTc+","+sServ+","+sCapas+"}";
+    }
 }

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+    <head>
+        <title>SI UPRA - Aplicación</title>
+        <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="keywords" content="Colombia, Ministerio de Agricultura y Desarrollo Rural, UPRA, Agricultura">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+        <![endif]-->
+        <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+        <link rel="stylesheet" type="text/css" media="screen" href="styles/reset.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="styles/generales.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="styles/aplicacion.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="libraries/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="libraries/openLayers/ol.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="libraries/w2ui/w2ui-1.4.2.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="libraries/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+
+		
+     </head>
+    <body>
+        <header class="bc1 bs0 c1 pa w100">
+            <div id="wrapper-branding" class="c0 pa w100">
+                <img id="branding-image" src="images/branding.png" class="pa" alt="UPRA, Ministerio de Agricultura y Desarrollo Rural" />
+                <p id="wrapper-branding-text" class="b0 cud fc1 ma pa" style="font-size: 17px; height: 43px;" data-fs="0">
+                    <span id="branding-text-title" class="fwb pa tac w100">SI - UPRA</span>
+                    <br />
+                    <span id="branding-text-subtitle" class="b0 pa tac w100">Sistema de Información de la UPRA</span>
+                </p>
+            </div>
+            <div id="wrapper-options" class="c1 pa" style="font-size: 14px; width: 290px;" data-fs="1">
+                <div id="wrapper-search" class="c0 pa w100">
+                    <input id="search-input" type="text" class="c0 ma pa" style="font-size: 14px;" placeholder="Buscar..." data-fs="1"/>
+                    <div id="search-button" class="c1 pa r0 cup">
+                        <img id="search-button-image" alt="Buscar" class="pa" src="images/icons/search.png" />
+                    </div>
+                </div>
+                <div id="wrapper-menu" class="c1 pa w100">
+                    <div class="cup bc3 h100 menu-option pa">
+                        <p class="b0 ma menu-option-text pa t0 tac w100" style="height: 14px;" data-h="1" data-i="ratonsobreEleBMcs" data-imcseb="ppl">Temáticas</p>
+                    </div>
+                    <div class="cup bc3 h100 menu-option pa r0">
+                        <p class="b0 ma menu-option-text pa t0 tac w100" style="height: 14px;" data-h="1" data-i="ratonsobreEleBMcs" data-imcseb="ar">Acceso rápido</p>
+                    </div>
+                </div>
+            </div>
+            <div id="wrapper-breadcrumb" class="cud bc2 fc2 pa w100">
+                <p id="wrapper-breadcrumb-content" class="b0 ma pa t0" style="font-size: 11px; height: 11px;" data-fs="2"></p>
+            </div>
+            <div id="wrapper-query-title" class="cud bc2 fc2 pa w100">
+                <p id="query-title-text" class="b0 fwb ma pa t0 tac ttu" style="font-size: 16px; height: 16px; line-height: 16px;" data-fs="3" data-h="3" data-lh="3"></p>
+            </div>
+        </header>
+        <ul id="wrapper-query-menu-content" class="c3 lsn m0 pa" style="display: none;" data-i="ratonsobreEleEMcs" data-imcsee="ppl">
+			<li class="aplBc0 w100" data-fs="2">
+				<div class="scroll-query-menu-options-content" class="w100">
+					<ul class="lsn m0 w100">
+					</ul>
+				</div>
+            </li>
+            <li class="w100" style="display: none;" data-fs="2">
+                <div>
+                    <p></p>
+                </div>
+                <ul class="lsn m0 scroll-query-menu-options-content w100">
+                </ul>
+            </li>
+            <li class="w100" style="display: none;" data-fs="2">
+                <div>
+                    <p></p>
+                </div>
+                <ul class="lsn m0 scroll-query-menu-options-content w100">
+                </ul>
+            </li>
+            <li class="w100" style="display: none;" data-fs="2">
+                <div>
+                    <p></p>
+                </div>
+                <ul class="lsn m0 scroll-query-menu-options-content w100">
+                </ul>
+            </li>
+        </ul><!-- / wrapper-query-menu-content -->
+        <div id="wrapper-tools" class="b0 bc1 c2 ov pa">
+            <nav id="wrapper-navigation-content" class="cup pa w100" style="height: 25%;">
+                <ul class="h100 m0 w100">
+                    <li class="w100">
+                        <div class="c1 fc2 element-navigation-description pa t0" style="left: -350%;">
+                            <p class="b0 ma pa t0" style="font-size: 14px; height: 14px; line-height: 14px;" data-fs="1" data-h="1" data-lh="1"></p>
+                        </div>
+                        <div class="c2 bc4 h100 w100">
+                            <img src="images/icons/information.png" alt="Información"/>
+                        </div>
+                        <div class="c3 pa t0" style="width: 100%;" data-nat="atInf"></div>
+                    </li>
+                    <li class="w100">
+                        <div class="c1 fc2 element-navigation-description pa t0" style="left: -350%;">
+                            <p class="b0 ma pa t0" style="font-size: 14px; height: 14px; line-height: 14px;" data-fs="1" data-h="1" data-lh="1"></p>
+                        </div>
+                        <div class="c2 bc4 h100 w100">
+                            <img src="images/icons/maps.png" alt="Mapas"/>
+                        </div>
+                        <div class="c3 pa t0" style="width: 100%;" data-nat="atMaps"></div>
+                    </li>
+                    <li class="w100">
+                        <div class="c1 fc2 element-navigation-description pa t0" style="left: -350%;">
+                            <p class="b0 ma pa t0" style="font-size: 14px; height: 14px; line-height: 14px;" data-fs="1" data-h="1" data-lh="1"></p>
+                        </div>
+                        <div class="c2 bc4 h100 w100">
+                            <img src="images/icons/tables.png" alt="Tablas"/>
+                        </div>
+                        <div class="c3 pa t0" style="width: 100%;" data-nat="atTabs"></div>
+                    </li>
+                    <li class="w100">
+                        <div class="c1 fc2 element-navigation-description pa t0" style="left: -350%;">
+                            <p class="b0 ma pa t0" style="font-size: 14px; height: 14px; line-height: 14px;" data-fs="1" data-h="1" data-lh="1"></p>
+                        </div>
+                        <div class="c2 bc4 h100 w100">
+                            <img src="images/icons/graphics.png" alt="Gráficos"/>
+                        </div>
+                        <div class="c3 pa t0" style="width: 100%;" data-nat="atGras"></div>
+                    </li>
+                    <li class="w100">
+                        <div class="c1 fc2 element-navigation-description pa t0" style="left: -350%;">
+                            <p class="b0 ma pa t0" style="font-size: 14px; height: 14px; line-height: 14px;" data-fs="1" data-h="1" data-lh="1"></p>
+                        </div>
+                        <div class="c2 bc4 h100 w100">
+                            <img src="images/icons/documents.png" alt="Documentos"/>
+                        </div>
+                        <div class="c3 pa t0" style="width: 100%;" data-nat="atDocs"></div>
+                    </li>
+                </ul>
+            </nav><!-- / wrapper-navigation-content -->
+        </div><!-- / wrapper-tools -->
+        <div id="scroll-main-content" class="b0 c0 pa r0">
+            <ul id="mask-main-content" class="m0 pa w100">
+                <li class="element-main-content pa w100" data-at="atInf">
+                    
+                </li>
+                <li class="element-main-content pa w100" data-at="atMaps">
+                    <div id="map-main" class="c0 h100 pa r0" style="width: 85%;"></div>
+                    <div id="wrapper-layer-tree-geographic-map-main" class="bs0 c1 h100 pa" style="width: 15%;">
+                        <div id="wrapper-layer-tree-geographic-map-main-title" class="pa w100">
+                            <p id="layer-tree-geographic-map-main-title-text" class="b0 c0 cud ma pa t0 tac ttu" style="font-size: 11px; height: 11px; line-height: 11px;" data-fs="2" data-h="2" data-lh="2">Árbol de capas</p>
+                            <div id="layer-tree-geographic-map-main-toggle-button" class="c1 h100 pa r0" style="width: 11%;" data-i="ratonsobre">
+                                <img src="images/layerTreeGeographic/hide.png" alt="Mostrar/ocultar árbol de capas" class="c0 pa"/>
+                            </div>
+                        </div>
+                        <div id="wrapper-layer-tree-geographic-map-main-content" class="pa">
+                            <div id="scroll-layer-tree-geographic-map-main-list" class="b0 h100 pa w100">
+                                <ul id="mask-layer-tree-geographic-map-main-list" class="w100"></ul>
+                            </div>
+                        </div>
+                        <ul id="wrapper-layer-tree-geographic-map-main-options" class="pa">
+                         
+                        </ul>
+                    </div>
+                </li>
+                <li class="element-main-content pa w100" data-at="atTabs">
+					<div id ="tab-1" class="c2 pa"></div>
+					<div id ="tab-2" class="c1 pa"></div>
+					<div id ="tab-3" class="c0 pa"></div>
+                </li>
+                <li class="element-main-content pa w100" data-at="atGras">
+					<div id ="gra-1" class="c2 pa"></div>
+					<div id ="gra-2" class="c1 pa"></div>
+					<div id ="gra-3" class="c0 pa"></div>
+                </li>
+                <li class="element-main-content pa w100" data-at="atDocs">
+
+                </li>
+            </ul><!-- / mask-main-content -->
+        </div><!-- / scroll-main-content -->
+		<div id="lock-screen" class="lock-screen-background-color-0 c4 h100 pa w100" style="">
+		</div>
+		<div id="modal-window" class="c5 pa" style="height: 90%; left: 10%; top: 5%; width: 80%;">
+			<div id="modal-window-header" class="pa" style="display: none;">
+				<p id="modal-window-header-text" class="b0 cud ma ov pa t0" style="font-size: 11px; height: 11px; line-height: 11px;" data-fs="2" data-h="2" data-lh="2"></p>
+				<div  id="modal-window-header-options" class="pa h100">
+					<p id="modal-window-header-options-minimize-button" class="cup m0 pa tac" style="display: none;">-</p>
+					<p id="modal-window-header-options-close-button" class="cup m0 pa r0 tac">X</p>
+				</div>
+			</div>
+			<div id="modal-window-body" class="pa" style="height: calc(100% - 10px);">
+				<div id="scroll-modal-window-body-content" class="c0 pa w100" style="height: 100%;">
+					<div id="mask-modal-window-body-area" class="cud  w100" style="height: 100%;" data-fs="2">
+						<div class="tac w100" style="height: 20%; margin-top: 10px;">
+							<img src="images/branding.png" class="h100"/>
+						</div>
+						<br /><br /><br />
+						<div id="launch-application-information" class="mCustomScrollbar" style="opacity: 0; height: 52%; margin-left: 5%; padding: 10px 20px; top: 37%; width: 90%;">
+							<!--Pasar estos textos a algo como un properties pero de js-->
+							<p class="fwb">INTRODUCCIÓN</p>
+							<br /><br />
+							<p class="taj">
+								La Unidad de Planificación Rural Agropecuaria presenta el geovisor de la UPRA, como una primera etapa de los productos tecnológicos desarrollados por la unidad. Esta herramienta está orientada a disponer de información de interés del sector agropecuario, que para ser consultada no requiere que sus usuarios sean especialistas en sistemas de información geográfica.
+								<br /><br />
+								Contiene información geográfica disponible a la fecha, de fuente propia y de otras Instituciones.
+								<br /><br />
+								Es deber del usuario leer las condiciones de uso antes de consultar la información geográfica ofrecida. La UPRA se reserva el derecho de cambiar o actualizar estas consideraciones de uso sin previo consentimiento. Las consideraciones de uso aquí expuestas son aplicables a la información geográfica por la UPRA, pero no a aquellas generadas por terceros, en razón a que estos son publicados con el fin de generar valor agregado al Usuario y no son responsabilidad directa de la Unidad. 
+							</p>
+							<br /><br />
+							<p class="fwb">CONSIDERACIONES DE USO</p>
+							<br />
+							<p class="taj">
+								Los productos de información publicados en este site son de carácter indicativo para la planificación rural agropecuaria y no constituyen una fuente de cartografía oficial. La UPRA no garantiza al usuario la precisión global de los datos, considerando que los productos publicados son derivados de fuentes secundarias de información; en este sentido, se advierte de posibles errores. Por lo anterior, todo riesgo referente al uso del producto y las decisiones que se tomen al respecto son responsabilidad del usuario. Igualmente, la UPRA no se hace responsable de la calidad de los trabajos, obras o investigaciones realizadas con base en la información y los datos suministrados en el producto publicado y/o dispuesto. En todo evento, el usuario se compromete a advertir cualquier imprecisión de los datos, de la información y/o de los productos publicados y/o dispuestos, asimismo, la UPRA podrá verificar, modificar y comunicar cualquier asunto al respecto. Por último, se debe reconocer que los productos de información dispuestos están sujetos a las leyes que reglamentan la propiedad intelectual y, en especial, las relacionadas con el derecho de autor.
+								<br /><br />
+								Este texto establece el debido uso de la Información que la UPRA, publica en su geovisor oficial, de manera gratuita y con el propósito de informar adecuada y oportunamente a la ciudadanía, se prohíbe por tanto cualquier tipo de comercialización o distribución con fines lucrativos. 
+							</p>
+						</div>
+						<br /><br /><br />
+						<progress id="status-application-bar" style="margin-left: 15%; width: 70%;" max="5" value="0"></progress>
+						<p id="launch-application-button" class="bc1 cup fwb tac" style="border: 1px solid #327e04; bottom: 15px; display: none; height: 31px; margin-left: 39%; line-height: 29px; opacity: 0; width: 22%;" data-fs="2">
+							Entiendo y acepto los términos
+						</p>
+					</div><!-- / mask-modal-window-body-area -->
+				</div><!-- / scroll-modal-window-body-content -->
+				<div id="modal-window-body-options" class="b0 c1 pa w100" style="display: none;" data-fs="2">
+					<div id="modal-window-body-options-accept-button" class="aplButton-0 cup modal-window-body-options-button pa" style="left: 25%;">
+						<p class="b0 ma ov pa tac t0 w100" data-h="2" data-lh="2">Aceptar</p>
+					</div>
+					<div id="modal-window-body-options-cancel-button" class="aplButton-0 cup modal-window-body-options-button pa" style="right: 25%;">
+						<p class="b0 ma ov pa tac t0 w100" data-h="2" data-lh="2">Cancelar</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+        <div id="wrapper-sizes" class="b0 bc1 c5 pa r0">
+            <p id="size-0" class="pa"></p>
+            <p id="size-1" class="pa"></p>
+            <p id="size-2" class="pa"></p>
+            <p id="size-3" class="pa"></p>
+			<p id="size-4" class="pa"></p>
+            <!--<p id="size-comparator" class="pa" style="background-color: orange; left: 80px; height: 20px;"></p>-->
+        </div>
+        <script type="text/javascript" src="libraries/jquery.js"></script>
+        <script type="text/javascript" src="libraries/bootstrap/bootstrap.min.js"></script>
+        <script type="text/javascript" src="libraries/openLayers/ol.js"></script>
+		<script type="text/javascript" src="libraries/w2ui/w2ui-1.4.2.min.js"></script>
+		<script type="text/javascript" src="libraries/highcharts/highcharts.js"></script>
+		<script type="text/javascript" src="libraries/highcharts/highcharts-3d.js"></script>
+		<script type="text/javascript" src="libraries/highcharts/modules/exporting.js"></script>
+        <script type="text/javascript" src="libraries/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script type="text/javascript" src="scripts/generales.js"></script>
+        <script type="text/javascript" src="scripts/aplicacion.js"></script>
+    </body>
+</html>

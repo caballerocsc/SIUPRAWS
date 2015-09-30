@@ -36,8 +36,8 @@ public class ServiciosFacadeREST {
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     /**
-     * El método busca todos los registros en la tabla "servicios" 
-     * @return List<Servicios> Lista de objetos de tipo "servicios" con la información procedente de la base de datos
+     * El método que  recibe la petición de buscar los servicios  
+     * @return String en formato Json con los servicios
      */
     public String findServicios() {
         return (new Operaciones().getServicios());

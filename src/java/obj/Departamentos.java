@@ -11,7 +11,7 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlTransient;
 import org.postgis.*;
 /**
- *
+ * Clase en la cual se hace el mapeo de la tabla Departamentos de la base de datos 
  * @author cesar.solano
  */
 

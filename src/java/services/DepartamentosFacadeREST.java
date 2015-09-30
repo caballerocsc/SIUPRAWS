@@ -36,11 +36,11 @@ public class DepartamentosFacadeREST {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    /**
+     * El método que  recibe la petición de buscar los Departamentos
+     * @return String en formato Json con los departamentos 
+     */
     public String findAllDepart() {
-//        List<Departamentos> list=super.ejecutarConsultaList("Departamentos.findByPeticion");
-//        TraduccionJson tjson=new TraduccionJson();
-//        String res=tjson.findDeptoJson(em, list);
-//        return res;
         Operaciones op=new Operaciones();
         return op.getDepartamentosMun();
     }

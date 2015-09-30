@@ -8,7 +8,7 @@ package obj;
 import java.io.Serializable;
 
 /**
- *
+ * Clase en la cual se hace el mapeo de la tabla Tablacontenido de la base de datos 
  * @author cesar.solano
  */
 public class Tablacontenido implements Serializable {
