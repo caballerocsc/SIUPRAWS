@@ -27,8 +27,8 @@ public class Conversion {
     
     /**
      * Método que convierte en json las lista del menú de consultas, y los departamentos con municipios
-     * @param dep List<Departamentos> de departamentos con municipios
-     * @param menuconsultas List<Menuconsultas> del menu de consultas
+     * @param dep Lista de departamentos con municipios
+     * @param menuconsultas Lista del menu de consultas
      * @return String con texto en formato json
      */
     public String DepartMuntoJson(List<Departamentos> dep, List<Menuconsultas> menuconsultas){
@@ -89,7 +89,7 @@ public class Conversion {
      
     /**
      * Método toma una lista de objetos y los concatena separados por comas
-     * @param lista List<String> objetos 
+     * @param lista Lista String de objetos 
      * @return texto concatenado
      */
      public String addComma(List<String> lista){
@@ -104,7 +104,7 @@ public class Conversion {
      
      /**
       * Método que convierte en json la tabla de contendio
-      * @param tc List<Tablacontenido> lista con la tabla de contenido
+      * @param tc Lista con la tabla de contenido
       * @return String en formato json
       */
      public String TablaContenidotoJson( List<Tablacontenido> tc){
@@ -151,7 +151,7 @@ public class Conversion {
      
      /**
       * Método que convierte en json los servicios
-      * @param serv List<Servicios> con los servicios geográficos
+      * @param serv List con los servicios geográficos
       * @return String en formato json
       */
     public String ServiciostoJson(List<Servicios> serv){
@@ -218,7 +218,7 @@ public class Conversion {
     
     /**
      * Método que convierte en json las capas
-     * @param capas List<Capas>
+     * @param capas Lista de capas
      * @return String en formato json
      */
     public String capastoJson(List<Capas> capas){
@@ -234,9 +234,9 @@ public class Conversion {
          
          for (Capas capa : capas) {
              if(capa.getEscmax()!=null)
-                 tmp.add("\"reMa\":\""+capa.getEscmax()+"\"");
+                 tmp.add("\"reMa\":"+capa.getEscmax());
              if(capa.getEscmin()!=null)
-                 tmp.add("\"reMi\":\""+capa.getEscmin()+"\"");
+                 tmp.add("\"reMi\":"+capa.getEscmin());
              if(capa.getFiltro()!=null)
                  tmp.add("\"fis\":\""+capa.getFiltro()+"\"");
              if(capa.getLimites()!=null)
@@ -313,8 +313,8 @@ public class Conversion {
              System.out.println(nivel3);
             nivel2="\"cg"+capa.getAlias()+"\":{"+nivel3+"}";
              System.out.println(nivel2);
-             nivel1="{\"csgs\":{"+nivel2+"}";
-             json.add(nivel1);
+             //nivel1="{\"csgs\":{"+nivel2+"}";
+             json.add(nivel2);
              //limpieza de variables
              nivel1="";
              nivel2="";
@@ -329,7 +329,7 @@ public class Conversion {
                  resul=resul+json.get(i)+",";
             }
         }
-        resul=resul+json.get(cont-1);
+        resul="\"csgs\":{"+resul+json.get(cont-1)+"}";
         System.out.println(resul);
         return resul;
      }
