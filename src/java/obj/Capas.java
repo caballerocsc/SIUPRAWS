@@ -49,6 +49,10 @@ public class Capas implements Serializable {
     private boolean vistaGeral;
     private int id_servicio;
     private String aliasTablaContendio;
+    private String sAcceso;
+    private String sformato;
+    private String sCrs;
+    private String sTipoCapa;
     
 
     public Capas() {
@@ -349,6 +353,38 @@ public class Capas implements Serializable {
 
     public void setAliasTablaContendio(String aliasTablaContendio) {
         this.aliasTablaContendio = aliasTablaContendio;
+    }
+
+    public String getsAcceso() {
+        return sAcceso;
+    }
+
+    public void setsAcceso(String sAcceso) {
+        this.sAcceso = sAcceso;
+    }
+
+    public String getSformato() {
+        return sformato;
+    }
+
+    public void setSformato(String sformato) {
+        this.sformato = sformato;
+    }
+
+    public String getsCrs() {
+        return sCrs;
+    }
+
+    public void setsCrs(String sCrs) {
+        this.sCrs = sCrs;
+    }
+
+    public String getsTipoCapa() {
+        return sTipoCapa;
+    }
+
+    public void setsTipoCapa(String sTipoCapa) {
+        this.sTipoCapa = sTipoCapa;
     }
     
     

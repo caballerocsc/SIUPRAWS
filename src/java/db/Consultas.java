@@ -199,9 +199,13 @@ public class Consultas {
 "       C.estado, C.autoidentificable, C.base, C.leyendacargada, C.identificable, \n" +
 "       C.ordenable, C.transparente, C.visible, C.anio, C.descripcion, C.escala, \n" +
 "       C.fuente, C.imagen, C.nombre, C.palabrasclave, C.orden, C.servicioid, C.accesofkid, \n" +
-"       C.formatofkid, C.crsfkid, C.tiposerviciofkid, C.tipocapafkid, C.vistageneral,tc.alias\n" +
-"  FROM adminsiupra.capas C inner join adminsiupra.tablacontenido_capas tcc on C.capasupraid=tcc.capasupraid\n" +
-"  inner join adminsiupra.tablacontenido tc on tcc.tablacontenidoupraid=tc.tablacontenidoupraid;");
+"       C.formatofkid, C.crsfkid, C.tiposerviciofkid, C.tipocapafkid, C.vistageneral,tc.alias,\n" +
+"       (select texto from dominios where dominioid=C.accesofkid),\n" +
+"       (select texto from dominios where dominioid=C.formatofkid),\n" +
+"       (select texto from dominios where dominioid=C.crsfkid),\n" +
+"       (select texto from dominios where dominioid=C.tipocapafkid)\n" +
+"       FROM adminsiupra.capas C inner join adminsiupra.tablacontenido_capas tcc on C.capasupraid=tcc.capasupraid\n" +
+"       inner join adminsiupra.tablacontenido tc on tcc.tablacontenidoupraid=tc.tablacontenidoupraid;");
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -214,7 +218,7 @@ public class Consultas {
                 c.setEscmin(rs.getBigDecimal(i++));
                 c.setFiltro(rs.getString(i++));
                 c.setLimites(rs.getString(i++));
-                c.setNombre(rs.getString(i++));
+                c.setNombre_capa(rs.getString(i++));
                 c.setOpacidad(rs.getBigDecimal(i++));
                 c.setTitulo(rs.getString(i++));
                 c.setEstado(rs.getBoolean(i++));
@@ -241,6 +245,7 @@ public class Consultas {
                 c.setTipo(rs.getInt(i++));
                 c.setVistaGeral(rs.getBoolean(i++));
                 c.setAliasTablaContendio(rs.getString(i++));
+                c.setsTipoCapa(rs.getString(i++));
                 capas.add(c);
             }
         }catch(SQLException e){

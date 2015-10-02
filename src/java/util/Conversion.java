@@ -133,7 +133,7 @@ public class Conversion {
                 }
                 json="\"inf\":{"+json+sub1.get(cont-1)+"}";   
             }
-            sub2.add("\"grcsgs"+tab.getAlias()+"\":{"+json+"}");
+            sub2.add("\""+tab.getAlias()+"\":{"+json+"}");
             System.out.println("el json va: "+json);
         }
         cont=sub2.size();
@@ -201,7 +201,7 @@ public class Conversion {
                 }
                 json=json+",\"inf\":{"+tmp+sub2.get(cont-1)+"}"; 
             }
-            al.add("\"sg"+s.getAlias()+"\":{"+json+"}");
+            al.add("\""+s.getAlias()+"\":{"+json+"}");
         }
         cont=al.size();
         json="";
@@ -244,9 +244,9 @@ public class Conversion {
              if(capa.getNombre_capa()!=null)
                  tmp.add("\"nomCg\":\""+capa.getNombre_capa()+"\"");
              if(capa.getOpacidad()!=null)
-                 tmp.add("\"opa\":\""+capa.getOpacidad()+"\"");
-             if(capa.getTipo()!=0)
-                 tmp.add("\"tCg\":\""+capa.getTipo()+"\"");
+                 tmp.add("\"opa\":"+capa.getOpacidad());
+//             if(capa.getsTipoCapa()!=null)
+//                 tmp.add("\"tCg\":\""+capa.getsTipoCapa()+"\"");
             cont=tmp.size();
             if(cont>1){
                 for (int i = 0; i < cont-1; i++) {// este for se puede rehusar en un metodo
@@ -258,19 +258,19 @@ public class Conversion {
             System.out.println(nivel4);
             tmp=new ArrayList<>();
             if(capa.getAutoident())
-                 tmp.add("\"autoIden\":\""+capa.getAutoident()+"\"");
+                 tmp.add("\"autoIden\":"+capa.getAutoident());
             if(capa.isVistaGeral())
-                tmp.add("\"viVisGen\":\""+capa.isVistaGeral()+"\"");
+                tmp.add("\"viVisGen\":"+capa.isVistaGeral());
             if(capa.getVisible())
-                 tmp.add("\"vi\":\""+capa.getVisible()+"\"");
+                 tmp.add("\"vi\":"+capa.getVisible());
             if(capa.getLeyenda_c())
-                 tmp.add("\"caLe\":\""+capa.getLeyenda_c()+"\"");
+                 tmp.add("\"caLe\":"+capa.getLeyenda_c());
             if(capa.getIdentific())
-                 tmp.add("\"iden\":\""+capa.getIdentific()+"\"");
+                 tmp.add("\"iden\":"+capa.getIdentific());
             if(capa.getOrdenable())
-                 tmp.add("\"or\":\""+capa.getOrdenable()+"\"");
+                 tmp.add("\"or\":"+capa.getOrdenable());
             if(capa.getTransparente())
-                 tmp.add("\"transp\":\""+capa.getTransparente()+"\"");
+                 tmp.add("\"transp\":"+capa.getTransparente());
             cont=tmp.size();
             t4="";
             if(cont>1){
