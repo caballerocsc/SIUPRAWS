@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import obj.Capas;
 import obj.Departamentos;
+import obj.DinamicaMercados;
 import obj.Menuconsultas;
 import obj.Municipios;
+import obj.Precios;
 import obj.Servicios;
 import obj.Tablacontenido;
 
@@ -293,6 +295,94 @@ public class Consultas {
         }
         return mConList;
         
+    }
+    
+    public List<Precios> consultaPrecios(String filtro){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Precios> precios=new ArrayList<>();
+        try {
+            if(filtro=="")
+                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_precios('');");
+            else
+                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_precios('where departamento=''"+filtro+"''');");
+            System.out.println(ps.toString());
+            rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=0;
+              //System.out.println(rs.getString(i++));
+              String[] row=rs.getString(1).split(",");
+              Precios p=new Precios();
+              p.setId(row[i++]);
+              p.setNombre(row[i++]);
+              p.setRango(row[i++]);
+              p.setDepartamento(row[i++]);
+              p.setGeo(row[i++]);
+              precios.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(precios.size());
+        return precios;
+    }
+    
+    public List<DinamicaMercados> consultaDinamicaMerc(){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<DinamicaMercados> Dinam=new ArrayList<>();
+        try {
+                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_dinamica_mercados('');");
+            System.out.println(ps.toString());
+            rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              //System.out.println(rs.getString(i++));
+              DinamicaMercados dm=new DinamicaMercados();
+              dm.setId(rs.getString(i++));
+              dm.setDepartamento(rs.getString(i++));
+              dm.setAno(2011);
+              dm.setCompraventa(rs.getDouble(i++));
+              dm.setHipoteca(rs.getDouble(i++));
+              dm.setRemate(rs.getDouble(i++));
+              dm.setPermuta(rs.getDouble(i++));
+              dm.setEmbargo(rs.getDouble(i++));
+              dm.setPeso(rs.getDouble(i++));
+              Dinam.add(dm);
+              dm.setAno(2012);
+              dm.setCompraventa(rs.getDouble(i++));
+              dm.setHipoteca(rs.getDouble(i++));
+              dm.setRemate(rs.getDouble(i++));
+              dm.setPermuta(rs.getDouble(i++));
+              dm.setEmbargo(rs.getDouble(i++));
+              dm.setPeso(rs.getDouble(i++));
+              Dinam.add(dm);
+              dm.setAno(2013);
+              dm.setCompraventa(rs.getDouble(i++));
+              dm.setHipoteca(rs.getDouble(i++));
+              dm.setRemate(rs.getDouble(i++));
+              dm.setPermuta(rs.getDouble(i++));
+              dm.setEmbargo(rs.getDouble(i++));
+              dm.setPeso(rs.getDouble(i++));
+              Dinam.add(dm);
+              dm.setAno(2014);
+              dm.setCompraventa(rs.getDouble(i++));
+              dm.setHipoteca(rs.getDouble(i++));
+              dm.setRemate(rs.getDouble(i++));
+              dm.setPermuta(rs.getDouble(i++));
+              dm.setEmbargo(rs.getDouble(i++));
+              dm.setPeso(rs.getDouble(i++));
+              Dinam.add(dm);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(Dinam.size());
+        return Dinam;
     }
 }
 

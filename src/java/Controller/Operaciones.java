@@ -27,6 +27,8 @@ public class Operaciones {
     public String getDepartamentosMun(){
         Consultas con=new Consultas();
         Conversion conv = new Conversion();
+        con.consultaPrecios("");
+        con.consultaDinamicaMerc();
         return conv.DepartMuntoJson(con.getDepartamentosMun(),con.getMenuConsultas());
     }
     
