@@ -83,7 +83,7 @@ public class Conversion {
         }
          men="\"dats\":{"+addComma(sMenu)+"}";
          men="\"mcsPpl\":{"+men+"}";
-         json="{"+json+men+"}";
+         json="resp({"+json+men+"})";
          return json;
      }
      
@@ -342,6 +342,6 @@ public class Conversion {
      * @return String en formato json 
      */
     public String tablasServiciosCapas(String sCapas, String sServ, String sTc){
-        return "resp={"+sTc+","+sServ+","+sCapas+"}";
+        return "resp({"+sTc+","+sServ+","+sCapas+"})";
     }
 }
