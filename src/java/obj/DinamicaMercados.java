@@ -5,6 +5,8 @@
  */
 package obj;
 
+import java.util.List;
+
 /**
  *
  * @author cesar.solano
@@ -13,13 +15,8 @@ public class DinamicaMercados {
 
     private String id;
     private String departamento;
-    private int ano;
-    private double compraventa;
-    private double hipoteca;
-    private double remate;
-    private double permuta;
-    private double embargo;
-    private double peso;
+    private List<TipoTransaccion> tiposT;
+    private String geo;
     
     public DinamicaMercados() {
     }
@@ -40,60 +37,20 @@ public class DinamicaMercados {
         this.departamento = departamento;
     }
 
-    public int getAno() {
-        return ano;
+    public String getGeo() {
+        return geo;
     }
 
-    public void setAno(int ano) {
-        this.ano = ano;
+    public void setGeo(String geo) {
+        this.geo = geo;
     }
 
-    public double getCompraventa() {
-        return compraventa;
+    public List<TipoTransaccion> getTiposT() {
+        return tiposT;
     }
 
-    public void setCompraventa(double compraventa) {
-        this.compraventa = compraventa;
-    }
-
-    public double getHipoteca() {
-        return hipoteca;
-    }
-
-    public void setHipoteca(double hipoteca) {
-        this.hipoteca = hipoteca;
-    }
-
-    public double getRemate() {
-        return remate;
-    }
-
-    public void setRemate(double remate) {
-        this.remate = remate;
-    }
-
-    public double getPermuta() {
-        return permuta;
-    }
-
-    public void setPermuta(double permuta) {
-        this.permuta = permuta;
-    }
-
-    public double getEmbargo() {
-        return embargo;
-    }
-
-    public void setEmbargo(double embargo) {
-        this.embargo = embargo;
-    }
-
-    public double getPeso() {
-        return peso;
-    }
-
-    public void setPeso(double peso) {
-        this.peso = peso;
+    public void setTiposT(List<TipoTransaccion> tiposT) {
+        this.tiposT = tiposT;
     }
     
 }

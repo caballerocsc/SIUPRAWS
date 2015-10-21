@@ -20,6 +20,7 @@ import obj.Municipios;
 import obj.Precios;
 import obj.Servicios;
 import obj.Tablacontenido;
+import obj.TipoTransaccion;
 
 /**
  * Clase encargada de generar las consultas a la base de datos 
@@ -340,42 +341,48 @@ public class Consultas {
             System.out.println(ps.toString());
             rs=ps.executeQuery();
             while (rs.next()) {                
-              int i=1;
+              int i=0;
               //System.out.println(rs.getString(i++));
+              String[] row=rs.getString(1).split(",");
               DinamicaMercados dm=new DinamicaMercados();
-              dm.setId(rs.getString(i++));
-              dm.setDepartamento(rs.getString(i++));
-              dm.setAno(2011);
-              dm.setCompraventa(rs.getDouble(i++));
-              dm.setHipoteca(rs.getDouble(i++));
-              dm.setRemate(rs.getDouble(i++));
-              dm.setPermuta(rs.getDouble(i++));
-              dm.setEmbargo(rs.getDouble(i++));
-              dm.setPeso(rs.getDouble(i++));
-              Dinam.add(dm);
-              dm.setAno(2012);
-              dm.setCompraventa(rs.getDouble(i++));
-              dm.setHipoteca(rs.getDouble(i++));
-              dm.setRemate(rs.getDouble(i++));
-              dm.setPermuta(rs.getDouble(i++));
-              dm.setEmbargo(rs.getDouble(i++));
-              dm.setPeso(rs.getDouble(i++));
-              Dinam.add(dm);
-              dm.setAno(2013);
-              dm.setCompraventa(rs.getDouble(i++));
-              dm.setHipoteca(rs.getDouble(i++));
-              dm.setRemate(rs.getDouble(i++));
-              dm.setPermuta(rs.getDouble(i++));
-              dm.setEmbargo(rs.getDouble(i++));
-              dm.setPeso(rs.getDouble(i++));
-              Dinam.add(dm);
-              dm.setAno(2014);
-              dm.setCompraventa(rs.getDouble(i++));
-              dm.setHipoteca(rs.getDouble(i++));
-              dm.setRemate(rs.getDouble(i++));
-              dm.setPermuta(rs.getDouble(i++));
-              dm.setEmbargo(rs.getDouble(i++));
-              dm.setPeso(rs.getDouble(i++));
+              TipoTransaccion tt= new TipoTransaccion();
+              List<TipoTransaccion> transaccions=new ArrayList<>();
+              dm.setId(row[i++]);
+              dm.setDepartamento(row[i++]);
+              tt.setAno(2011);
+              tt.setCompraventa(Double.parseDouble(row[i++]));
+              tt.setHipoteca(Double.parseDouble(row[i++]));
+              tt.setRemate(Double.parseDouble(row[i++]));
+              tt.setPermuta(Double.parseDouble(row[i++]));
+              tt.setEmbargo(Double.parseDouble(row[i++]));
+              tt.setPeso(Double.parseDouble(row[i++]));
+              transaccions.add(tt);
+              tt.setAno(2012);
+              tt.setCompraventa(Double.parseDouble(row[i++]));
+              tt.setHipoteca(Double.parseDouble(row[i++]));
+              tt.setRemate(Double.parseDouble(row[i++]));
+              tt.setPermuta(Double.parseDouble(row[i++]));
+              tt.setEmbargo(Double.parseDouble(row[i++]));
+              tt.setPeso(Double.parseDouble(row[i++]));
+              transaccions.add(tt);
+              tt.setAno(2013);
+              tt.setCompraventa(Double.parseDouble(row[i++]));
+              tt.setHipoteca(Double.parseDouble(row[i++]));
+              tt.setRemate(Double.parseDouble(row[i++]));
+              tt.setPermuta(Double.parseDouble(row[i++]));
+              tt.setEmbargo(Double.parseDouble(row[i++]));
+              tt.setPeso(Double.parseDouble(row[i++]));
+              transaccions.add(tt);
+              tt.setAno(2014);
+              tt.setCompraventa(Double.parseDouble(row[i++]));
+              tt.setHipoteca(Double.parseDouble(row[i++]));
+              tt.setRemate(Double.parseDouble(row[i++]));
+              tt.setPermuta(Double.parseDouble(row[i++]));
+              tt.setEmbargo(Double.parseDouble(row[i++]));
+              tt.setPeso(Double.parseDouble(row[i++]));
+              transaccions.add(tt);
+              dm.setTiposT(transaccions);
+              dm.setGeo(row[i++]);
               Dinam.add(dm);
             }
         } catch (Exception e) {
@@ -385,4 +392,6 @@ public class Consultas {
         return Dinam;
     }
 }
+
+public List<Ava>
 
