@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import obj.Avaluos;
 import obj.Capas;
 import obj.Departamentos;
 import obj.DinamicaMercados;
@@ -337,7 +338,7 @@ public class Consultas {
         PreparedStatement ps=null;
         List<DinamicaMercados> Dinam=new ArrayList<>();
         try {
-                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_dinamica_mercados('');");
+            ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_dinamica_mercados('');");
             System.out.println(ps.toString());
             rs=ps.executeQuery();
             while (rs.next()) {                
@@ -391,7 +392,37 @@ public class Consultas {
         System.out.println(Dinam.size());
         return Dinam;
     }
+    
+    public List<Avaluos> consultaAvaluos(String filtro){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Avaluos> avaluos=new ArrayList<>();
+        try {
+            if(filtro=="")
+                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('');");
+            else
+                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('"+filtro+"');");
+            rs=ps.executeQuery();
+            while (rs.next()) {                
+                int i=0;
+                String[] row=rs.getString(1).split(",");
+                Avaluos ava=new Avaluos();
+                ava.setId(row[i++]);
+                ava.setAno(Integer.parseInt(row[i++]));
+                ava.setDepartamento(row[i++]);
+                ava.setMunicipio(row[i++]);
+                ava.setRango(row[i++]);
+                ava.setArea(row[i++]);
+                ava.setGeo(row[i++]);
+                avaluos.add(ava);
+            }
+        } catch (Exception e) {
+        }
+        return avaluos;
+    }
 }
 
-public List<Ava>
+
 
