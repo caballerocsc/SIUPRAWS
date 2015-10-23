@@ -394,6 +394,7 @@ public class Consultas {
     }
     
     public List<Avaluos> consultaAvaluos(String filtro){
+        System.out.println("entre");
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
@@ -404,7 +405,7 @@ public class Consultas {
                 ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('');");
             else
                 ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('"+filtro+"');");
-            rs=ps.executeQuery();
+            rs=ps.executeQuery();int j=0;
             while (rs.next()) {                
                 int i=0;
                 String[] row=rs.getString(1).split(",");
@@ -417,9 +418,11 @@ public class Consultas {
                 ava.setArea(row[i++]);
                 ava.setGeo(row[i++]);
                 avaluos.add(ava);
+                System.out.println(i++);
             }
         } catch (Exception e) {
         }
+        System.out.println(avaluos.size());
         return avaluos;
     }
 }
