@@ -16,6 +16,7 @@ import obj.Avaluos;
 import obj.Capas;
 import obj.Departamentos;
 import obj.DinamicaMercados;
+import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Precios;
@@ -298,7 +299,11 @@ public class Consultas {
         return mConList;
         
     }
-    
+    /**
+     * Método que retorna la informacion de la consulta de precios de la base de datos 
+     * @param filtro parametro where de la sentencia sql 
+     * @return retorna una lista de objetos del tipo Precios
+     */
     public List<Precios> consultaPrecios(String filtro){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -330,7 +335,10 @@ public class Consultas {
         System.out.println(precios.size());
         return precios;
     }
-    
+    /**
+     * Método que retorna la informacion de dinamicas de mercado de todos los años
+     * @return lista de tipo DinamicaMercados
+     */
     public List<DinamicaMercados> consultaDinamicaMerc(){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -392,7 +400,11 @@ public class Consultas {
         System.out.println(Dinam.size());
         return Dinam;
     }
-    
+    /**
+     * Método que retorna la información de avaluos 
+     * @param filtro parametro where de la sentencia sql
+     * @return lista de tipo Avaluos con la información 
+     */
     public List<Avaluos> consultaAvaluos(String filtro){
         System.out.println("entre");
         Conexion con=new Conexion();
@@ -425,6 +437,58 @@ public class Consultas {
         System.out.println(avaluos.size());
         return avaluos;
     }
+    
+    public List<Filtros> consultaFiltros(int idConsulta){
+        System.out.println("entre");
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Filtros> filtros=new ArrayList<>();
+        try {
+            ps=cn.prepareStatement("select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, tfp.valor, d.texto, '' as tipofiltropadre \n" +
+                "	from adminsiupra.tipofiltros f \n" +
+                "	inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid \n" +
+                "	inner join adminsiupra.filtroperiodos tfp on tfp.subttipovalorfkid=sf.subtipofiltroid \n" +
+                "	inner join dominios  d on tipoelementofkid=dominioid where tfp.menuconsultaid=?\n" +
+                "union \n" +
+                "select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, dep.codigodane, d.texto, '' as tipofiltropadre \n" +
+                "	from adminsiupra.tipofiltros f \n" +
+                "	inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid \n" +
+                "	inner join adminsiupra.filtrovaloresdeptos fvd on fvd.subttipovalorid=sf.subtipofiltroid \n" +
+                "	inner join carto_basica.departamentos  dep on fvd.departamentosid=dep.deptoid \n" +
+                "	inner join dominios  d on tipoelementofkid=dominioid where fvd.menuconsultaid=?\n" +
+                "union\n" +
+                "select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, mun.codigodane, d.texto, '' as tipofiltropadre \n" +
+                "	from adminsiupra.tipofiltros f \n" +
+                "	inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid \n" +
+                "	inner join adminsiupra.filtrovaloresmpios fvm on fvm.subttipovalorid=sf.subtipofiltroid\n" +
+                "	inner join carto_basica.municipios mun on fvm.municipiosid=mun.municipid \n" +
+                "	inner join dominios  d on tipoelementofkid=dominioid where fvm.menuconsultaid=?");
+            ps.setInt(1, idConsulta);
+            ps.setInt(2, idConsulta);
+            ps.setInt(3, idConsulta);
+            rs=ps.executeQuery();
+            while (rs.next()) {          
+                int i=1;
+                Filtros f=new Filtros();
+                f.setAliasTipo(rs.getString(i++));
+                f.setNombreTipo(rs.getString(i++));
+                f.setTextoTipo(rs.getString(i++));
+                f.setAliasSubTipo(rs.getString(i++));
+                f.setNombreSubTipo(rs.getString(i++));
+                f.setValorFiltro(rs.getString(i++));
+                f.setTipoElemento(rs.getString(i++));
+                f.setTipoElemtoPadre(rs.getString(i++));
+                filtros.add(f);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filtros;
+    }
+    
+    
 }
 
 

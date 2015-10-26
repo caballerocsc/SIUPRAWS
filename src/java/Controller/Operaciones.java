@@ -29,7 +29,8 @@ public class Operaciones {
         Conversion conv = new Conversion();
 //        con.consultaPrecios("");
 //        con.consultaDinamicaMerc();
-        con.consultaAvaluos("limit 10");
+//        con.consultaAvaluos("limit 10");
+            con.consultaFiltros(1);
         return conv.DepartMuntoJson(con.getDepartamentosMun(),con.getMenuConsultas());
     }
     
@@ -62,5 +63,21 @@ public class Operaciones {
         Consultas con= new Consultas();
         Conversion conv=new Conversion();
         return conv.capastoJson(con.getCapas());
+    }
+    
+    public String seleccionarConsulta(int id){
+        Consultas con= new Consultas();
+        switch(id){
+            case 13:
+                con.consultaPrecios("");
+                break;
+            case 19:
+                con.consultaAvaluos("");
+                break;
+            case 24:
+                con.consultaDinamicaMerc();
+                break;
+        }
+        return null;
     }
 }

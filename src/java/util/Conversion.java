@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import obj.Capas;
 import obj.Departamentos;
+import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Servicios;
@@ -343,5 +344,10 @@ public class Conversion {
      */
     public String tablasServiciosCapas(String sCapas, String sServ, String sTc){
         return "resp({"+sTc+","+sServ+","+sCapas+"})";
+    }
+    
+    public String filtrostoJson(List<Filtros> filtros){
+        
+        return null;
     }
 }
