@@ -347,7 +347,113 @@ public class Conversion {
     }
     
     public String filtrostoJson(List<Filtros> filtros){
-        
+        String ent;
+        String per;
+        String otros;
+        String nac="";
+        List<String> Ldepar= new ArrayList<>();
+        List<String> Lmun= new ArrayList<>();
+        List<String> Lregi= new ArrayList<>();
+        List<String> Lterr= new ArrayList<>();
+        List<String> Lanios= new ArrayList<>();
+        List<String> Lmeses= new ArrayList<>();
+        List<String> Ltri= new ArrayList<>();
+        List<String> Lsem= new ArrayList<>();
+        List<String> LValotros= new ArrayList<>();
+        List<String> Lentidades= new ArrayList<>();
+        List<String> Lperiodos= new ArrayList<>();
+        List<String> Lotros= new ArrayList<>();
+        String nomFi="";
+        String subTFi="";
+        String tFi="";
+        String tFiPa="";
+        for (Filtros f : filtros) {
+            switch(f.getAliasTipo()){
+                case "ent":
+                    if(f.getAliasSubTipo().equals("nac"))
+                        nac=("\"nal\":{\"dats\":true}");
+                    if(f.getAliasSubTipo().equals("dep"))
+                        Ldepar.add(f.getValorFiltro());
+                    if(f.getAliasSubTipo().equals("mun"))
+                        Lmun.add(f.getValorFiltro());
+                    if(f.getAliasSubTipo().equals("reg"))
+                        Lregi.add(f.getValorFiltro());
+                    if(f.getAliasSubTipo().equals("terr"))
+                        Lterr.add(f.getValorFiltro());
+                    break;
+                case "per":
+                    if(f.getAliasSubTipo().equals("an"))
+                         Lanios.add(f.getValorFiltro());
+                    if(f.getAliasSubTipo().equals("sem"))
+                         Lsem.add(f.getValorFiltro());
+                    if(f.getAliasSubTipo().equals("trim"))
+                         Ltri.add(f.getValorFiltro());
+                    if(f.getAliasSubTipo().equals("mens"))
+                         Lmeses.add(f.getValorFiltro());
+                    break;
+                case "otr":
+                    if(f.getValorFiltro()!=null)
+                        LValotros.add(f.getValorFiltro());
+                    if(f.getTextoTipo()!=null)
+                        nomFi="\"nomFi\":\""+f.getTextoTipo()+"\"";
+                    if(f.getTipoElemento()!=null){
+                        subTFi="\"subTFi\":\""+f.getTipoElemento()+"\"";
+                        if(f.getTipoElemento().equals("select"))
+                           tFi="\"tFi\":\"input\"";
+                    }
+                    if(f.getTipoElemtoPadre()!=null)
+                        tFiPa="\"tFiPa\":\""+f.getTipoElemtoPadre()+"\"";
+                    break;
+            }
+        }
+        String tmp;
+        ///////////////////////////////
+        ///////Entidades//////////////
+        Lentidades.add(nac);
+        tmp=addComma(Ldepar);
+        if(tmp!=null)
+            Lentidades.add("\"deps\":{\"dats\":["+tmp+"]}");
+        tmp=addComma(Lmun);
+        if(tmp!=null)
+            Lentidades.add("\"muns\":{\"dats\":["+tmp+"]}");
+        tmp=addComma(Lregi);
+        if(tmp!=null)
+            Lentidades.add("\"regis\":{\"dats\":["+tmp+"]}");
+        tmp=addComma(Lterr);
+        if(tmp!=null)
+            Lentidades.add("\"terrs\":{\"dats\":["+tmp+"]}");
+        ent="\"ens\":{"+addComma(Lentidades)+"}";
+        System.out.println(ent);
+        //////////////////////////////////////////
+        ////////Periodos/////////////////////
+        tmp=addComma(Lanios);
+        if(tmp!=null)
+            Lperiodos.add("\"anios\":{\"dats\":["+tmp+"]}");
+        tmp=addComma(Lmeses);
+        if(tmp!=null)
+            Lperiodos.add("\"meses\":{\"dats\":["+tmp+"]}");
+        tmp=addComma(Ltri);
+        if(tmp!=null)
+            Lperiodos.add("\"trimestres\":{\"dats\":["+tmp+"]}");
+         tmp=addComma(Lsem);
+        if(tmp!=null)
+            Lperiodos.add("\"semestres\":{\"dats\":["+tmp+"]}");
+        per="\"dats\":{"+addComma(Lperiodos)+"}";
+        System.out.println("per");
+        //////////////////////////////////////////
+        ////////otros/////////////////////
+        /*tmp=addComma(LValotros);
+        if(tmp!=null)
+            Lotros.add("\"dats\":["+tmp+"]}");
+        if(nomFi!="")
+            Lotros.add(nomFi);
+        if(subTFi!="")
+            Lotros.add(subTFi);
+        if(tFi!="")
+            Lotros.add(tFi);
+        if(tFiPa!="")
+            Lotros.add(tFiPa);
+        otros="";*/
         return null;
     }
 }
