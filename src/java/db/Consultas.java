@@ -438,7 +438,7 @@ public class Consultas {
         return avaluos;
     }
     
-    public List<Filtros> consultaFiltros(int idConsulta){
+    public List<Filtros> consultaFiltros(String alias){
         System.out.println("entre");
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -446,28 +446,34 @@ public class Consultas {
         PreparedStatement ps=null;
         List<Filtros> filtros=new ArrayList<>();
         try {
-            ps=cn.prepareStatement("select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, tfp.valor, d.texto, '' as tipofiltropadre \n" +
-                "	from adminsiupra.tipofiltros f \n" +
-                "	inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid \n" +
-                "	inner join adminsiupra.filtroperiodos tfp on tfp.subttipovalorfkid=sf.subtipofiltroid \n" +
-                "	inner join dominios  d on tipoelementofkid=dominioid where tfp.menuconsultaid=?\n" +
-                "union \n" +
-                "select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, dep.codigodane, d.texto, '' as tipofiltropadre \n" +
-                "	from adminsiupra.tipofiltros f \n" +
-                "	inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid \n" +
-                "	inner join adminsiupra.filtrovaloresdeptos fvd on fvd.subttipovalorid=sf.subtipofiltroid \n" +
-                "	inner join carto_basica.departamentos  dep on fvd.departamentosid=dep.deptoid \n" +
-                "	inner join dominios  d on tipoelementofkid=dominioid where fvd.menuconsultaid=?\n" +
-                "union\n" +
-                "select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, mun.codigodane, d.texto, '' as tipofiltropadre \n" +
-                "	from adminsiupra.tipofiltros f \n" +
-                "	inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid \n" +
-                "	inner join adminsiupra.filtrovaloresmpios fvm on fvm.subttipovalorid=sf.subtipofiltroid\n" +
-                "	inner join carto_basica.municipios mun on fvm.municipiosid=mun.municipid \n" +
-                "	inner join dominios  d on tipoelementofkid=dominioid where fvm.menuconsultaid=?");
-            ps.setInt(1, idConsulta);
-            ps.setInt(2, idConsulta);
-            ps.setInt(3, idConsulta);
+            ps=cn.prepareStatement("select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, tfp.valor, d.texto, '' as tipofiltropadre  \n" +
+"                	from adminsiupra.tipofiltros f  \n" +
+"                	inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid  \n" +
+"                	inner join adminsiupra.filtroperiodos tfp on tfp.subttipovalorfkid=sf.subtipofiltroid  \n" +
+"                	inner join dominios  d on tipoelementofkid=dominioid \n" +
+"			inner join adminsiupra.menuconsultas mc on tfp.menuconsultaid=mc.menuconsultaid\n" +
+"                	where mc.alias like ? \n" +
+"                union  \n" +
+"                select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, dep.codigodane, d.texto, '' as tipofiltropadre  \n" +
+"                	from adminsiupra.tipofiltros f  \n" +
+"                	inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid  \n" +
+"                	inner join adminsiupra.filtrovaloresdeptos fvd on fvd.subttipovalorid=sf.subtipofiltroid  \n" +
+"                	inner join carto_basica.departamentos  dep on fvd.departamentosid=dep.deptoid  \n" +
+"                	inner join dominios  d on tipoelementofkid=dominioid \n" +
+"			inner join adminsiupra.menuconsultas mc on mc.menuconsultaid=fvd.menuconsultaid\n" +
+"                	where mc.alias like ?\n" +
+"                union \n" +
+"                select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, mun.codigodane, d.texto, '' as tipofiltropadre  \n" +
+"                	from adminsiupra.tipofiltros f  \n" +
+"                	inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid  \n" +
+"                	inner join adminsiupra.filtrovaloresmpios fvm on fvm.subttipovalorid=sf.subtipofiltroid \n" +
+"                	inner join carto_basica.municipios mun on fvm.municipiosid=mun.municipid  \n" +
+"                	inner join dominios  d on tipoelementofkid=dominioid \n" +
+"                	inner join adminsiupra.menuconsultas mc on mc.menuconsultaid=fvm.menuconsultaid\n" +
+"                	where mc.alias like ?");
+            ps.setString(1, alias);
+            ps.setString(2, alias);
+            ps.setString(3, alias);
             rs=ps.executeQuery();
             while (rs.next()) {          
                 int i=1;

@@ -50,14 +50,14 @@ public class Conversion {
                      mun.add(tmp);
              }
              json="\"dats\":{\"ens\":{\"muns\":["+addComma(l)+"]}},";
-             System.out.println(json);
+//             System.out.println(json);
              //
              json=json+"\"ext\":\""+d.getExt()+"\",";
              json=json+"\"nomCorto\":\""+d.getNomcorto()+"\",";
              json=json+"\"nom\":\""+d.getNombre()+"\",";
              json=json+"\"nomLargo\":\""+d.getNomlargo()+"\"";
              json="\""+d.getCodigodane()+"\":{"+json+"}";
-             System.out.println(json);
+//             System.out.println(json);
              dep1.add(json);
          }
          json="\"dats\":{"+addComma(dep1)+"},";
@@ -94,13 +94,16 @@ public class Conversion {
      * @return texto concatenado
      */
      public String addComma(List<String> lista){
-         int cont=lista.size();
-         String json="";
-         for (int i = 0; i < cont-1; i++) {
-             json+=lista.get(i)+",";
-         }
-         json+=lista.get(cont-1);
-         return json;
+         if (lista.size()>0) {
+             int cont = lista.size();
+             String json = "";
+             for (int i = 0; i < cont - 1; i++) {
+                 json += lista.get(i) + ",";
+             }
+             json += lista.get(cont - 1);
+             return json;
+         }else
+             return null;
      }
      
      /**
@@ -347,8 +350,8 @@ public class Conversion {
     }
     
     public String filtrostoJson(List<Filtros> filtros){
-        String ent;
-        String per;
+        String ent="";
+        String per="";
         String otros;
         String nac="";
         List<String> Ldepar= new ArrayList<>();
@@ -373,13 +376,13 @@ public class Conversion {
                     if(f.getAliasSubTipo().equals("nac"))
                         nac=("\"nal\":{\"dats\":true}");
                     if(f.getAliasSubTipo().equals("dep"))
-                        Ldepar.add(f.getValorFiltro());
+                        Ldepar.add("\""+f.getValorFiltro()+"\"");
                     if(f.getAliasSubTipo().equals("mun"))
-                        Lmun.add(f.getValorFiltro());
+                        Lmun.add("\""+f.getValorFiltro()+"\"");
                     if(f.getAliasSubTipo().equals("reg"))
-                        Lregi.add(f.getValorFiltro());
+                        Lregi.add("\""+f.getValorFiltro()+"\"");
                     if(f.getAliasSubTipo().equals("terr"))
-                        Lterr.add(f.getValorFiltro());
+                        Lterr.add("\""+f.getValorFiltro()+"\"");
                     break;
                 case "per":
                     if(f.getAliasSubTipo().equals("an"))
@@ -409,7 +412,8 @@ public class Conversion {
         String tmp;
         ///////////////////////////////
         ///////Entidades//////////////
-        Lentidades.add(nac);
+        if(nac!="")
+            Lentidades.add(nac);
         tmp=addComma(Ldepar);
         if(tmp!=null)
             Lentidades.add("\"deps\":{\"dats\":["+tmp+"]}");
@@ -422,8 +426,9 @@ public class Conversion {
         tmp=addComma(Lterr);
         if(tmp!=null)
             Lentidades.add("\"terrs\":{\"dats\":["+tmp+"]}");
-        ent="\"ens\":{"+addComma(Lentidades)+"}";
-        System.out.println(ent);
+        if(Lentidades.size()>0)
+            ent="\"ens\":{"+addComma(Lentidades)+"}";
+        //System.out.println(ent);
         //////////////////////////////////////////
         ////////Periodos/////////////////////
         tmp=addComma(Lanios);
@@ -438,8 +443,21 @@ public class Conversion {
          tmp=addComma(Lsem);
         if(tmp!=null)
             Lperiodos.add("\"semestres\":{\"dats\":["+tmp+"]}");
-        per="\"dats\":{"+addComma(Lperiodos)+"}";
-        System.out.println("per");
+        if(Lperiodos.size()>0)
+            per="\"pers\":{\"dats\":{"+addComma(Lperiodos)+"}}";
+        //System.out.println(per);
+        
+        //json  final
+        String json="";
+        List<String> ljson=new ArrayList<>();
+        if(!ent.equals(""))
+            ljson.add(ent);
+        if(!per.equals(""))
+            ljson.add(per);
+        json=addComma(ljson);
+        json="resp({"+json+"})";
+        System.out.println(json);
+        return json;
         //////////////////////////////////////////
         ////////otros/////////////////////
         /*tmp=addComma(LValotros);
@@ -454,6 +472,5 @@ public class Conversion {
         if(tFiPa!="")
             Lotros.add(tFiPa);
         otros="";*/
-        return null;
     }
 }

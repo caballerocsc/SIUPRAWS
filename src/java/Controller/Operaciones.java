@@ -30,7 +30,6 @@ public class Operaciones {
 //        con.consultaPrecios("");
 //        con.consultaDinamicaMerc();
 //        con.consultaAvaluos("limit 10");
-            con.consultaFiltros(1);
         return conv.DepartMuntoJson(con.getDepartamentosMun(),con.getMenuConsultas());
     }
     
@@ -65,6 +64,11 @@ public class Operaciones {
         return conv.capastoJson(con.getCapas());
     }
     
+    public String getFiltroConsulta(String alias){
+        Consultas con= new Consultas();
+        Conversion conv=new Conversion();
+        return conv.filtrostoJson(con.consultaFiltros(alias));
+    }
     public String seleccionarConsulta(int id){
         Consultas con= new Consultas();
         switch(id){

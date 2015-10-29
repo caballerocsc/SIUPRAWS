@@ -31,6 +31,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(services.CapasFacadeREST.class);
         resources.add(services.DepartamentosFacadeREST.class);
+        resources.add(services.FiltrosFacadeREST.class);
         resources.add(services.MunicipiosFacadeREST.class);
         resources.add(services.ServiciosFacadeREST.class);
         resources.add(services.TablacontenidoFacadeREST.class);
