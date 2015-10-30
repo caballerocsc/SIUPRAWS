@@ -27,6 +27,11 @@ public class FiltrosFacadeREST {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    /**
+     * Método que consulta los filtros de una consulta segun el alias de la consulta
+     * @param alias de la consulta de la cual se desean obtener los filtros
+     * @return String en formato json con los filtros correspondientes
+     */
     public String findFiltroConsulta(@PathParam("id") String al) {
         Operaciones op=new Operaciones();
         return op.getFiltroConsulta(al);
@@ -34,6 +39,11 @@ public class FiltrosFacadeREST {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    /**
+     * Método vacio ya que no se implementara la busqueda de todos los filtros, 
+     * sin embargo es obligacion colocarlo para implementar la busqueda por alias.
+     * @return siempre retorna vacio
+     */
     public String findFiltros() {
         
         return null;

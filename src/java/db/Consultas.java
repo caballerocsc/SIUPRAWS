@@ -438,6 +438,12 @@ public class Consultas {
         return avaluos;
     }
     
+    /**
+     * Método que obtiene los filtros de las diferentes tablas asociados a una 
+     * consulta a traves del alias de la consulta
+     * @param alias campo de alias en la tabla de menuconsultas
+     * @return lista de tipo Filtros con todos los registros encontrados 
+     */
     public List<Filtros> consultaFiltros(String alias){
         System.out.println("entre");
         Conexion con=new Conexion();
@@ -493,8 +499,6 @@ public class Consultas {
         }
         return filtros;
     }
-    
-    
 }
 
 

@@ -6,7 +6,7 @@
 package obj;
 
 /**
- *
+ * Clase para mapear registro de la base de datos de tipo avaluos a objetos
  * @author cesar.solano
  */
 public class Avaluos {

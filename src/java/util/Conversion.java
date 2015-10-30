@@ -349,6 +349,11 @@ public class Conversion {
         return "resp({"+sTc+","+sServ+","+sCapas+"})";
     }
     
+    /**
+     * Método que convierte una lista de filtros en una cadena String en formato Json
+     * @param filtros lista de tipo Filtros para convertirla en Json
+     * @return String en formato json con la información
+     */
     public String filtrostoJson(List<Filtros> filtros){
         String ent="";
         String per="";
@@ -428,7 +433,6 @@ public class Conversion {
             Lentidades.add("\"terrs\":{\"dats\":["+tmp+"]}");
         if(Lentidades.size()>0)
             ent="\"ens\":{"+addComma(Lentidades)+"}";
-        //System.out.println(ent);
         //////////////////////////////////////////
         ////////Periodos/////////////////////
         tmp=addComma(Lanios);
@@ -445,8 +449,6 @@ public class Conversion {
             Lperiodos.add("\"semestres\":{\"dats\":["+tmp+"]}");
         if(Lperiodos.size()>0)
             per="\"pers\":{\"dats\":{"+addComma(Lperiodos)+"}}";
-        //System.out.println(per);
-        
         //json  final
         String json="";
         List<String> ljson=new ArrayList<>();
@@ -458,19 +460,6 @@ public class Conversion {
         json="resp({"+json+"})";
         System.out.println(json);
         return json;
-        //////////////////////////////////////////
-        ////////otros/////////////////////
-        /*tmp=addComma(LValotros);
-        if(tmp!=null)
-            Lotros.add("\"dats\":["+tmp+"]}");
-        if(nomFi!="")
-            Lotros.add(nomFi);
-        if(subTFi!="")
-            Lotros.add(subTFi);
-        if(tFi!="")
-            Lotros.add(tFi);
-        if(tFiPa!="")
-            Lotros.add(tFiPa);
-        otros="";*/
+        
     }
 }

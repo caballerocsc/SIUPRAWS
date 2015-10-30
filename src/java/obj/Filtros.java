@@ -6,7 +6,7 @@
 package obj;
 
 /**
- *
+ * Clase para mapear objetos de tipo filtro desde la base de datos
  * @author cesar.solano
  */
 public class Filtros {

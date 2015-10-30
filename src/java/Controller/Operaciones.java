@@ -64,11 +64,23 @@ public class Operaciones {
         return conv.capastoJson(con.getCapas());
     }
     
+    /**
+     * Método que recibe un alias de la consulta y consulta los resultados
+     * los transforma a json y retorna el resultado
+     * @param alias de la consulta que se selecciono
+     * @return String en formato json con la informacion de la base de datos
+     */
     public String getFiltroConsulta(String alias){
         Consultas con= new Consultas();
         Conversion conv=new Conversion();
         return conv.filtrostoJson(con.consultaFiltros(alias));
     }
+    
+    /**
+     *  Método que recibe un identificador y selecciona la consulta que hay que realizar 
+     * @param id de la consulta que hay que realizar
+     * @return resultado de la consulta
+     */
     public String seleccionarConsulta(int id){
         Consultas con= new Consultas();
         switch(id){

@@ -8,7 +8,8 @@ package obj;
 import java.util.List;
 
 /**
- *
+ * Clase para hacer el mapeo a objetos de la informacion en la tabla
+ * de dinámica de mercados en la base de datos
  * @author cesar.solano
  */
 public class DinamicaMercados {
