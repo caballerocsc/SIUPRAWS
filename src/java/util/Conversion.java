@@ -18,7 +18,7 @@ import obj.Tablacontenido;
 
 /**
  * Clase que se encarga de tomar los objetos y convertirlos a Json
- * @author Usuario
+ * @author cesar.solano
  */
 public class Conversion {
     
@@ -36,6 +36,8 @@ public class Conversion {
          String json="";
          List<String> dep1=new ArrayList<>();
          List<String> mun=new ArrayList<>();
+         Varios v=new Varios();
+         menuconsultas=v.ordenarMenuConsultasPorPadre(menuconsultas);
          for (Departamentos d : dep) {
              List<String> l=new ArrayList<>();
              for (Municipios m : d.getMunicipiosCollection()) {
@@ -137,6 +139,10 @@ public class Conversion {
                 }
                 json="\"inf\":{"+json+sub1.get(cont-1)+"}";   
             }
+            if(cont>=1)
+                json="\"inf\":{"+sub1.get(0)+"}";
+            if(tab.isDesplegado())
+                json=json+",\"es\":{\"desp\":true}";
             sub2.add("\""+tab.getAlias()+"\":{"+json+"}");
             System.out.println("el json va: "+json);
         }
@@ -249,8 +255,8 @@ public class Conversion {
                  tmp.add("\"nomCg\":\""+capa.getNombre_capa()+"\"");
              if(capa.getOpacidad()!=null)
                  tmp.add("\"opa\":"+capa.getOpacidad());
-//             if(capa.getsTipoCapa()!=null)
-//                 tmp.add("\"tCg\":\""+capa.getsTipoCapa()+"\"");
+             if(capa.getsTipoAcceso()!=null)
+                 tmp.add("\"tCg\":\""+capa.getsTipoCapa()+"\"");
             cont=tmp.size();
             if(cont>1){
                 for (int i = 0; i < cont-1; i++) {// este for se puede rehusar en un metodo

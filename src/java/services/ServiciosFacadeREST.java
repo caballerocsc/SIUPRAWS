@@ -6,6 +6,9 @@
 package services;
 
 import Controller.Operaciones;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -30,8 +33,15 @@ public class ServiciosFacadeREST {
      * El método que  recibe la petición de buscar los servicios  
      * @return String en formato Json con los servicios
      */
-    public String findServicios() {
-        return (new Operaciones().getServicios());
+    public byte[] findServicios() {
+        try {
+            Operaciones op=new Operaciones();
+            String s=op.getServicios();
+            return (s.getBytes("windows-1252"));
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(CapasFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     

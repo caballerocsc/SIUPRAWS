@@ -6,6 +6,9 @@
 package services;
 
 import Controller.Operaciones;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -32,9 +35,15 @@ public class FiltrosFacadeREST {
      * @param alias de la consulta de la cual se desean obtener los filtros
      * @return String en formato json con los filtros correspondientes
      */
-    public String findFiltroConsulta(@PathParam("id") String al) {
-        Operaciones op=new Operaciones();
-        return op.getFiltroConsulta(al);
+    public byte[] findFiltroConsulta(@PathParam("id") String al) {
+        try {
+            Operaciones op=new Operaciones();
+            String s=op.getFiltroConsulta(al);
+            return (s.getBytes("windows-1252"));
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(CapasFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     @GET
@@ -45,7 +54,6 @@ public class FiltrosFacadeREST {
      * @return siempre retorna vacio
      */
     public String findFiltros() {
-        
         return null;
     }
 

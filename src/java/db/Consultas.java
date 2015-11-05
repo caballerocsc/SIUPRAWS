@@ -121,7 +121,7 @@ public class Consultas {
         List<Tablacontenido> tablaContenido=new ArrayList<>();
         try{
             ps=cn.prepareStatement("SELECT tablacontenidoupraid, alias, descripcion, imagen, nombre, palabrasclave," +
-                "orden  FROM adminsiupra.tablacontenido order by orden;");
+                "orden, desplegado  FROM adminsiupra.tablacontenido order by orden;");
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -133,6 +133,7 @@ public class Consultas {
                 tb.setNombre(rs.getString(i++));
                 tb.setPalabrasclave(rs.getString(i++));
                 tb.setOrden(rs.getInt(i++));
+                tb.setDesplegado(rs.getBoolean(i++));
                 tablaContenido.add(tb);
             }
         }catch(SQLException e){
@@ -250,6 +251,9 @@ public class Consultas {
                 c.setTipo(rs.getInt(i++));
                 c.setVistaGeral(rs.getBoolean(i++));
                 c.setAliasTablaContendio(rs.getString(i++));
+                c.setsTipoAcceso(rs.getString(i++));
+                c.setsTipoFormato(rs.getString(i++));
+                c.setsTipocrs(rs.getString(i++));
                 c.setsTipoCapa(rs.getString(i++));
                 capas.add(c);
             }
