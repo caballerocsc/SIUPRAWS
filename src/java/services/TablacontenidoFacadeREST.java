@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -111,5 +112,4 @@ public class TablacontenidoFacadeREST {
 //        return String.valueOf(super.count());
 //    }
 
-    
 }

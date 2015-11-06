@@ -6,7 +6,9 @@
 
 package Controller;
 
+import com.google.gson.Gson;
 import db.Consultas;
+import obj.FiltroJson;
 import util.Conversion;
 
 /**
@@ -78,22 +80,30 @@ public class Operaciones {
     
     /**
      *  Método que recibe un identificador y selecciona la consulta que hay que realizar 
-     * @param id de la consulta que hay que realizar
+     * @param alias de la consulta que hay que realizar
+     * @param json cadena en formato json con los filtros seleccionados por el usuario
      * @return resultado de la consulta
      */
-    public String seleccionarConsulta(int id){
+    public String seleccionarConsulta(String alias , String json){
+        FiltroJson fil=convertirJsonFiltro(json);
         Consultas con= new Consultas();
-        switch(id){
-            case 13:
+        switch(alias){
+            case "":
                 con.consultaPrecios("");
                 break;
-            case 19:
+            case "a":
                 con.consultaAvaluos("");
                 break;
-            case 24:
+            case "b":
                 con.consultaDinamicaMerc();
                 break;
         }
         return null;
+    }
+    
+    public FiltroJson convertirJsonFiltro(String json){
+        final Gson gson=new Gson();
+        FiltroJson fjson=gson.fromJson(json, FiltroJson.class);
+        return fjson;
     }
 }
