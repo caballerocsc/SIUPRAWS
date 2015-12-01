@@ -16,12 +16,16 @@ import obj.Avaluos;
 import obj.Capas;
 import obj.Departamentos;
 import obj.DinamicaMercados;
+import obj.FiltroJson;
+import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
+import obj.PlantillaConsultas;
+import obj.PlantillaElementos;
 import obj.Precios;
 import obj.Servicios;
 import obj.Tablacontenido;
-import obj.TipoTransaccion;
+import util.Conversion;
 
 /**
  * Clase encargada de generar las consultas a la base de datos 
@@ -41,10 +45,12 @@ public class Consultas {
         Conexion con=new Conexion();
         PreparedStatement ps=null;
         ResultSet rs=null;
-        List<Departamentos> depar=new ArrayList<>();
+        List<Departamentos> depar;
+        depar=new ArrayList<>();
         Connection cn=con.getConexion();
+        SentenciasBD sbd=SentenciasBD.DEPARTAMENTOSMUN;
         try{
-            ps=cn.prepareStatement("SELECT d.codigodane, d.deptoid, d.nomcorto, d.nombre, d.nomlargo, d.ext FROM carto_basica.departamentos d");
+            ps=cn.prepareStatement(sbd.getSentencia());
             rs=ps.executeQuery();
             while(rs.next()){
                 Departamentos d = new Departamentos();
@@ -80,9 +86,10 @@ public class Consultas {
         PreparedStatement ps=null;
         ResultSet rs=null;
         Connection cn=con.getConexion();
-        List<Municipios> mun=new ArrayList<>();
+        List<Municipios> mun=new ArrayList<Municipios>();
+        SentenciasBD sbd=SentenciasBD.MUNICIPIOS;
         try{
-            ps=cn.prepareStatement("SELECT m.codigodane, m.nombre, m.nomcorto, m.nomlargo, m.ext, m.deptosfk  FROM carto_basica.municipios m where m.deptosfk = ?");
+            ps=cn.prepareStatement(sbd.getSentencia());
             ps.setInt(1, idDepart);
             rs=ps.executeQuery();
             while(rs.next()){
@@ -117,10 +124,10 @@ public class Consultas {
         Connection cn=con.getConexion();
         ResultSet rs=null;
         PreparedStatement ps=null;
-        List<Tablacontenido> tablaContenido=new ArrayList<>();
+        List<Tablacontenido> tablaContenido=new ArrayList<Tablacontenido>();
+        SentenciasBD sbd=SentenciasBD.TABLADECONTENIDO;
         try{
-            ps=cn.prepareStatement("SELECT tablacontenidoupraid, alias, descripcion, imagen, nombre, palabrasclave," +
-                "orden  FROM adminsiupra.tablacontenido order by orden;");
+            ps=cn.prepareStatement(sbd.getSentencia());
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -132,6 +139,7 @@ public class Consultas {
                 tb.setNombre(rs.getString(i++));
                 tb.setPalabrasclave(rs.getString(i++));
                 tb.setOrden(rs.getInt(i++));
+                tb.setDesplegado(rs.getBoolean(i++));
                 tablaContenido.add(tb);
             }
         }catch(SQLException e){
@@ -153,11 +161,10 @@ public class Consultas {
         Connection cn=con.getConexion();
         ResultSet rs=null;
         PreparedStatement ps=null;
-        List<Servicios> servicios=new ArrayList<>();
+        List<Servicios> servicios=new ArrayList<Servicios>();
+        SentenciasBD sbd=SentenciasBD.SERVICIOS;
         try{
-            ps=cn.prepareStatement("SELECT serviciosupraid, alias, tiposervidor, url, versionservicio," +
-            "estado, importado, descripcion, nombre, palabrasclave, orden, " +
-            "accesofkid FROM adminsiupra.servicios;");
+            ps=cn.prepareStatement(sbd.getSentencia());
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -196,20 +203,10 @@ public class Consultas {
         Connection cn=con.getConexion();
         ResultSet rs=null;
         PreparedStatement ps=null;
-        List<Capas> capas=new ArrayList<>();
+        List<Capas> capas=new ArrayList<Capas>();
+        SentenciasBD sbd=SentenciasBD.CAPAS;
         try{
-            ps=cn.prepareStatement("SELECT C.capasupraid, C.alias, C.aliasgrupo, C.aliasservicio, C.resolucionmax, \n" +
-"       C.resolucionmin, C.filtro, C.limites, C.nombrecapa, C.opacidad, C.titulo, \n" +
-"       C.estado, C.autoidentificable, C.base, C.leyendacargada, C.identificable, \n" +
-"       C.ordenable, C.transparente, C.visible, C.anio, C.descripcion, C.escala, \n" +
-"       C.fuente, C.imagen, C.nombre, C.palabrasclave, C.orden, C.servicioid, C.accesofkid, \n" +
-"       C.formatofkid, C.crsfkid, C.tiposerviciofkid, C.tipocapafkid, C.vistageneral,tc.alias,\n" +
-"       (select texto from dominios where dominioid=C.accesofkid),\n" +
-"       (select texto from dominios where dominioid=C.formatofkid),\n" +
-"       (select texto from dominios where dominioid=C.crsfkid),\n" +
-"       (select texto from dominios where dominioid=C.tipocapafkid)\n" +
-"       FROM adminsiupra.capas C inner join adminsiupra.tablacontenido_capas tcc on C.capasupraid=tcc.capasupraid\n" +
-"       inner join adminsiupra.tablacontenido tc on tcc.tablacontenidoupraid=tc.tablacontenidoupraid;");
+            ps=cn.prepareStatement(sbd.getSentencia());
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -249,6 +246,9 @@ public class Consultas {
                 c.setTipo(rs.getInt(i++));
                 c.setVistaGeral(rs.getBoolean(i++));
                 c.setAliasTablaContendio(rs.getString(i++));
+                c.setsTipoAcceso(rs.getString(i++));
+                c.setsTipoFormato(rs.getString(i++));
+                c.setsTipocrs(rs.getString(i++));
                 c.setsTipoCapa(rs.getString(i++));
                 capas.add(c);
             }
@@ -273,9 +273,9 @@ public class Consultas {
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Menuconsultas> mConList=new ArrayList<>();
+        SentenciasBD sbd=SentenciasBD.MENUCONSULTAS;
         try{
-            ps=cn.prepareStatement("SELECT menuconsultaid, alias, nombre, texto, dependede, consultable\n" +
-            "  FROM adminsiupra.menuconsultas;");
+            ps=cn.prepareStatement(sbd.getSentencia());
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -298,18 +298,23 @@ public class Consultas {
         return mConList;
         
     }
-    
-    public List<Precios> consultaPrecios(String filtro){
+    /**
+     * Método que retorna la informacion de la consulta de precios de la base de datos 
+     * @param filtros objeto de tipo FiltroJson que contiene los filtros de la sentencia sql 
+     * @return retorna una lista de objetos del tipo Precios
+     */
+    public List<Precios> consultaPrecios(FiltroJson filtros){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Precios> precios=new ArrayList<>();
         try {
-            if(filtro=="")
+            if(filtros==null)
                 ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_precios('');");
-            else
-                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_precios('where departamento=''"+filtro+"''');");
+            else{
+                //ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_precios('where departamento=''"+filtro+"''');");
+            }
             System.out.println(ps.toString());
             rs=ps.executeQuery();
             while (rs.next()) {                
@@ -326,19 +331,31 @@ public class Consultas {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
         }
         System.out.println(precios.size());
         return precios;
     }
-    
-    public List<DinamicaMercados> consultaDinamicaMerc(){
+    /**
+     * Método que retorna la informacion de dinamicas de mercado de todos los años
+     * @param filtro Objeto que almacena los filtros seleccionados para la consulta
+     * @return lista de tipo DinamicaMercados
+     */
+    public List<DinamicaMercados> consultaDinamicaMerc(FiltroJson filtro){
+        String clausula=filtrosToString(filtro);
+        clausula+="order by departamento, anio asc";
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<DinamicaMercados> Dinam=new ArrayList<>();
+        SentenciasBD sbd=SentenciasBD.DINAMICAMERCADO;
         try {
-            ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_dinamica_mercados('');");
+            ps=cn.prepareStatement(sbd.getSentencia());
+            ps.setString(1, clausula);
             System.out.println(ps.toString());
             rs=ps.executeQuery();
             while (rs.next()) {                
@@ -346,81 +363,244 @@ public class Consultas {
               //System.out.println(rs.getString(i++));
               String[] row=rs.getString(1).split(",");
               DinamicaMercados dm=new DinamicaMercados();
-              TipoTransaccion tt= new TipoTransaccion();
-              List<TipoTransaccion> transaccions=new ArrayList<>();
-              dm.setId(row[i++]);
+//              TipoTransaccion tt= new TipoTransaccion();
+//              List<TipoTransaccion> transaccions=new ArrayList<>();
+              dm.setIdTabla(row[i++]);
+              dm.setIdDepart(row[i++]);
               dm.setDepartamento(row[i++]);
-              tt.setAno(2011);
-              tt.setCompraventa(Double.parseDouble(row[i++]));
-              tt.setHipoteca(Double.parseDouble(row[i++]));
-              tt.setRemate(Double.parseDouble(row[i++]));
-              tt.setPermuta(Double.parseDouble(row[i++]));
-              tt.setEmbargo(Double.parseDouble(row[i++]));
-              tt.setPeso(Double.parseDouble(row[i++]));
-              transaccions.add(tt);
-              tt.setAno(2012);
-              tt.setCompraventa(Double.parseDouble(row[i++]));
-              tt.setHipoteca(Double.parseDouble(row[i++]));
-              tt.setRemate(Double.parseDouble(row[i++]));
-              tt.setPermuta(Double.parseDouble(row[i++]));
-              tt.setEmbargo(Double.parseDouble(row[i++]));
-              tt.setPeso(Double.parseDouble(row[i++]));
-              transaccions.add(tt);
-              tt.setAno(2013);
-              tt.setCompraventa(Double.parseDouble(row[i++]));
-              tt.setHipoteca(Double.parseDouble(row[i++]));
-              tt.setRemate(Double.parseDouble(row[i++]));
-              tt.setPermuta(Double.parseDouble(row[i++]));
-              tt.setEmbargo(Double.parseDouble(row[i++]));
-              tt.setPeso(Double.parseDouble(row[i++]));
-              transaccions.add(tt);
-              tt.setAno(2014);
-              tt.setCompraventa(Double.parseDouble(row[i++]));
-              tt.setHipoteca(Double.parseDouble(row[i++]));
-              tt.setRemate(Double.parseDouble(row[i++]));
-              tt.setPermuta(Double.parseDouble(row[i++]));
-              tt.setEmbargo(Double.parseDouble(row[i++]));
-              tt.setPeso(Double.parseDouble(row[i++]));
-              transaccions.add(tt);
-              dm.setTiposT(transaccions);
-              dm.setGeo(row[i++]);
+              dm.setAnio(Integer.parseInt(row[i++]));
+              dm.setCompraventa(Double.parseDouble(row[i++]));
+              dm.setHipoteca(Double.parseDouble(row[i++]));
+              dm.setRemate(Double.parseDouble(row[i++]));
+              dm.setPermuta(Double.parseDouble(row[i++]));
+              dm.setEmbargo(Double.parseDouble(row[i++]));
+              dm.setPeso(Double.parseDouble(row[i++]));
+//              transaccions.add(tt);
+//              tt.setAno(2012);
+//              tt.setCompraventa(Double.parseDouble(row[i++]));
+//              tt.setHipoteca(Double.parseDouble(row[i++]));
+//              tt.setRemate(Double.parseDouble(row[i++]));
+//              tt.setPermuta(Double.parseDouble(row[i++]));
+//              tt.setEmbargo(Double.parseDouble(row[i++]));
+//              tt.setPeso(Double.parseDouble(row[i++]));
+//              transaccions.add(tt);
+//              tt.setAno(2013);
+//              tt.setCompraventa(Double.parseDouble(row[i++]));
+//              tt.setHipoteca(Double.parseDouble(row[i++]));
+//              tt.setRemate(Double.parseDouble(row[i++]));
+//              tt.setPermuta(Double.parseDouble(row[i++]));
+//              tt.setEmbargo(Double.parseDouble(row[i++]));
+//              tt.setPeso(Double.parseDouble(row[i++]));
+//              transaccions.add(tt);
+//              tt.setAno(2014);
+//              tt.setCompraventa(Double.parseDouble(row[i++]));
+//              tt.setHipoteca(Double.parseDouble(row[i++]));
+//              tt.setRemate(Double.parseDouble(row[i++]));
+//              tt.setPermuta(Double.parseDouble(row[i++]));
+//              tt.setEmbargo(Double.parseDouble(row[i++]));
+//              tt.setPeso(Double.parseDouble(row[i++]));
+//              transaccions.add(tt);
+//              dm.setTiposT(transaccions);
+//              dm.setGeo(row[i++]);
               Dinam.add(dm);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
         }
         System.out.println(Dinam.size());
         return Dinam;
     }
-    
-    public List<Avaluos> consultaAvaluos(String filtro){
+    /**
+     * Método que retorna la información de avaluos 
+     * @param filtro parametro where de la sentencia sql
+     * @return lista de tipo Avaluos con la información 
+     */
+    public List<Avaluos> consultaAvaluos(FiltroJson filtro){
+        String clausula=filtrosToString(filtro);
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Avaluos> avaluos=new ArrayList<>();
         try {
-            if(filtro=="")
+            if(clausula.equals(""))
                 ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('');");
             else
-                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('"+filtro+"');");
-            rs=ps.executeQuery();
+                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('"+clausula+"');");
+            rs=ps.executeQuery();int j=0;
             while (rs.next()) {                
                 int i=0;
                 String[] row=rs.getString(1).split(",");
                 Avaluos ava=new Avaluos();
                 ava.setId(row[i++]);
                 ava.setAno(Integer.parseInt(row[i++]));
+                ava.setIdDepart(Integer.parseInt(row[i++]));
                 ava.setDepartamento(row[i++]);
+                ava.setIdMun(Integer.parseInt(row[i++]));
                 ava.setMunicipio(row[i++]);
                 ava.setRango(row[i++]);
                 ava.setArea(row[i++]);
-                ava.setGeo(row[i++]);
                 avaluos.add(ava);
+                System.out.println(i++);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
         }
+        System.out.println(avaluos.size());
         return avaluos;
+    }
+    
+    /**
+     * Método que obtiene los filtros de las diferentes tablas asociados a una 
+     * consulta a traves del alias de la consulta
+     * @param alias campo de alias en la tabla de menuconsultas
+     * @return lista de tipo Filtros con todos los registros encontrados 
+     */
+    public List<Filtros> consultaFiltros(String alias){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Filtros> filtros=new ArrayList<>();
+        SentenciasBD sentenciasBD=SentenciasBD.CONSULTAFILTROS;
+        try {
+            ps=cn.prepareStatement(sentenciasBD.getSentencia());
+            ps.setString(1, alias);
+            ps.setString(2, alias);
+            ps.setString(3, alias);
+            rs=ps.executeQuery();
+            while (rs.next()) {          
+                int i=1;
+                Filtros f=new Filtros();
+                f.setAliasTipo(rs.getString(i++));
+                f.setNombreTipo(rs.getString(i++));
+                f.setTextoTipo(rs.getString(i++));
+                f.setAliasSubTipo(rs.getString(i++));
+                f.setNombreSubTipo(rs.getString(i++));
+                f.setValorFiltro(rs.getString(i++));
+                f.setTipoElemento(rs.getString(i++));
+                f.setTipoElemtoPadre(rs.getString(i++));
+                filtros.add(f);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return filtros;
+    }
+    
+    /**
+     * Método que convierte un objeto de tipo FiltroJson en las clausulas de la sentencia 
+     * where en sql para consultar la tabla de avaluos catastrales.
+     * @param filtro objeto de tipo FiltroJson con los filtros seleccionados por los usuarios.
+     * @return retorna un String con la clausula where y todos los filtros para ser adicionado a una consulta
+     */
+    public String filtrosToString(FiltroJson filtro){
+        List<String> lista=new ArrayList<>();
+        String clausula="";
+        if(filtro.getAnios()!=null){
+            for (int i = 0; i < filtro.getAnios().length; i++) {
+                clausula="anio="+filtro.getAnios()[i];
+                lista.add(clausula);
+            }
+        }
+        if(filtro.getDeps()!=null){
+            for (int i = 0; i < filtro.getDeps().length; i++) {
+                clausula="deptoid="+filtro.getDeps()[i];
+            }
+        }
+        if(filtro.getMuns()!=null){
+            for (int i = 0; i < filtro.getMuns().length; i++) {
+                clausula="municipioid="+filtro.getMuns()[i];
+            }
+        }
+        Conversion conv=new Conversion();
+        if (lista.size()>0) {
+            clausula = conv.addComma(lista);
+            clausula="where "+clausula;
+        }
+        return clausula;
+    }
+    
+    /**
+     * Método que consulta la información referente a las plantillas para mostrar
+     * las tablas, graficos e información de las consultas de usuario
+     * @param opcion indica si la plantilla es de tabla, grafico o información
+     * @param alias parametro que indica el alias de la consulta a la cual esta asociada la plantilla
+     * @return objeto de tipo PlantillaConsultas con la información de la plantilla.
+     */
+    public PlantillaConsultas consultarPlantillas(int opcion,String alias){
+        final int informacion=1;
+        final int tabla=2;
+        final int grafico=3;
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        PlantillaConsultas pc=new PlantillaConsultas();
+        SentenciasBD sbd=null;
+        try {
+            switch(opcion){
+                case informacion:
+                    sbd=SentenciasBD.PLANTILLASINFORMACION;
+                    break;
+                case tabla:
+                    sbd=SentenciasBD.PLANTILLATABLAS;
+                    ps=cn.prepareStatement(sbd.getSentencia());
+                    ps.setString(1, alias);
+                    break;
+                case grafico:
+                    sbd=SentenciasBD.PLANTILLAGRAFICOS;
+                    break;
+            }
+           
+           rs=ps.executeQuery();
+           int column=1;
+           int columnGroup=4;
+            while (rs.next()) {                
+                int i=1;
+                PlantillaElementos pe=new PlantillaElementos();
+                pc.setAliasPlantilla(rs.getString(i++));
+                pc.setNombrePlantilla(rs.getString(i++));
+                pc.setTextoPlantilla(rs.getString(i++));
+                pe.setAliasElemento(rs.getString(i++));
+                pe.setNombreelemento(rs.getString(i++));
+                pe.setTextoElemento(rs.getString(i++));
+                pe.setDependede(rs.getInt(i++));
+                pe.setValorElemento(rs.getString(i++));
+                pe.setColumnGroup(rs.getInt(i++));
+                pe.setFiltro(rs.getBoolean(i++));
+                //columnGroup
+                if (pe.getDependede()==1) {
+                    pc.agregarColumnGroup(pe);
+                }
+                //column
+                if (pe.getDependede()==4) {
+                    pc.agregarColumn(pe);
+                }
+                //si no es column ni columngroup agregar a la lista de propiedades
+                if(pe.getDependede()!=1&&pe.getColumnGroup()!=4){
+                    pc.agregarPropiedad(pe);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return pc;
     }
 }
 

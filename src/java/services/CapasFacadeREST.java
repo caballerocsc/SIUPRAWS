@@ -6,6 +6,9 @@
 package services;
 
 import Controller.Operaciones;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -30,8 +33,15 @@ public class CapasFacadeREST {
      * El método que  recibe la petición de buscar las capas  
      * @return String en formato Json con las capas
      */
-    public String findAllCapas() {
-        return (new Operaciones().getCapas());
+    public byte[] findAllCapas() {
+        try {
+            Operaciones op=new Operaciones();
+            String s=op.getCapas();
+            return (s.getBytes("windows-1252"));
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(CapasFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     

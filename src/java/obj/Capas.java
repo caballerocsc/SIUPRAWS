@@ -49,10 +49,11 @@ public class Capas implements Serializable {
     private boolean vistaGeral;
     private int id_servicio;
     private String aliasTablaContendio;
-    private String sAcceso;
-    private String sformato;
-    private String sCrs;
+    private String sTipoAcceso;
+    private String sTipoFormato;
+    private String sTipocrs;
     private String sTipoCapa;
+    
     
 
     public Capas() {
@@ -355,28 +356,28 @@ public class Capas implements Serializable {
         this.aliasTablaContendio = aliasTablaContendio;
     }
 
-    public String getsAcceso() {
-        return sAcceso;
+    public String getsTipoAcceso() {
+        return sTipoAcceso;
     }
 
-    public void setsAcceso(String sAcceso) {
-        this.sAcceso = sAcceso;
+    public void setsTipoAcceso(String sTipoAcceso) {
+        this.sTipoAcceso = sTipoAcceso;
     }
 
-    public String getSformato() {
-        return sformato;
+    public String getsTipoFormato() {
+        return sTipoFormato;
     }
 
-    public void setSformato(String sformato) {
-        this.sformato = sformato;
+    public void setsTipoFormato(String sTipoFormato) {
+        this.sTipoFormato = sTipoFormato;
     }
 
-    public String getsCrs() {
-        return sCrs;
+    public String getsTipocrs() {
+        return sTipocrs;
     }
 
-    public void setsCrs(String sCrs) {
-        this.sCrs = sCrs;
+    public void setsTipocrs(String sTipocrs) {
+        this.sTipocrs = sTipocrs;
     }
 
     public String getsTipoCapa() {
@@ -386,7 +387,6 @@ public class Capas implements Serializable {
     public void setsTipoCapa(String sTipoCapa) {
         this.sTipoCapa = sTipoCapa;
     }
-    
     
     
     @Override

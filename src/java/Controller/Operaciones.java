@@ -6,7 +6,12 @@
 
 package Controller;
 
+import com.google.gson.Gson;
 import db.Consultas;
+import java.util.List;
+import obj.DinamicaMercados;
+import obj.FiltroJson;
+import obj.Parametros;
 import util.Conversion;
 
 /**
@@ -27,8 +32,9 @@ public class Operaciones {
     public String getDepartamentosMun(){
         Consultas con=new Consultas();
         Conversion conv = new Conversion();
-        con.consultaPrecios("");
-        con.consultaDinamicaMerc();
+//        con.consultaPrecios("");
+//        con.consultaDinamicaMerc();
+//        con.consultaAvaluos("limit 10");
         return conv.DepartMuntoJson(con.getDepartamentosMun(),con.getMenuConsultas());
     }
     
@@ -61,5 +67,55 @@ public class Operaciones {
         Consultas con= new Consultas();
         Conversion conv=new Conversion();
         return conv.capastoJson(con.getCapas());
+    }
+    
+    /**
+     * Método que recibe el alias de la consulta y consulta los resultados
+     * los transforma a json y retorna el resultado
+     * @param alias de la consulta que se selecciono
+     * @return String en formato json con la informacion de la base de datos
+     */
+    public String getFiltroConsulta(String alias){
+        Consultas con= new Consultas();
+        Conversion conv=new Conversion();
+        return conv.filtrostoJson(con.consultaFiltros(alias));
+    }
+    
+    /**
+     *  Método que recibe un identificador y selecciona la consulta que hay que realizar 
+     * @param alias de la consulta que hay que realizar
+     * @param json cadena en formato json con los filtros seleccionados por el usuario
+     * @return resultado de la consulta
+     */
+    public String seleccionarConsulta(String alias , String json){
+        FiltroJson fil=convertirJsonFiltro(json);
+        Consultas con= new Consultas();
+        Conversion conv=new Conversion();
+        switch(alias){
+            case Parametros.PRECIOS:
+                con.consultaPrecios(fil);
+                break;
+            case Parametros.AVALUOS:
+                con.consultaAvaluos(fil);
+                break;
+            case Parametros.TRANSACCIONES:
+                List<DinamicaMercados> dm=con.consultaDinamicaMerc(fil);
+                conv.crearTablaPropiedadesJson(fil, con.consultarPlantillas(2,alias));
+                conv.crearRegistrosTablaDinaMerc(dm);
+                break;
+        }
+        return null;
+    }
+    
+    /**
+     * Método que se encarga de tomar una cadena string y convertirla en 
+     * un objeto java de tipo FiltroJson
+     * @param json String que continen en formato json los filtros seleccionados por el usuario
+     * @return Objeto de tipo FiltroJson con los filtros que seleccionó el usuario
+     */
+    public FiltroJson convertirJsonFiltro(String json){
+        final Gson gson=new Gson();
+        FiltroJson fjson=gson.fromJson(json, FiltroJson.class);
+        return fjson;
     }
 }
