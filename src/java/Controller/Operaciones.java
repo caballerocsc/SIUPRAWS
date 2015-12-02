@@ -100,11 +100,10 @@ public class Operaciones {
                 break;
             case Parametros.TRANSACCIONES:
                 List<DinamicaMercados> dm=con.consultaDinamicaMerc(fil);
-                conv.crearTablaPropiedadesJson(fil, con.consultarPlantillas(2,alias));
-                conv.crearRegistrosTablaDinaMerc(dm);
+                conv.crearJsonDinamMerc(fil, dm);
                 break;
         }
-        return null;
+        return "";
     }
     
     /**

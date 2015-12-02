@@ -20,8 +20,6 @@ import obj.FiltroJson;
 import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
-import obj.PlantillaConsultas;
-import obj.PlantillaElementos;
 import obj.Precios;
 import obj.Servicios;
 import obj.Tablacontenido;
@@ -346,7 +344,7 @@ public class Consultas {
      */
     public List<DinamicaMercados> consultaDinamicaMerc(FiltroJson filtro){
         String clausula=filtrosToString(filtro);
-        clausula+="order by departamento, anio asc";
+        clausula+=" order by departamento, anio asc";
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
@@ -360,12 +358,9 @@ public class Consultas {
             rs=ps.executeQuery();
             while (rs.next()) {                
               int i=0;
-              //System.out.println(rs.getString(i++));
               String[] row=rs.getString(1).split(",");
               DinamicaMercados dm=new DinamicaMercados();
-//              TipoTransaccion tt= new TipoTransaccion();
-//              List<TipoTransaccion> transaccions=new ArrayList<>();
-              dm.setIdTabla(row[i++]);
+              dm.setIdTabla(row[i++].replace("(", ""));
               dm.setIdDepart(row[i++]);
               dm.setDepartamento(row[i++]);
               dm.setAnio(Integer.parseInt(row[i++]));
@@ -374,34 +369,7 @@ public class Consultas {
               dm.setRemate(Double.parseDouble(row[i++]));
               dm.setPermuta(Double.parseDouble(row[i++]));
               dm.setEmbargo(Double.parseDouble(row[i++]));
-              dm.setPeso(Double.parseDouble(row[i++]));
-//              transaccions.add(tt);
-//              tt.setAno(2012);
-//              tt.setCompraventa(Double.parseDouble(row[i++]));
-//              tt.setHipoteca(Double.parseDouble(row[i++]));
-//              tt.setRemate(Double.parseDouble(row[i++]));
-//              tt.setPermuta(Double.parseDouble(row[i++]));
-//              tt.setEmbargo(Double.parseDouble(row[i++]));
-//              tt.setPeso(Double.parseDouble(row[i++]));
-//              transaccions.add(tt);
-//              tt.setAno(2013);
-//              tt.setCompraventa(Double.parseDouble(row[i++]));
-//              tt.setHipoteca(Double.parseDouble(row[i++]));
-//              tt.setRemate(Double.parseDouble(row[i++]));
-//              tt.setPermuta(Double.parseDouble(row[i++]));
-//              tt.setEmbargo(Double.parseDouble(row[i++]));
-//              tt.setPeso(Double.parseDouble(row[i++]));
-//              transaccions.add(tt);
-//              tt.setAno(2014);
-//              tt.setCompraventa(Double.parseDouble(row[i++]));
-//              tt.setHipoteca(Double.parseDouble(row[i++]));
-//              tt.setRemate(Double.parseDouble(row[i++]));
-//              tt.setPermuta(Double.parseDouble(row[i++]));
-//              tt.setEmbargo(Double.parseDouble(row[i++]));
-//              tt.setPeso(Double.parseDouble(row[i++]));
-//              transaccions.add(tt);
-//              dm.setTiposT(transaccions);
-//              dm.setGeo(row[i++]);
+              dm.setPeso(Double.parseDouble(row[i++].replace(")", "")));
               Dinam.add(dm);
             }
         } catch (Exception e) {
@@ -510,7 +478,7 @@ public class Consultas {
         String clausula="";
         if(filtro.getAnios()!=null){
             for (int i = 0; i < filtro.getAnios().length; i++) {
-                clausula="anio="+filtro.getAnios()[i];
+                clausula="anio='"+filtro.getAnios()[i]+"'";
                 lista.add(clausula);
             }
         }
@@ -526,81 +494,9 @@ public class Consultas {
         }
         Conversion conv=new Conversion();
         if (lista.size()>0) {
-            clausula = conv.addComma(lista);
-            clausula="where "+clausula;
+            clausula = "where "+conv.addOr(lista);
         }
         return clausula;
-    }
-    
-    /**
-     * Método que consulta la información referente a las plantillas para mostrar
-     * las tablas, graficos e información de las consultas de usuario
-     * @param opcion indica si la plantilla es de tabla, grafico o información
-     * @param alias parametro que indica el alias de la consulta a la cual esta asociada la plantilla
-     * @return objeto de tipo PlantillaConsultas con la información de la plantilla.
-     */
-    public PlantillaConsultas consultarPlantillas(int opcion,String alias){
-        final int informacion=1;
-        final int tabla=2;
-        final int grafico=3;
-        Conexion con=new Conexion();
-        Connection cn=con.getConexion();
-        ResultSet rs=null;
-        PreparedStatement ps=null;
-        PlantillaConsultas pc=new PlantillaConsultas();
-        SentenciasBD sbd=null;
-        try {
-            switch(opcion){
-                case informacion:
-                    sbd=SentenciasBD.PLANTILLASINFORMACION;
-                    break;
-                case tabla:
-                    sbd=SentenciasBD.PLANTILLATABLAS;
-                    ps=cn.prepareStatement(sbd.getSentencia());
-                    ps.setString(1, alias);
-                    break;
-                case grafico:
-                    sbd=SentenciasBD.PLANTILLAGRAFICOS;
-                    break;
-            }
-           
-           rs=ps.executeQuery();
-           int column=1;
-           int columnGroup=4;
-            while (rs.next()) {                
-                int i=1;
-                PlantillaElementos pe=new PlantillaElementos();
-                pc.setAliasPlantilla(rs.getString(i++));
-                pc.setNombrePlantilla(rs.getString(i++));
-                pc.setTextoPlantilla(rs.getString(i++));
-                pe.setAliasElemento(rs.getString(i++));
-                pe.setNombreelemento(rs.getString(i++));
-                pe.setTextoElemento(rs.getString(i++));
-                pe.setDependede(rs.getInt(i++));
-                pe.setValorElemento(rs.getString(i++));
-                pe.setColumnGroup(rs.getInt(i++));
-                pe.setFiltro(rs.getBoolean(i++));
-                //columnGroup
-                if (pe.getDependede()==1) {
-                    pc.agregarColumnGroup(pe);
-                }
-                //column
-                if (pe.getDependede()==4) {
-                    pc.agregarColumn(pe);
-                }
-                //si no es column ni columngroup agregar a la lista de propiedades
-                if(pe.getDependede()!=1&&pe.getColumnGroup()!=4){
-                    pc.agregarPropiedad(pe);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally{
-            con.cerrar(cn);
-            con.cerrar(ps);
-            con.cerrar(rs);
-        }
-        return pc;
     }
 }
 

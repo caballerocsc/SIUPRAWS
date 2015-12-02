@@ -15,8 +15,6 @@ import obj.FiltroJson;
 import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
-import obj.PlantillaConsultas;
-import obj.PlantillaElementos;
 import obj.Servicios;
 import obj.Tablacontenido;
 
@@ -25,7 +23,6 @@ import obj.Tablacontenido;
  * @author cesar.solano
  */
 public class Conversion {
-    List<String> titulosColum=new ArrayList<>();
     
     public Conversion(){
         
@@ -110,7 +107,7 @@ public class Conversion {
              json += lista.get(cont - 1);
              return json;
          }else
-             return null;
+             return "";
      }
      
      /**
@@ -474,174 +471,122 @@ public class Conversion {
         
     }
     
-    /**
-     * Método que se encarga de crear el json de las propiedades de las tabla de información
-     * que se le muestra al usuario.
-     * @param filtro filtros seleccionados por el usuario
-     * @param pc plantilla asociada a la consulta de usuario
-     * @return String en formato json con las propiedades de la tabla de información
-     */
-    public String crearTablaPropiedadesJson(FiltroJson filtro, PlantillaConsultas pc){
+    
+    public String crearJsonDinamMerc(FiltroJson filtro, List<DinamicaMercados> lista){
         String tmp="";
+        int numAnios=filtro.getAnios().length;
         String columnGroup="";
         List<String> lColumnGroup=new ArrayList<>();
         List<String> lColumn=new ArrayList<>();
-        List<String> field=new ArrayList<>();
-        List<String> lColumns=new ArrayList<>();
         String column="";
-        List<PlantillaElementos> pecg=pc.getColumnGroup();
-        List<PlantillaElementos> peco=pc.getColumn();
-        ArrayList<Integer> indicesColGrp=new ArrayList<>();
-        List<String> tabla= new ArrayList<>();
-        /////////columnGroups/////////////
-        if (pecg.size()>0) {
-            for (PlantillaElementos tColGrp : pecg) {
-                //pecg.remove(tColGrp);
-                if(!tColGrp.isFiltro()){
-                    indicesColGrp=guardarIndicesTablaColumnGroup(indicesColGrp, tColGrp.getColumnGroup());
-                    tmp="{\""+tColGrp.getAliasElemento()+"\":"+"\""+tColGrp.getValorElemento()+"\",";
-                    for (PlantillaElementos tColGrp2 : pecg) {
-                        if(tColGrp.getColumnGroup()==tColGrp2.getColumnGroup()){
-                            tmp+="\""+tColGrp2.getAliasElemento()+"\":"+"\""+tColGrp2.getValorElemento()+"\"}";
-                            //pecg.remove(tColGrp2);
-                            break;
-                        }
-                    }
-                    lColumnGroup.add(tmp);
-                }else{
-                    for (int i = 0; i < filtro.getAnios().length; i++) {
-                        if(filtro.getAnios()[i].equals(tColGrp.getValorElemento())){
-                            indicesColGrp=guardarIndicesTablaColumnGroup(indicesColGrp, tColGrp.getColumnGroup());
-                            tmp="{\""+tColGrp.getAliasElemento()+"\":"+"\""+tColGrp.getValorElemento()+"\",";
-                            for (PlantillaElementos tColGrp2 : pecg) {
-                                if (tColGrp.getColumnGroup() == tColGrp2.getColumnGroup()) {
-                                    tmp += "{\"" + tColGrp.getAliasElemento() + "\":" + "\"" + tColGrp.getValorElemento() + "\"";
-                                    pecg.remove(tColGrp2);
-                                }
-                            }
-                            lColumnGroup.add(tmp);
-                        }
-                    }
-                }
-                columnGroup="\"columnGroups\":["+addComma(lColumnGroup)+"]";
-            }
-        } 
-        ////////columnas/////////////
-        if(peco.size()>0){
-            for (Integer ind : indicesColGrp) {
-                 for (PlantillaElementos colTemp : peco) {
-                     if(ind==colTemp.getColumnGroup()){
-                         if(colTemp.getAliasElemento().equals("field")){
-                             titulosColum.add(colTemp.getValorElemento());
-                         }
-                        tmp="\""+colTemp.getAliasElemento()+"\":"+"\""+colTemp.getValorElemento()+"\"";
-                        field.add(tmp);
-                        peco.remove(colTemp);
-                     }
-                 }
-                 lColumns.add("{"+addComma(field)+"}");
-            }
-            column="\"columns\":["+addComma(lColumn)+"]";
-        }
-        ///////falta por hacer el json de las propiedades//////
-        if (!columnGroup.equals("")) {
-            tabla.add(columnGroup);
-        }if (!column.equals("")) {
-            tabla.add(column);
-        }
-        System.out.println(addComma(tabla));
-        return addComma(tabla);
-        
-        
-
-//        for (PlantillaElementos elemento : pecg) {
-//                for (PlantillaElementos elemento2 : pecg) {
-//                    if(elemento2.getColumnGroup()==1&&(elemento2.getOrden()==elemento.getOrden())&&(!elemento2.getAliasElemento().equals(elemento.getAliasElemento()))){
-//                        tmp="{\""+elemento.getAliasElemento()+"\":"+"\""+elemento.getValorElemento()+"\",";
-//                        tmp+="\""+elemento2.getAliasElemento()+"\":"+"\""+elemento2.getValorElemento()+"\"}";
-//                        lColumnGroup.add(tmp);
-//                    }
-//                }
-//        }
-//        columnGroup="\"columnGroups\":["+addComma(lColumnGroup)+"]";
-//        /////crear el json de las columnas
-//        //obtener la cantidad de columnas 
-//        int cantColumn=peco.get(peco.size()-1).getOrden();
-//        for (int i = 1; i <= cantColumn; i++) {
-//            for (PlantillaElementos pe : peco) {
-//                if(pe.getOrden()==i){
-//                    tmp="\""+pe.getAliasElemento()+"\":"+"\""+pe.getValorElemento()+"\"";
-//                    field.add(tmp);
-//                }
-//            }
-//            lColumns.add("{"+addComma(field)+"}");
-//        }
-//        column="\"columns\":["+addComma(lColumn)+"]";
-//       ////crear el jsson para los registros con informacion
-//       
-    }
-    
-    /**
-     * Método que encarga de almacenar en un arreglo la cantidad de columnGroups existentes
-     * en la tabla de información
-     * @param listaColumnGroups lista que almacena la cantidad de ColumnGroups
-     * @param indiceColGrp valor que se desea verificar para saber si se debe almacenar o no
-     * @return lista con los ColumnGroups actualizados
-     */
-    public ArrayList<Integer> guardarIndicesTablaColumnGroup(ArrayList<Integer> listaColumnGroups, int indiceColGrp){
-        boolean existe=false;
-        bucle1:
-        for (Integer i : listaColumnGroups) {
-            if(i==indiceColGrp){
-                existe=true;
-                break bucle1;
-            }
-        }
-        if(!existe)
-            listaColumnGroups.add(indiceColGrp);
-        return listaColumnGroups;
-    }
-    
-    /**
-     * Método que se encarga de crear un json con los registros de información 
-     * de una tabla de información
-     * @param dm Objeto de tipo DinamicaMercados que almacena la información consultada
-     * @return String en formato json con la información 
-     */
-    public String crearRegistrosTablaDinaMerc(List<DinamicaMercados> dm){
-        String tmp="";
+        ArrayList<String> titulosColumnas=new ArrayList<>();
+        List<String> lSubRegistros= new ArrayList<>();
+        List<String> lRegistros= new ArrayList<>();
         String registros="";
-        int id=1;
-        int indT=0;
-        List<String> lcolumn=new ArrayList<>();
-        List<String> Lreg=new ArrayList<>();
-        int numAnios=(titulosColum.size()-3)/6;
-        for (int i = 0; i < dm.size(); i=i+numAnios) {
-            tmp="\""+titulosColum.get(indT++)+"\":"+id;
-            lcolumn.add(tmp);
-            tmp="\""+titulosColum.get(indT++)+"\":"+"\""+dm.get(i).getIdDepart()+"\"";
-            lcolumn.add(tmp);
-            tmp="\""+titulosColum.get(indT++)+"\":"+"\""+dm.get(i).getDepartamento()+"\"";
-            lcolumn.add(tmp);
-            for (int j = i; j < j+numAnios; j++) {
-                tmp="\""+titulosColum.get(indT++)+"\":"+dm.get(j).getCompraventa();
-                lcolumn.add(tmp);
-                tmp="\""+titulosColum.get(indT++)+"\":"+dm.get(j).getHipoteca();
-                lcolumn.add(tmp);
-                tmp="\""+titulosColum.get(indT++)+"\":"+dm.get(j).getRemate();
-                lcolumn.add(tmp);
-                tmp="\""+titulosColum.get(indT++)+"\":"+dm.get(j).getPermuta();
-                lcolumn.add(tmp);
-                tmp="\""+titulosColum.get(indT++)+"\":"+dm.get(j).getEmbargo();
-                lcolumn.add(tmp);
-                tmp="\""+titulosColum.get(indT++)+"\":"+dm.get(j).getPeso();
-                lcolumn.add(tmp);
+        //////Creacion de los ColumnGroups
+        for (int i = 0; i < 3; i++) {
+            tmp="{\"caption\":\"\",\"span\":\"1\"}";
+            lColumnGroup.add(tmp);
+        }
+        for (int i = 0; i < numAnios; i++) {
+            tmp="{\"caption\":\""+filtro.getAnios()[i]+"\",\"span\":\"6\"}";
+            lColumnGroup.add(tmp);
+        }
+        columnGroup="\"columnGroups\":["+addComma(lColumnGroup)+"]";
+        //Creacion de las columnas
+        tmp="{\"field\":  \"recid\",\"caption\": \"#\",\"size\": \"50px\",\"sortable\": true,\"attr\": \"align=center\"}";
+        lColumn.add(tmp);
+        tmp="{\"field\":  \"codDane\",\"caption\": \"CódigoDANE\",\"size\": \"30px\",\"sortable\": true,\"resizable\": true}";
+        lColumn.add(tmp);
+        tmp="{\"field\":  \"departamento\",\"caption\": \"Departamento\",\"size\": \"100px\",\"sortable\": true,\"resizable\": true}";
+        lColumn.add(tmp);
+        String titulo="";
+        for (int i = 0; i < numAnios; i++) {
+            titulo="\"compraventa"+i+"\"";
+            tmp="{\"field\":"+titulo+",\"caption\": \"# de compraventas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}";
+            titulosColumnas.add(titulo);
+            lColumn.add(tmp);
+            titulo="\"hipoteca"+i+"\"";
+            tmp="{\"field\":"+titulo+",\"caption\": \"# de hipotecas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}";
+            titulosColumnas.add(titulo);
+            lColumn.add(tmp);
+            titulo="\"remate"+i+"\"";
+            tmp="{\"field\": "+titulo+",\"caption\": \"# de remates\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}";
+            titulosColumnas.add(titulo);
+            lColumn.add(tmp);
+            titulo="\"permuta"+i+"\"";
+            tmp="{\"field\": "+titulo+",\"caption\": \"# de permutas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}";
+            titulosColumnas.add(titulo);
+            lColumn.add(tmp);
+            titulo="\"embargo"+i+"\"";
+            tmp="{\"field\": "+titulo+",\"caption\": \"# de embargos\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}";
+            titulosColumnas.add(titulo);
+            lColumn.add(tmp);
+            titulo="\"pesoTransaccion"+i+"\"";
+            tmp="{\"field\": "+titulo+",\"caption\": \"#Peso de Transacciones\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}";
+            titulosColumnas.add(titulo);
+            lColumn.add(tmp);
+        }
+        column="\"columns\":["+addComma(lColumn)+"]";
+        //creación de los registros
+        int id =1;
+        for (int i = 0; i < lista.size(); i+=numAnios) {
+            int cont=0;
+            DinamicaMercados din=lista.get(i);
+            tmp="\"recid\":"+id;
+            lSubRegistros.add(tmp);
+            tmp="\"codDane\":\""+din.getIdDepart()+"\"";
+            lSubRegistros.add(tmp);
+            tmp="\"departamento\":\""+din.getDepartamento()+"\"";
+            lSubRegistros.add(tmp);
+            for (int j = i; j < i+numAnios; j++) {
+                din=lista.get(j);
+                tmp=titulosColumnas.get(cont)+":"+din.getCompraventa();
+                lSubRegistros.add(tmp);
+                cont++;
+                tmp=titulosColumnas.get(cont)+":"+din.getHipoteca();
+                lSubRegistros.add(tmp);
+                cont++;
+                tmp=titulosColumnas.get(cont)+":"+din.getRemate();
+                lSubRegistros.add(tmp);
+                cont++;
+                tmp=titulosColumnas.get(cont)+":"+din.getPermuta();
+                lSubRegistros.add(tmp);
+                cont++;
+                tmp=titulosColumnas.get(cont)+":"+din.getEmbargo();
+                lSubRegistros.add(tmp);
+                cont++;
+                tmp=titulosColumnas.get(cont)+":"+din.getPeso();
+                lSubRegistros.add(tmp);
+                cont++;
             }
-            Lreg.add("\""+addComma(lcolumn)+"\"");
+            lRegistros.add("{"+addComma(lSubRegistros)+"}");
+            lSubRegistros.clear();
             id++;
         }
-        registros="\"records\":["+addComma(Lreg)+"]";
+        registros="\"records\":["+addComma(lRegistros)+"}";
         System.out.println(registros);
-        return registros;
+        System.out.println(column);
+        System.out.println(columnGroup);
+        return null;
     }
+    
+    /**
+     * Método que se encarga de tomar los filtro y concatenarlos con un OR, si la lista no
+     * contiene elementos retorna un String vacio.
+     * @param lista con elemento a unir
+     * @return ejemplo 1: 201 or 2015 or 2016 ejemplo 2: auto or casa or oficina
+     */
+    public String addOr(List<String> lista){
+         if (lista.size()>0) {
+             int cont = lista.size();
+             String cad = "";
+             for (int i = 0; i < cont - 1; i++) {
+                 cad += lista.get(i) + " or ";
+             }
+             cad += lista.get(cont - 1);
+             return cad;
+         }else
+             return "";
+     }
 }
