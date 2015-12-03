@@ -8,7 +8,7 @@ package obj;
 import java.io.Serializable;
 
 /**
- * Clase en la cual se hace el mapeo de la tabla Servicios de la base de datos 
+ *
  * @author cesar.solano
  */
 public class Servicios implements Serializable {

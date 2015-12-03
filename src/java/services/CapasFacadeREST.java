@@ -6,14 +6,21 @@
 package services;
 
 import Controller.Operaciones;
-import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import obj.Capas;
+import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.persistence.Query;
 
 /**
  *
@@ -30,18 +37,11 @@ public class CapasFacadeREST {
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     /**
-     * El método que  recibe la petición de buscar las capas  
-     * @return String en formato Json con las capas
+     * El método busca todos los registros en la tabla "capas" 
+     * @return List<Capas> Lista de objetos de tipo "capas" con la información procedente de la base de datos
      */
-    public byte[] findAllCapas() {
-        try {
-            Operaciones op=new Operaciones();
-            String s=op.getCapas();
-            return (s.getBytes("windows-1252"));
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(CapasFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+    public String findAllCapas() {
+        return (new Operaciones().getCapas());
     }
 
     

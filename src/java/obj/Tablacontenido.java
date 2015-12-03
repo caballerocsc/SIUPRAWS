@@ -8,7 +8,7 @@ package obj;
 import java.io.Serializable;
 
 /**
- * Clase en la cual se hace el mapeo de la tabla Tablacontenido de la base de datos 
+ *
  * @author cesar.solano
  */
 public class Tablacontenido implements Serializable {
@@ -21,7 +21,6 @@ public class Tablacontenido implements Serializable {
     private String palabrasclave;
     private String capas;
     private int orden;
-    private boolean desplegado;
 
     public Tablacontenido() {
     }
@@ -102,15 +101,6 @@ public class Tablacontenido implements Serializable {
         this.orden = orden;
     }
 
-    public boolean isDesplegado() {
-        return desplegado;
-    }
-
-    public void setDesplegado(boolean desplegado) {
-        this.desplegado = desplegado;
-    }
-
-    
     @Override
     public int hashCode() {
         int hash = 0;

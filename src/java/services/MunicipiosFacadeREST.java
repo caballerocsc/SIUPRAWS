@@ -6,6 +6,7 @@
 package services;
 
 //import obj.Municipios;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

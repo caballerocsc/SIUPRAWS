@@ -7,15 +7,23 @@ package services;
 
 //import obj.Departamentos;
 import Controller.Operaciones;
-import java.io.UnsupportedEncodingException;
+import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+//import traduccion.TraduccionJson;
 
 /**
- * Clase que recibe las peticiones de consulta de departamentos 
+ *
  * @author cesar.solano
  */
 @Stateless
@@ -28,15 +36,13 @@ public class DepartamentosFacadeREST {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    /**
-     * El método que  recibe la petición de buscar los Departamentos
-     * @return String en formato Json con los departamentos 
-     */
-    public byte[] findAllDepart() throws UnsupportedEncodingException {
+    public String findAllDepart() {
+//        List<Departamentos> list=super.ejecutarConsultaList("Departamentos.findByPeticion");
+//        TraduccionJson tjson=new TraduccionJson();
+//        String res=tjson.findDeptoJson(em, list);
+//        return res;
         Operaciones op=new Operaciones();
-        String s=op.getDepartamentosMun();
-        return s.getBytes("windows-1252");
-                
+        return op.getDepartamentosMun();
     }
 
 }
