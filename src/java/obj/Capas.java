@@ -7,22 +7,9 @@ package obj;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *Clase en la cual se hace el mapeo de la tabla Capas de la base de datos 
  * @author cesar.solano
  */
 public class Capas implements Serializable {
@@ -62,6 +49,11 @@ public class Capas implements Serializable {
     private boolean vistaGeral;
     private int id_servicio;
     private String aliasTablaContendio;
+    private String sTipoAcceso;
+    private String sTipoFormato;
+    private String sTipocrs;
+    private String sTipoCapa;
+    
     
 
     public Capas() {
@@ -363,7 +355,38 @@ public class Capas implements Serializable {
     public void setAliasTablaContendio(String aliasTablaContendio) {
         this.aliasTablaContendio = aliasTablaContendio;
     }
-    
+
+    public String getsTipoAcceso() {
+        return sTipoAcceso;
+    }
+
+    public void setsTipoAcceso(String sTipoAcceso) {
+        this.sTipoAcceso = sTipoAcceso;
+    }
+
+    public String getsTipoFormato() {
+        return sTipoFormato;
+    }
+
+    public void setsTipoFormato(String sTipoFormato) {
+        this.sTipoFormato = sTipoFormato;
+    }
+
+    public String getsTipocrs() {
+        return sTipocrs;
+    }
+
+    public void setsTipocrs(String sTipocrs) {
+        this.sTipocrs = sTipocrs;
+    }
+
+    public String getsTipoCapa() {
+        return sTipoCapa;
+    }
+
+    public void setsTipoCapa(String sTipoCapa) {
+        this.sTipoCapa = sTipoCapa;
+    }
     
     
     @Override

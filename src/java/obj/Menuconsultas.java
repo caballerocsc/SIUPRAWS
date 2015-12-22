@@ -8,16 +8,16 @@ package obj;
 import java.io.Serializable;
 
 /**
- *
+ * Clase en la cual se hace el mapeo de la tabla Menuconsultas de la base de datos 
  * @author cesar.solano
  */
 public class Menuconsultas implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Integer menuconsultaid;
+    private int menuconsultaid;
     private String alias;
     private String nombre;
     private String texto;
-    private Integer dependede;
+    private int dependede;
     private boolean consultable;
 
     public Menuconsultas() {
@@ -34,11 +34,11 @@ public class Menuconsultas implements Serializable {
         this.consultable = consultable;
     }
 
-    public Integer getMenuconsultaid() {
+    public int getMenuconsultaid() {
         return menuconsultaid;
     }
 
-    public void setMenuconsultaid(Integer menuconsultaid) {
+    public void setMenuconsultaid(int menuconsultaid) {
         this.menuconsultaid = menuconsultaid;
     }
 
@@ -66,11 +66,11 @@ public class Menuconsultas implements Serializable {
         this.texto = texto;
     }
 
-    public Integer getDependede() {
+    public int getDependede() {
         return dependede;
     }
 
-    public void setDependede(Integer dependede) {
+    public void setDependede(int dependede) {
         this.dependede = dependede;
     }
 
@@ -80,26 +80,6 @@ public class Menuconsultas implements Serializable {
 
     public void setConsultable(boolean consultable) {
         this.consultable = consultable;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (menuconsultaid != null ? menuconsultaid.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Menuconsultas)) {
-            return false;
-        }
-        Menuconsultas other = (Menuconsultas) object;
-        if ((this.menuconsultaid == null && other.menuconsultaid != null) || (this.menuconsultaid != null && !this.menuconsultaid.equals(other.menuconsultaid))) {
-            return false;
-        }
-        return true;
     }
 
     @Override

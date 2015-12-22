@@ -25,9 +25,7 @@ public class OperacionesTest {
     String jsonPrueba="{\n" +
 "    \"nal\": true,\n" +
 "    \"deps\": [\n" +
-"        \"01\",\n" +
-"        \"02\",\n" +
-"        \"03\"\n" +
+"        \"15\"\n" +
 "    ],\n" +
 "    \"muns\": [\n" +
 "        \"04\",\n" +
@@ -44,10 +42,8 @@ public class OperacionesTest {
 "        \"11\",\n" +
 "        \"12\"\n" +
 "    ],\n" +
-"    \"anios\": [\n" +
-"        2012,\n" +
-"        2013,\n" +
-"        2014\n" +
+"    \"anios\": [2012,\n" +
+"        2013\n" +
 "    ],\n" +
 "    \"meses\": [\n" +
 "        1,\n" +
@@ -160,12 +156,14 @@ public class OperacionesTest {
     public void testSeleccionarConsulta() {
         System.out.println("seleccionarConsulta");
         String alias = "trans";
+//        String alias = "pr";
         Operaciones instance = new Operaciones();
         String expResult = "";
         String result = instance.seleccionarConsulta(alias, jsonPrueba);
+        System.out.println(result);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
 //    /**

@@ -6,9 +6,13 @@
 package services;
 
 import Controller.Operaciones;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -71,12 +75,18 @@ public class TablacontenidoFacadeREST {
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     /**
-     * El método busca todos los registros en la tabla "tablacontenido" 
-     * @return List<tablacontenido> Lista de objetos de tipo "tablacontenido" con la información procedente de la base de datos
+     * El método que  recibe la petición de buscar la tabla de contenido  
+     * @return String en formato Json con la tabla de contenido
      */
-    public String findAllJson() {
-        Operaciones op=new Operaciones();
-        return op.getTablaContenido();
+    public byte[] findAllTablaContenido() {
+        try {
+            Operaciones op=new Operaciones();
+            String s=op.getTablaContenido();
+            return (s.getBytes("windows-1252"));
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(CapasFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
 //    @GET
@@ -102,5 +112,4 @@ public class TablacontenidoFacadeREST {
 //        return String.valueOf(super.count());
 //    }
 
-    
 }
