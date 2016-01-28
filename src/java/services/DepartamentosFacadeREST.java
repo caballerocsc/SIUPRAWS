@@ -8,7 +8,6 @@ package services;
 //import obj.Departamentos;
 import Controller.Operaciones;
 import java.io.UnsupportedEncodingException;
-import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -18,7 +17,6 @@ import javax.ws.rs.core.MediaType;
  * Clase que recibe las peticiones de consulta de departamentos 
  * @author cesar.solano
  */
-@Stateless
 @Path("obj.departamentos")
 public class DepartamentosFacadeREST {
     

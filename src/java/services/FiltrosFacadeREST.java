@@ -9,7 +9,6 @@ import Controller.Operaciones;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,7 +19,6 @@ import javax.ws.rs.core.MediaType;
  *
  * @author cesar.solano
  */
-@Stateless
 @Path("obj.filtros")
 public class FiltrosFacadeREST {
 
