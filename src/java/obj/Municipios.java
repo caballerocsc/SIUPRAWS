@@ -8,7 +8,6 @@ package obj;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
-import org.postgis.Geometry;
 
 /**
  * Clase en la cual se hace el mapeo de la tabla Municipios de la base de datos 
@@ -22,7 +21,6 @@ public class Municipios implements Serializable {
     private String codigodane;
     private BigInteger areaHa;
     private BigInteger areaKm2;
-    private Geometry geom;
     private Integer domfkesc;
     private Date fechadato;
     private String fuente;
@@ -91,14 +89,6 @@ public class Municipios implements Serializable {
 
     public void setAreaKm2(BigInteger areaKm2) {
         this.areaKm2 = areaKm2;
-    }
-
-    public Geometry getGeom() {
-        return geom;
-    }
-
-    public void setGeom(Geometry geom) {
-        this.geom = geom;
     }
 
     public Integer getDomfkesc() {

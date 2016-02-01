@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlTransient;
-import org.postgis.*;
 /**
  * Clase en la cual se hace el mapeo de la tabla Departamentos de la base de datos 
  * @author cesar.solano
@@ -23,7 +22,6 @@ public class Departamentos implements Serializable {
     private String nombre;
     private String fuente;
     private Short domfkesc;
-    private Geometry geom;
     private Date fechadato;
     private String nomcorto;
     private String nomlargo;
@@ -89,15 +87,6 @@ public class Departamentos implements Serializable {
     public void setDomfkesc(Short domfkesc) {
         this.domfkesc = domfkesc;
     }
-
-    public Geometry getGeom() {
-        return geom;
-    }
-
-    public void setGeom(Geometry geom) {
-        this.geom = geom;
-    }
-
     public Date getFechadato() {
         return fechadato;
     }
