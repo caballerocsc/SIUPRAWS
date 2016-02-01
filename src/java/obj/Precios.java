@@ -14,8 +14,11 @@ public class Precios {
     private String id;
     private String nombre;
     private String rango;
+    private double area;
+    private String idDept;
     private String departamento;
-    private String geo;
+    private String idMun;
+    private String municipio;
     
     public Precios(){
         
@@ -53,12 +56,36 @@ public class Precios {
         this.departamento = departamento;
     }
 
-    public String getGeo() {
-        return geo;
+    public double getArea() {
+        return area;
     }
 
-    public void setGeo(String geo) {
-        this.geo = geo;
+    public void setArea(double area) {
+        this.area = area;
+    }
+
+    public String getIdDept() {
+        return idDept;
+    }
+
+    public void setIdDept(String idDept) {
+        this.idDept = idDept;
+    }
+
+    public String getIdMun() {
+        return idMun;
+    }
+
+    public void setIdMun(String idMun) {
+        this.idMun = idMun;
+    }
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
     }
     
     

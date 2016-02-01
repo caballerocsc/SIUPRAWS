@@ -9,13 +9,14 @@ package Controller;
 import com.google.gson.Gson;
 import db.Consultas;
 import obj.FiltroJson;
+import obj.Parametros;
 import util.Conversion;
 
 /**
  *
  * @author Usuario
- * Clase encargada de unir la capa de base de datos con la capa de logica del negocio
- * en la cual se encuentra la clase encargada de generar los Json y retornar un String
+ * Clase encargada de unir la capa de base de datos con la capa de logica del negocio, en esta última
+ * se encuentra la clase encargada de generar los Json (Conversion) y retornar un String
  */
 public class Operaciones {
 
@@ -67,7 +68,7 @@ public class Operaciones {
     }
     
     /**
-     * Método que recibe un alias de la consulta y consulta los resultados
+     * Método que recibe el alias de la consulta y consulta los resultados
      * los transforma a json y retorna el resultado
      * @param alias de la consulta que se selecciono
      * @return String en formato json con la informacion de la base de datos
@@ -87,20 +88,31 @@ public class Operaciones {
     public String seleccionarConsulta(String alias , String json){
         FiltroJson fil=convertirJsonFiltro(json);
         Consultas con= new Consultas();
+        Conversion conv=new Conversion();
+        String resultado="";
         switch(alias){
-            case "":
-                con.consultaPrecios("");
+            case Parametros.PRECIOS:
+                resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
+                        con.consultarCapasporMenuConsulta(alias), fil, con.consultaPrecios(fil),con.consultaSumatoriaPrecios(fil));
                 break;
-            case "a":
-                con.consultaAvaluos("");
+            case Parametros.AVALUOS:
+                con.consultaAvaluos(fil);
                 break;
-            case "b":
-                con.consultaDinamicaMerc();
+            case Parametros.TRANSACCIONES:
+                //List<DinamicaMercados> dm=;
+                resultado=conv.crearJsonDinamMerc(fil, con.consultaDinamicaMerc(fil), con.consultarTablaContenidoporMenuConsulta(alias), 
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias));
                 break;
         }
-        return null;
+        return resultado;
     }
     
+    /**
+     * Método que se encarga de tomar una cadena string y convertirla en 
+     * un objeto java de tipo FiltroJson
+     * @param json String que continen en formato json los filtros seleccionados por el usuario
+     * @return Objeto de tipo FiltroJson con los filtros que seleccionó el usuario
+     */
     public FiltroJson convertirJsonFiltro(String json){
         final Gson gson=new Gson();
         FiltroJson fjson=gson.fromJson(json, FiltroJson.class);
