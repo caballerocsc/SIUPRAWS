@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/db/Consultas.java</file>
+            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/services/ConsultasFacadeREST.java</file>
+            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/test/Controller/OperacionesTest.java</file>
             <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/Controller/Operaciones.java</file>
-            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/services/DepartamentosFacadeREST.java</file>
             <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/db/SentenciasBD.java</file>
-=======
             <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/util/Conversion.java</file>
->>>>>>> c1923e235f5ad21581101b94ffcfdaf2a36beff0
         </group>
     </open-files>
 </project-private>
