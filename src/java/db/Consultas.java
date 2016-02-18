@@ -25,6 +25,8 @@ import obj.Municipios;
 import obj.Precios;
 import obj.Servicios;
 import obj.Tablacontenido;
+import obj.graficos.PlantillaColumnas;
+import obj.graficos.PlantillaElementos;
 import util.Conversion;
 
 /**
@@ -645,6 +647,113 @@ public class Consultas {
             con.cerrar(rs);
         }
         return precios;
+    }
+    
+    public PlantillaElementos consultarPlantillaGraficos(){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+//        ResultSet rs1=null;
+//        ResultSet rs2=null;
+//        ResultSet rs3=null;
+//        ResultSet rs4=null;
+//        ResultSet rs5=null;
+//        ResultSet rs6=null;
+//        ResultSet rs7=null;
+        PreparedStatement ps=null;
+        PlantillaElementos pe= new PlantillaElementos();
+        try {
+             ps=cn.prepareStatement((SentenciasBD.PLANTILLAGENERALGRAFICOS).getSentencia());
+             ps.setInt(1, 6);
+             ps.setInt(2,13 );
+             System.out.println(ps.toString());
+             rs=ps.executeQuery();
+             
+             int i=1;
+             while (rs.next()) {
+                i=1;
+                pe.setId(rs.getInt(i++));
+                pe.setAl(rs.getString(i++));
+                pe.setCompcg(rs.getString(i++));
+                pe.setComptab(rs.getString(i++));
+                pe.setIndtab(rs.getInt(i++));
+                pe.setIndgraf(rs.getInt(i++));
+            }
+             ps.clearBatch();
+             ps=cn.prepareStatement(SentenciasBD.GRAFICOSCOLUMNAS.getSentencia());
+             ps.setInt(1, pe.getId());
+             System.out.println(ps.toString());
+             rs=ps.executeQuery();
+             while (rs.next()) {       
+                 i=1;
+                PlantillaColumnas pc=new PlantillaColumnas();
+                pc.setColumnas(rs.getString(i++));
+                pe.getPc().add(pc);
+            }
+             ps.clearBatch();
+             ps=cn.prepareStatement(SentenciasBD.PLANTILLAGRAFICOS.getSentencia());
+             ps.setInt(1, pe.getId());
+             System.out.println(ps.toString());
+             rs=ps.executeQuery(); 
+             while(rs.next()){
+                 i=1;
+                 pe.getPg().setId(rs.getInt(i++));
+                 pe.getPg().setTipo(rs.getString(i++));
+                 pe.getPg().setTitulo(rs.getString(i++));
+             }
+             ps.clearBatch();
+             ps=cn.prepareStatement(SentenciasBD.GRAFICOSEJEY.getSentencia());
+             ps.setInt(1, pe.getPg().getId());
+             System.out.println(ps.toString());
+             rs=ps.executeQuery(); 
+             while(rs.next()){
+                 i=1;
+                 pe.getPg().getEjeY().add(rs.getString(i++));
+             }
+             ps.clearBatch();
+             ps=cn.prepareStatement(SentenciasBD.GRAFICOSEJEX.getSentencia());
+             ps.setInt(1, pe.getPg().getId());
+             System.out.println(ps.toString());
+             rs=ps.executeQuery(); 
+             while(rs.next()){
+                 i=1;
+                 pe.getPg().getEjeX().add(rs.getString(i++));
+             }
+             ps.clearBatch();
+             ps=cn.prepareStatement(SentenciasBD.GRAFICOSSERIES.getSentencia());
+             ps.setInt(1, pe.getPg().getId());
+             System.out.println(ps.toString());
+             rs=ps.executeQuery(); 
+             while(rs.next()){
+                 i=1;
+                 pe.getPg().getSerie().add(rs.getString(i++));
+             }
+             ps.clearBatch();
+             ps=cn.prepareStatement(SentenciasBD.GRAFICOSDATOS.getSentencia());
+             ps.setInt(1, pe.getPg().getId());
+             System.out.println(ps.toString());
+             rs=ps.executeQuery(); 
+             while(rs.next()){
+                 i=1;
+                 pe.getPg().getDatos().add(rs.getString(i++));
+             }
+             ps.clearBatch();
+             ps=cn.prepareStatement(SentenciasBD.GRAFICOSCOLORES.getSentencia());
+             ps.setInt(1, pe.getPg().getId());
+             System.out.println(ps.toString());
+             rs=ps.executeQuery(); 
+             while(rs.next()){
+                 i=1;
+                 pe.getPg().getColores().add(rs.getString(i++));
+             }
+        } catch (SQLException | NullPointerException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+             con.cerrar(rs);
+        }
+        return pe;
     }
 }
 

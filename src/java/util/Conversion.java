@@ -6,6 +6,7 @@
 
 package util;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,6 +21,7 @@ import obj.Municipios;
 import obj.Precios;
 import obj.Servicios;
 import obj.Tablacontenido;
+import obj.graficos.PlantillaElementos;
 
 /**
  * Clase que se encarga de tomar los objetos y convertirlos a Json
@@ -865,5 +867,10 @@ public class Conversion {
         String atGras="\"atGras\":{\"plantilla2\":2,\"dats\":["+grafico1+","+grafico2+"]}";
         String json = "resp({\"ast\":{" + atMaps + "," + atTabs + "," + atGras + "},\"atSel\":\"atMaps\"}})";
         return json;
+    }
+    
+    public String pruebaJsonGson(PlantillaElementos pe){
+        Gson gson= new Gson();
+        return gson.toJson(pe, PlantillaElementos.class);
     }
 }

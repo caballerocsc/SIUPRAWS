@@ -74,7 +74,20 @@ public enum SentenciasBD {
     "where mc.alias like ?"),
     PRECIOS("SELECT mercado_tierras_rurales.funcion_parametros_precios(?);"),
     PRECIOSSUMATORIARANGOS("SELECT  rango_precios, sum(area_hectareas),municipioid,municipio\n" +
-        "FROM mercado_tierras_rurales.v_precios_mpios P where deptoid=? group by municipio,municipioid, rango_precios order by municipioid;");
+        "FROM mercado_tierras_rurales.v_precios_mpios P where deptoid=? group by municipio,municipioid, rango_precios order by municipioid;"),
+    PLANTILLAGENERALGRAFICOS("select pe.plantelemenid, pe.alias, pe.compcg, pe.comptab, pe.indtab,pe.indgraf from mod.plantilla_elementos pe "
+            + "inner join adminsiupra.areastrabajo_plantillas_menuconsultas atpmc on pe.plantillaidfk=atpmc.plantillaid where areatrabajoid=? and menuconsultaid=?"),
+    GRAFICOSCOLUMNAS("select pc.columnas, pc.tipo from mod.plantilla_columnas pc "
+            + "inner join  mod.plantilla_elementos pe on pc.plantelemidfk=pe.plantelemenid where pe.plantelemenid=? and pc.tipo=1 order by pc.orden asc"),
+    PLANTILLAGRAFICOS("select pg.plantgrafid, pg.tipo, pg.titulo from mod.plantilla_grafico pg "
+            + "inner join mod.plantilla_elementos pe on pg.plantelemidfk=pe.plantelemenid where pe.plantelemenid=? "),
+    GRAFICOSEJEY("select pgy.valor from mod.plantilla_graficoy pgy inner join mod.plantilla_grafico pg on pgy.plantgrafidfk=pg.plantgrafid where pg.plantgrafid = ?"),
+    GRAFICOSEJEX("select pgx.valor from mod.plantilla_graficox pgx inner join mod.plantilla_grafico pg on pgx.plantgrafidfk=pg.plantgrafid where pg.plantgrafid = ?"),
+    GRAFICOSSERIES("select gs.valor from mod.plantilla_graficos_series gs "
+            + "inner join mod.plantilla_grafico pg on gs.plantillagrafidfk=pg.plantgrafid where pg.plantgrafid = ? order by gs.orden asc "),
+    GRAFICOSDATOS("select gd.valor from mod.plantilla_grafico_datos gd inner join mod.plantilla_grafico pg on gd.plantgrafseridfk=pg.plantgrafid"
+            + " where pg.plantgrafid = ? order by gd.orden asc"),
+    GRAFICOSCOLORES("select gc.color from mod.plantilla_grafico_colores gc inner join mod.plantilla_grafico pg on gc.plantgrafidfk=pg.plantgrafid  where pg.plantgrafid =? order by gc.orden asc");
     
     private final String sentencia;
 

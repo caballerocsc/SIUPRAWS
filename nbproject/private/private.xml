@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/services/ConsultasFacadeREST.java</file>
-            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/test/Controller/OperacionesTest.java</file>
-            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/Controller/Operaciones.java</file>
+            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/obj/graficos/PlantillaColumnas.java</file>
+            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/obj/graficos/PlantillaElementos.java</file>
+            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/obj/graficos/PlantillaGraficos.java</file>
             <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/db/SentenciasBD.java</file>
-            <file>file:/D:/Users/Usuario/Documents/upra/NetBeansProjects/SIUPRAWS/src/java/util/Conversion.java</file>
         </group>
     </open-files>
 </project-private>

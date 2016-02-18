@@ -104,6 +104,7 @@ public class Operaciones {
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias));
                 break;
         }
+        resultado=conv.pruebaJsonGson(con.consultarPlantillaGraficos());
         return resultado;
     }
     
