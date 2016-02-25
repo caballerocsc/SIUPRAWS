@@ -149,7 +149,7 @@ public class Conversion {
             if(tab.isDesplegado())
                 json=json+",\"es\":{\"desp\":true}";
             sub2.add("\""+tab.getAlias()+"\":{"+json+"}");
-            System.out.println("el json va: "+json);
+//            System.out.println("el json va: "+json);
         }
         cont=sub2.size();
         json="";
@@ -160,7 +160,7 @@ public class Conversion {
             json="\"acsgs\":{"+json+sub2.get(cont-1)+"}";
         }if(cont==1)
             json="\"acsgs\":{"+json+sub2.get(cont-1)+"}";
-        System.out.println("ultimo paso: "+json);
+//        System.out.println("ultimo paso: "+json);
         return json;
     }
      
@@ -227,7 +227,7 @@ public class Conversion {
             json="\"ssgs\":{"+json+al.get(cont-1)+"}";
         }if(cont==1)
             json="\"ssgs\":{"+json+al.get(cont-1)+"}";
-        System.out.println("ultimo paso: "+json);
+//        System.out.println("ultimo paso: "+json);
         return json;
     }
     
@@ -270,7 +270,7 @@ public class Conversion {
 //            nivel4=nivel4+tmp.get(cont-1);
 //            nivel4="\"conf\":{"+nivel4+"}";
             nivel4="\"conf\":{"+addComma(tmp)+"}";
-            System.out.println(nivel4);
+//            System.out.println(nivel4);
             tmp=new ArrayList<>();
             if(capa.getAutoident())
                  tmp.add("\"autoIden\":"+capa.getAutoident());
@@ -296,7 +296,7 @@ public class Conversion {
 //            t4=t4+tmp.get(cont-1);
 //            nivel4=nivel4+",\"es\":{"+t4+"}";
             nivel4=nivel4+",\"es\":{"+addComma(tmp)+"}";
-            System.out.println(nivel4);
+//            System.out.println(nivel4);
             tmp=new ArrayList<>();
             if(capa.getAnio()!=null)
                 tmp.add("\"anio\":\""+capa.getAnio()+"\"");
@@ -320,16 +320,16 @@ public class Conversion {
 //            t4=t4+tmp.get(cont-1);
 //            nivel4=nivel4+",\"inf\":{"+t4+"}";
             nivel4=nivel4+",\"inf\":{"+addComma(tmp)+"}";
-            System.out.println(nivel4);
+//            System.out.println(nivel4);
             t4="";
             if(capa.getAliasTablaContendio()!=null)
                 t4="\"alGrcsgs\":"+"\""+capa.getAliasTablaContendio()+"\",";
             if(capa.getAliasservicio()!=null)
                 t4=t4+"\"alSg\":\""+capa.getAliasservicio()+"\",";
             nivel3=t4+nivel4;
-             System.out.println(nivel3);
+//             System.out.println(nivel3);
             nivel2="\"cg"+capa.getAlias()+"\":{"+nivel3+"}";
-             System.out.println(nivel2);
+//             System.out.println(nivel2);
              //nivel1="{\"csgs\":{"+nivel2+"}";
              json.add(nivel2);
              //limpieza de variables
@@ -348,7 +348,7 @@ public class Conversion {
 //        }
 //        resul="\"csgs\":{"+resul+json.get(cont-1)+"}";
         resul="\"csgs\":{"+addComma(json)+"}";
-        System.out.println(resul);
+//        System.out.println(resul);
         return resul;
      }
     
@@ -472,7 +472,7 @@ public class Conversion {
             ljson.add(per);
         json=addComma(ljson);
         json="resp({"+json+"})";
-        System.out.println(json);
+//        System.out.println(json);
         return json;
         
     }
@@ -604,7 +604,7 @@ public class Conversion {
             //creacion del parametro sortdata
             sortData = "\"sortData\": [{\"field\": \"recid\",\"direction\": \"ASC\"}]";
             atTabs = "\"atTabs\":{\"plantilla\":1,\"dats\":[{" + show + "," + column + "," + sortData + "," + registros + "}]}";
-            System.out.println(atTabs);
+//            System.out.println(atTabs);
         //fin seccion tabla de información
             /////////////////////////////////
             //inicio seccion gráfico
@@ -628,7 +628,7 @@ public class Conversion {
                 }
             }
             tmp += filtro.getAnios()[filtro.getAnios().length - 1];
-            System.out.println(tmp);
+//            System.out.println(tmp);
             tituloGraf = "\"titulo\":{\"text\":\"Número de Transacciones y Actos Registrales " + tmp + "\"}";
             //Creación del eje X
             ejeX = "\"xAxis\":{\"categories\":[\"Compraventas\",\"Hipotecas\",\"Remates\",\"Remates\",\"Embargos\"],\"crosshair\":true}";
@@ -648,7 +648,7 @@ public class Conversion {
             series = "\"series\":[" + addComma(subseries) + "]";
             atGras = "\"atGras\":{\"plantilla\":1,\"dats\":[{" + tipoGrafico + "," + tituloGraf + "," + ejeX + "," + ejeY + "," + tooltip
                     + "," + series + "}]}";
-            System.out.println(atGras);
+//            System.out.println(atGras);
             //fin sección gráfico
             //////////////////////////////////////
             //inicio sección geográfica (tabla de contenido)
@@ -669,7 +669,7 @@ public class Conversion {
             }
             identificacion="\"identificacion\":{\"t\":\"auto\",\"dats\":["+addComma(dats)+"]}";
             String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,identificacion);
-            System.out.println(atMaps);
+//            System.out.println(atMaps);
             //fin seccion geográfica
             json = "resp({\"ast\":{" + atMaps + "," + atTabs + "," + atGras + "},\"atSel\":\"atMaps\"}})";
             return json;
@@ -758,7 +758,7 @@ public class Conversion {
             }
         }
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,identificacion);
-        System.out.println(atMaps);
+//        System.out.println(atMaps);
         //Creación del área de trabajo de tabla
         List<String> lColumn=new ArrayList<>();
         List<String> lSubRegistros = new ArrayList<>();
@@ -800,7 +800,7 @@ public class Conversion {
         //creacion del parametro searches
         searches="\"searches\": [{\"field\": \"departamento\",\"caption\": \"Departamento\",\"type\": \"text\"}]";
         atTabs = "\"atTabs\":{\"plantilla\":1,\"dats\":[{" + show + "," + column + "," + sortData + "," + registros +","+searches+"}]}";
-        System.out.println(atTabs);
+//        System.out.println(atTabs);
         //creacion del grafico
         List<String> graf1=new ArrayList();
         String grafico1;

@@ -78,76 +78,91 @@ public class OperacionesTest {
     public void tearDown() {
     }
 
-//    /**
-//     * Test of getDepartamentosMun method, of class Operaciones.
-//     */
-//    @Test
-//    public void testGetDepartamentosMun() {
+    /**
+     * Test of getDepartamentosMun method, of class Operaciones.
+     */
+    @Test
+    public void testGetDepartamentosMun() {
 //        System.out.println("getDepartamentosMun");
-//        Operaciones instance = new Operaciones();
-//        String expResult = "";
-//        String result = instance.getDepartamentosMun();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
+        Operaciones instance = new Operaciones();
+        String expResult = "";
+        for(int i=0;i<500;i++){
+                System.out.println("getDepartamentosMun: "+i);
+                String result = instance.getDepartamentosMun();
+                assertEquals(result, result);
+        }
+        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getTablaContenido method, of class Operaciones.
-//     */
-//    @Test
-//    public void testGetTablaContenido() {
+    }
+
+    /**
+     * Test of getTablaContenido method, of class Operaciones.
+     */
+    @Test
+    public void testGetTablaContenido() {
 //        System.out.println("getTablaContenido");
-//        Operaciones instance = new Operaciones();
-//        String expResult = "";
-//        String result = instance.getTablaContenido();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
+        Operaciones instance = new Operaciones();
+        String expResult = "";
+        for(int i=0;i<500;i++){
+            System.out.println("getTablaContenido: "+i);
+            String result = instance.getTablaContenido();
+            assertEquals(result, result);
+        }
+        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getServicios method, of class Operaciones.
-//     */
-//    @Test
-//    public void testGetServicios() {
+    }
+
+    /**
+     * Test of getServicios method, of class Operaciones.
+     */
+    @Test
+    public void testGetServicios() {
 //        System.out.println("getServicios");
-//        Operaciones instance = new Operaciones();
-//        String expResult = "";
-//        String result = instance.getServicios();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
+        Operaciones instance = new Operaciones();
+        String expResult = "";
+        for(int i=0;i<500;i++){
+            System.out.println("getServicios: "+i);
+            String result = instance.getServicios();
+            assertEquals(result, result);
+        }
+        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getCapas method, of class Operaciones.
-//     */
-//    @Test
-//    public void testGetCapas() {
+    }
+
+    /**
+     * Test of getCapas method, of class Operaciones.
+     */
+    @Test
+    public void testGetCapas() {
 //        System.out.println("getCapas");
-//        Operaciones instance = new Operaciones();
-//        String expResult = "";
-//        String result = instance.getCapas();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
+        Operaciones instance = new Operaciones();
+        String expResult = "";
+        for(int i=0;i<500;i++){
+            System.out.println("getCapas: "+i);
+            String result = instance.getCapas();
+            assertEquals(result, result);
+        }
+        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getFiltroConsulta method, of class Operaciones.
-//     */
-//    @Test
-//    public void testGetFiltroConsulta() {
+    }
+
+    /**
+     * Test of getFiltroConsulta method, of class Operaciones.
+     */
+    @Test
+    public void testGetFiltroConsulta() {
 //        System.out.println("getFiltroConsulta");
-//        String alias = "";
-//        Operaciones instance = new Operaciones();
-//        String expResult = "";
-//        String result = instance.getFiltroConsulta(alias);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
+        String alias = "";
+        Operaciones instance = new Operaciones();
+        String expResult = "";
+        for(int i=0;i<500;i++){
+            System.out.println("getFiltroConsulta: "+i);
+            String result = instance.getFiltroConsulta(alias);
+            assertEquals(result, result);
+        }
+        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
-//    }
+    }
 
     /**
      * Test of seleccionarConsulta method, of class Operaciones.
