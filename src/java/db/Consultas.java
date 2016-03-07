@@ -48,9 +48,9 @@ public class Consultas {
         List<Departamentos> depar;
         depar=new ArrayList<>();
         Connection cn=con.getConexion();
-        SentenciasBD sbd=SentenciasBD.DEPARTAMENTOSMUN;
+        SentenciasBD sbd=new SentenciasBD();
         try{
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getDEPARTAMENTOSMUN());
             rs=ps.executeQuery();
             while(rs.next()){
                 Departamentos d = new Departamentos();
@@ -85,9 +85,9 @@ public class Consultas {
         ResultSet rs=null;
         Connection cn=con.getConexion();
         List<Municipios> mun=new ArrayList<>();
-        SentenciasBD sbd=SentenciasBD.MUNICIPIOS;
+        SentenciasBD sbd=new SentenciasBD();
         try{
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getMUNICIPIOS());
             ps.setInt(1, idDepart);
             rs=ps.executeQuery();
             while(rs.next()){
@@ -121,9 +121,9 @@ public class Consultas {
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Tablacontenido> tablaContenido=new ArrayList<>();
-        SentenciasBD sbd=SentenciasBD.TABLADECONTENIDO;
+        SentenciasBD sbd=new SentenciasBD();
         try{
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getTABLADECONTENIDO());
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -158,9 +158,9 @@ public class Consultas {
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Servicios> servicios=new ArrayList<>();
-        SentenciasBD sbd=SentenciasBD.SERVICIOS;
+        SentenciasBD sbd=new SentenciasBD();
         try{
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getSERVICIOS());
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -200,9 +200,9 @@ public class Consultas {
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Capas> capas=new ArrayList<>();
-        SentenciasBD sbd=SentenciasBD.CAPAS;
+        SentenciasBD sbd=new SentenciasBD();
         try{
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getCAPAS());
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -269,9 +269,9 @@ public class Consultas {
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Menuconsultas> mConList=new ArrayList<>();
-        SentenciasBD sbd=SentenciasBD.MENUCONSULTAS;
+        SentenciasBD sbd=new SentenciasBD();
         try{
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getMENUCONSULTAS());
             rs=ps.executeQuery();
             while (rs.next()) {
                 int i=1;
@@ -306,9 +306,9 @@ public class Consultas {
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Precios> precios=new ArrayList<>();
-        SentenciasBD sbd=SentenciasBD.PRECIOS;
+        SentenciasBD sbd=new SentenciasBD();
         try {
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getPRECIOS());
             ps.setString(1, clausula);
             System.out.println(ps.toString());
             rs=ps.executeQuery();
@@ -350,9 +350,9 @@ public class Consultas {
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<DinamicaMercados> Dinam=new ArrayList<>();
-        SentenciasBD sbd=SentenciasBD.DINAMICAMERCADO;
+        SentenciasBD sbd=new SentenciasBD();
         try {
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getDINAMICAMERCADO());
             ps.setString(1, clausula);
             System.out.println(ps.toString());
             rs=ps.executeQuery();
@@ -438,9 +438,9 @@ public class Consultas {
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Filtros> filtros=new ArrayList<>();
-        SentenciasBD sentenciasBD=SentenciasBD.CONSULTAFILTROS;
+        SentenciasBD sentenciasBD=new SentenciasBD();
         try {
-            ps=cn.prepareStatement(sentenciasBD.getSentencia());
+            ps=cn.prepareStatement(sentenciasBD.getCONSULTAFILTROS());
             ps.setString(1, alias);
             ps.setString(2, alias);
             ps.setString(3, alias);
@@ -492,13 +492,13 @@ public class Consultas {
     
     public Tablacontenido consultarTablaContenidoporMenuConsulta(String alias){
         Tablacontenido tablacontenido=new Tablacontenido();
-        SentenciasBD sbd=SentenciasBD.TABLACONTENIDO_MENUCONSULTAS;
+        SentenciasBD sbd=new SentenciasBD();
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
         PreparedStatement ps=null;
         try {
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getTABLACONTENIDO_MENUCONSULTAS());
             ps.setString(1, alias);
             rs=ps.executeQuery();
             int i=1;
@@ -520,13 +520,13 @@ public class Consultas {
     
     public List<Capas> consultarCapasporMenuConsulta(String alias){
         List<Capas> lista=new ArrayList<>();
-        SentenciasBD sbd=SentenciasBD.CAPAS_MENUCONSULTAS;
+        SentenciasBD sbd=new SentenciasBD();
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
         PreparedStatement ps=null;
         try {
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getCAPAS_MENUCONSULTAS());
             ps.setString(1, alias);
             rs=ps.executeQuery();
             int i=1;
@@ -562,14 +562,14 @@ public class Consultas {
     
     public List<Servicios> consultarServicioporMenuConsulta(String alias){
         Servicios servicios=new Servicios();
-        SentenciasBD sbd=SentenciasBD.SERVICIOS_MENUCONSULTAS;
+        SentenciasBD sbd=new SentenciasBD();
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
         PreparedStatement ps=null;
         List<Servicios> list=new ArrayList<>();
         try {
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getSERVICIOS_MENUCONSULTAS());
             ps.setString(1, alias);
             rs=ps.executeQuery();
             int i=1;
@@ -622,9 +622,9 @@ public class Consultas {
         //String clausula=filtrosEntidadesToString(filtros);
         PreparedStatement ps=null;
         List<Precios> precios=new ArrayList<>();
-        SentenciasBD sbd=SentenciasBD.PRECIOSSUMATORIARANGOS;
+        SentenciasBD sbd=new SentenciasBD();
         try {
-            ps=cn.prepareStatement(sbd.getSentencia());
+            ps=cn.prepareStatement(sbd.getPRECIOSSUMATORIARANGOS());
             ps.setString(1, filtros.getDeps()[0]+"");
             System.out.println(ps.toString());
             rs=ps.executeQuery();
