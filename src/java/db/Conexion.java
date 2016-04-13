@@ -22,7 +22,8 @@ public class Conexion {
     }
 
     String driver = "org.postgresql.Driver";
-    String connectString = "jdbc:postgresql://10.10.30.11:5432/siupra";
+    //String connectString = "jdbc:postgresql://10.10.30.11:5432/siupra"; //pruebas
+    String connectString = "jdbc:postgresql://10.10.150.10:5432/siupra"; //produccion
     String user = "upramisional";
     String password = "upr4m1s10n4l";
 
