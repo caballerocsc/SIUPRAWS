@@ -103,6 +103,9 @@ public class Operaciones {
                 resultado=conv.crearJsonDinamMerc(fil, con.consultaDinamicaMerc(fil), con.consultarTablaContenidoporMenuConsulta(alias), 
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias));
                 break;
+            case Parametros.RESTRICCIONES:
+                resultado=conv.crearJsonRestricciones(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias), con.consultaRestricciones());
         }
         return resultado;
     }

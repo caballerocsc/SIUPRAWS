@@ -43,6 +43,7 @@ public class Parametros {
     public static final String CONFLICTOS_USO="cut";
     public static final String INDICADORES="iadt";
     public static final String AVALUOS="av";
+    public static final String RESTRICCIONES="celaaf";
             
     public Parametros() {
     }

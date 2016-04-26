@@ -62,8 +62,8 @@ public class SentenciasBD {
         "inner join adminsiupra.menuconsultas_tablacontenido mtc on tc.tablacontenidoupraid=mtc.tablacontenidoid\n" +
         "inner join adminsiupra.menuconsultas mc on mtc.menuconsultaid=mc.menuconsultaid\n" +
         "where mc.alias like ? ";
-    private String CAPAS_MENUCONSULTAS="select c.alias,c.aliasgrupo,c.aliasservicio,c.resolucionmax,c.filtro,c.nombrecapa,c.opacidad,=select texto from dominios where dominioid=c.crsfkid;c.anio,c.fuente,c.nombre,\n" +
-        "c.visible, c.identificable, c.leyendacargada, c.autoidentificable from adminsiupra.capas c\n" +
+    private String CAPAS_MENUCONSULTAS="select c.alias,c.aliasgrupo,c.aliasservicio,c.resolucionmax,c.filtro,c.nombrecapa,c.opacidad,(select texto from dominios where dominioid=c.crsfkid),c.anio,c.fuente,c.nombre,\n" +
+        "c.visible, c.identificable, c.leyendacargada, c.autoidentificable, c.titulo from adminsiupra.capas c\n" +
         "inner join adminsiupra.menuconsultas_capas mcc on mcc.capasid=c.capasupraid\n" +
         "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
         "where mc.alias like ?";
@@ -88,6 +88,10 @@ public class SentenciasBD {
     private String GRAFICOSDATOS="select gd.valor from mod.plantilla_grafico_datos gd inner join mod.plantilla_grafico pg on gd.plantgrafseridfk=pg.plantgrafid"
             + " where pg.plantgrafid = ? order by gd.orden asc";
     private String GRAFICOSCOLORES="select gc.color from mod.plantilla_grafico_colores gc inner join mod.plantilla_grafico pg on gc.plantgrafidfk=pg.plantgrafid  where pg.plantgrafid =? order by gc.orden asc";
+        private String RESTRICCIONES="select codigodanedepto,tipo_zona,departamento,round((sum(area_ha_rest_agro)*100)/area_ha_depto,2) , round(area_ha_depto,2) \n" +
+"    from areas_disponibles_ordenamiento_productivo.v_restricciones_agropecuarias \n" +
+"    group by tipo_zona,departamento,codigodanedepto,area_ha_depto \n" +
+"    order by departamento,tipo_zona";
 
     public SentenciasBD() {
     }
@@ -259,8 +263,13 @@ public class SentenciasBD {
     public void setGRAFICOSCOLORES(String GRAFICOSCOLORES) {
         this.GRAFICOSCOLORES = GRAFICOSCOLORES;
     }
-    
-    
-    
+
+    public String getRESTRICCIONES() {
+        return RESTRICCIONES;
+    }
+
+    public void setRESTRICCIONES(String RESTRICCIONES) {
+        this.RESTRICCIONES = RESTRICCIONES;
+    }
     
 }

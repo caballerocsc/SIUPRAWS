@@ -36,17 +36,17 @@ public class ConsultasFacadeREST {
      * @param alias parametro de busqueda de la consulta en la base de datos
      * @param json string con la información de filtros que se deben aplicar
      */
-    public byte[] consultasAplicacion(@PathParam("alias") String alias, @PathParam("json") String json){
-        try{
+    public String /*byte[]*/ consultasAplicacion(@PathParam("alias") String alias, @PathParam("json") String json){
+//        try{
             Operaciones op=new Operaciones();
             System.out.println("alias: "+alias+" json: "+json);
             String s=op.seleccionarConsulta(alias, json);
-            return s.getBytes("windows-1252");
-        }
-        catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(CapasFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+            return s;//.getBytes("windows-1252");
+//        }
+//        catch (UnsupportedEncodingException ex) {
+//            Logger.getLogger(CapasFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+//            return "";
+//        }
     }
     
     @GET

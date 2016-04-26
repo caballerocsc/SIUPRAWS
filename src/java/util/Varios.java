@@ -5,16 +5,18 @@
  */
 package util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import obj.DinamicaMercados;
 import obj.Menuconsultas;
 import obj.Precios;
+import obj.Restricciones;
 
 /**
  * Clase que contiene diversos metodos que pueden ser utilizados por todas las clases
@@ -189,5 +191,62 @@ public class Varios {
 //            System.out.println("llave: "+key+" valor: "+valor);
 //        }
         return map;
+    }
+    
+    public float promedioRestricciones(List<Restricciones> list, int zona){
+        float resul=0;
+        final int cond=1;
+        final int excl=2;
+        final int sinRest=3;
+        for (Restricciones restricciones : list) {
+            switch(zona){
+                case cond:{
+                    resul+=restricciones.getCondicionante();
+                    break;
+                }
+                case excl:{
+                    resul+=restricciones.getExclusion();
+                    break;
+                }
+                case sinRest:{
+                    resul+=restricciones.getSinRestriccion();
+                    break;
+                }
+            }
+        }
+        resul=resul/list.size();
+        return resul;
+    }
+    
+    public List<BigDecimal> totalAreaxZonaRestricciones(List<Restricciones> list, int zona){
+        List<BigDecimal> listTotal = new ArrayList<>();
+        final int cond=1;
+        final int excl=2;
+        final int sinRest=3;
+        for (Restricciones res : list) {
+            switch(zona){
+                case cond:{
+                    listTotal.add(res.getAreaDepto().multiply(BigDecimal.valueOf(res.getCondicionante())).divide(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP));
+                    break;
+                }
+                case excl:{
+                    listTotal.add(res.getAreaDepto().multiply(BigDecimal.valueOf(res.getExclusion())).divide(new BigDecimal(100)).setScale(2,RoundingMode.HALF_UP));
+                    break;
+                }
+                case sinRest:{
+                    listTotal.add(res.getAreaDepto().multiply(BigDecimal.valueOf(res.getSinRestriccion())).divide(new BigDecimal(100)).setScale(2,RoundingMode.HALF_UP));
+                    break;
+                }
+            }
+        }
+        return listTotal;
+    }
+    
+    public BigDecimal sacarPorcentaje(float num1, BigDecimal num2){
+        BigDecimal divisor = new BigDecimal(num1);
+        BigDecimal mult = new BigDecimal(100);
+        divisor=divisor.multiply(mult);
+        divisor = divisor.divide(num2,2, RoundingMode.HALF_UP);
+        return divisor;
     }
 }

@@ -6,6 +6,7 @@
 
 package util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Precios;
+import obj.Restricciones;
 import obj.Servicios;
 import obj.Tablacontenido;
 
@@ -56,7 +58,7 @@ public class Conversion {
                      tmp="\""+m.getCodigodane()+"\":{"+tmp+"}";
                      mun.add(tmp);
              }
-             json="\"dats\":{\"ens\":{\"muns\":["+addComma(l)+"]}},";
+             json="\"dats\":{\"ens\":{\"muns\":["+addCommaString(l)+"]}},";
 //             System.out.println(json);
              //
              json=json+"\"ext\":\""+d.getExt()+"\",";
@@ -67,10 +69,10 @@ public class Conversion {
 //             System.out.println(json);
              dep1.add(json);
          }
-         json="\"dats\":{"+addComma(dep1)+"},";
+         json="\"dats\":{"+addCommaString(dep1)+"},";
          json+="\"nom\":\"Departamentos\"";
          json="\"deps\":{"+json+"},";
-         json+="\"muns\":{\"dats\":{"+addComma(mun)+"}, \"nom\":\"Municipios\"}";
+         json+="\"muns\":{\"dats\":{"+addCommaString(mun)+"}, \"nom\":\"Municipios\"}";
          json="\"ens\":{"+json+"},";
          List<String> sMenu=new ArrayList<>();
          String men="";
@@ -89,7 +91,7 @@ public class Conversion {
              men="\""+m.getAlias()+"\":{"+men+"}";
              sMenu.add(men);
         }
-         men="\"dats\":{"+addComma(sMenu)+"}";
+         men="\"dats\":{"+addCommaString(sMenu)+"}";
          men="\"mcsPpl\":{"+men+"}";
          json="resp({"+json+men+"})";
          return json;
@@ -100,7 +102,25 @@ public class Conversion {
      * @param lista Lista String de objetos 
      * @return texto concatenado
      */
-     public String addComma(List<String> lista){
+     public String addCommaString(List<String> lista){
+         if (lista.size()>0) {
+             int cont = lista.size();
+             String json = "";
+             for (int i = 0; i < cont - 1; i++) {
+                 json += lista.get(i) + ",";
+             }
+             json += lista.get(cont - 1);
+             return json;
+         }else
+             return "";
+     }
+     
+    /**
+     *
+     * @param lista
+     * @return
+     */
+    public String addCommaDouble(List<BigDecimal> lista){
          if (lista.size()>0) {
              int cont = lista.size();
              String json = "";
@@ -256,21 +276,12 @@ public class Conversion {
              if(capa.getLimites()!=null)
                  tmp.add("\"lims\":\""+capa.getLimites()+"\"");
              if(capa.getNombre_capa()!=null)
-                 tmp.add("\"nomCg\":\""+capa.getNombre_capa()+"\"");
+                 tmp.add("\"nom\":\""+capa.getNombre_capa()+"\"");
              if(capa.getOpacidad()!=null)
                  tmp.add("\"opa\":"+capa.getOpacidad());
              if(capa.getsTipoAcceso()!=null)
-                 tmp.add("\"tCg\":\""+capa.getsTipoCapa()+"\"");
-//            cont=tmp.size();
-//            if(cont>1){
-//                for (int i = 0; i < cont-1; i++) {// este for se puede rehusar en un metodo
-//                    nivel4=nivel4+tmp.get(i)+",";
-//                }
-//            }
-//            nivel4=nivel4+tmp.get(cont-1);
-//            nivel4="\"conf\":{"+nivel4+"}";
-            nivel4="\"conf\":{"+addComma(tmp)+"}";
-//            System.out.println(nivel4);
+                 tmp.add("\"t\":\""+capa.getsTipoCapa()+"\"");
+            nivel4="\"conf\":{"+addCommaString(tmp)+"}";
             tmp=new ArrayList<>();
             if(capa.getAutoident())
                  tmp.add("\"autoIden\":"+capa.getAutoident());
@@ -286,17 +297,9 @@ public class Conversion {
                  tmp.add("\"or\":"+capa.getOrdenable());
             if(capa.getTransparente())
                  tmp.add("\"transp\":"+capa.getTransparente());
-//            cont=tmp.size();
-//            t4="";
-//            if(cont>1){
-//                for (int i = 0; i < cont-1; i++) {
-//                     t4=t4+tmp.get(i)+",";
-//                }
-//            }
-//            t4=t4+tmp.get(cont-1);
-//            nivel4=nivel4+",\"es\":{"+t4+"}";
-            nivel4=nivel4+",\"es\":{"+addComma(tmp)+"}";
-//            System.out.println(nivel4);
+            if(capa.getBase())
+                tmp.add("\"bas\":"+capa.getBase());
+            nivel4=nivel4+",\"es\":{"+addCommaString(tmp)+"}";
             tmp=new ArrayList<>();
             if(capa.getAnio()!=null)
                 tmp.add("\"anio\":\""+capa.getAnio()+"\"");
@@ -310,45 +313,23 @@ public class Conversion {
                  tmp.add("\"nom\":\""+capa.getNombre()+"\"");   
             if(capa.getPalab_cl()!=null)
                  tmp.add("\"palCla\":\""+capa.getPalab_cl()+"\"");
-//            cont=tmp.size();
-//            t4="";
-//            if(cont>1){
-//                for (int i = 0; i < cont-1; i++) {
-//                     t4=t4+tmp.get(i)+",";
-//                }
-//            }
-//            t4=t4+tmp.get(cont-1);
-//            nivel4=nivel4+",\"inf\":{"+t4+"}";
-            nivel4=nivel4+",\"inf\":{"+addComma(tmp)+"}";
-//            System.out.println(nivel4);
+            if(capa.getImagen()!=null)
+                tmp.add("\"img\":\""+capa.getImagen()+"\"");
+            nivel4=nivel4+",\"inf\":{"+addCommaString(tmp)+"}";
             t4="";
             if(capa.getAliasTablaContendio()!=null)
-                t4="\"alGrcsgs\":"+"\""+capa.getAliasTablaContendio()+"\",";
+                t4="\"alGr\":"+"\""+capa.getAliasTablaContendio()+"\",";
             if(capa.getAliasservicio()!=null)
                 t4=t4+"\"alSg\":\""+capa.getAliasservicio()+"\",";
             nivel3=t4+nivel4;
-//             System.out.println(nivel3);
             nivel2="\"cg"+capa.getAlias()+"\":{"+nivel3+"}";
-//             System.out.println(nivel2);
-             //nivel1="{\"csgs\":{"+nivel2+"}";
              json.add(nivel2);
-             //limpieza de variables
-             //nivel1="";
              nivel2="";
              nivel3="";
              nivel4="";
              tmp=new ArrayList<>();
          }
-//         resul="";
-//        cont=json.size();
-//        if(cont>1){
-//            for (int i = 0; i < cont-1; i++) {
-//                 resul=resul+json.get(i)+",";
-//            }
-//        }
-//        resul="\"csgs\":{"+resul+json.get(cont-1)+"}";
-        resul="\"csgs\":{"+addComma(json)+"}";
-//        System.out.println(resul);
+        resul="\"csgs\":{"+addCommaString(json)+"}";
         return resul;
      }
     
@@ -368,113 +349,141 @@ public class Conversion {
      * @param filtros lista de tipo Filtros para convertirla en Json
      * @return String en formato json con la información
      */
-    public String filtrostoJson(List<Filtros> filtros){
-        String ent="";
-        String per="";
-        //String otros;
-        String nac="";
-        List<String> Ldepar= new ArrayList<>();
-        List<String> Lmun= new ArrayList<>();
-        List<String> Lregi= new ArrayList<>();
-        List<String> Lterr= new ArrayList<>();
-        List<String> Lanios= new ArrayList<>();
-        List<String> Lmeses= new ArrayList<>();
-        List<String> Ltri= new ArrayList<>();
-        List<String> Lsem= new ArrayList<>();
-        List<String> LValotros= new ArrayList<>();
-        List<String> Lentidades= new ArrayList<>();
-        List<String> Lperiodos= new ArrayList<>();
-        List<String> Lotros= new ArrayList<>();
-        String nomFi="";
-        String subTFi="";
-        String tFi="";
-        String tFiPa="";
-        for (Filtros f : filtros) {
-            switch(f.getAliasTipo()){
-                case "ent":
-                    if(f.getAliasSubTipo().equals("nac"))
-                        nac=("\"nal\":{\"dats\":true}");
-                    if(f.getAliasSubTipo().equals("dep"))
-                        Ldepar.add("\""+f.getValorFiltro()+"\"");
-                    if(f.getAliasSubTipo().equals("mun"))
-                        Lmun.add("\""+f.getValorFiltro()+"\"");
-                    if(f.getAliasSubTipo().equals("reg"))
-                        Lregi.add("\""+f.getValorFiltro()+"\"");
-                    if(f.getAliasSubTipo().equals("terr"))
-                        Lterr.add("\""+f.getValorFiltro()+"\"");
-                    break;
-                case "per":
-                    if(f.getAliasSubTipo().equals("an"))
-                         Lanios.add(f.getValorFiltro());
-                    if(f.getAliasSubTipo().equals("sem"))
-                         Lsem.add(f.getValorFiltro());
-                    if(f.getAliasSubTipo().equals("trim"))
-                         Ltri.add(f.getValorFiltro());
-                    if(f.getAliasSubTipo().equals("mens"))
-                         Lmeses.add(f.getValorFiltro());
-                    break;
-                case "otr":
-                    if(f.getValorFiltro()!=null)
-                        LValotros.add(f.getValorFiltro());
-                    if(f.getTextoTipo()!=null)
-                        nomFi="\"nomFi\":\""+f.getTextoTipo()+"\"";
-                    if(f.getTipoElemento()!=null){
-                        subTFi="\"subTFi\":\""+f.getTipoElemento()+"\"";
-                        if(f.getTipoElemento().equals("select"))
-                           tFi="\"tFi\":\"input\"";
-                    }
-                    if(f.getTipoElemtoPadre()!=null)
-                        tFiPa="\"tFiPa\":\""+f.getTipoElemtoPadre()+"\"";
-                    break;
+    public String filtrostoJson(List<Filtros> filtros) {
+        if (filtros.size() == 0) {
+            return null;
+        } else {
+            String ent = "";
+            String per = "";
+            //String otros;
+            String nac = "";
+            List<String> Ldepar = new ArrayList<>();
+            List<String> Lmun = new ArrayList<>();
+            List<String> Lregi = new ArrayList<>();
+            List<String> Lterr = new ArrayList<>();
+            List<String> Lanios = new ArrayList<>();
+            List<String> Lmeses = new ArrayList<>();
+            List<String> Ltri = new ArrayList<>();
+            List<String> Lsem = new ArrayList<>();
+            List<String> LValotros = new ArrayList<>();
+            List<String> Lentidades = new ArrayList<>();
+            List<String> Lperiodos = new ArrayList<>();
+            List<String> Lotros = new ArrayList<>();
+            String nomFi = "";
+            String subTFi = "";
+            String tFi = "";
+            String tFiPa = "";
+            for (Filtros f : filtros) {
+                switch (f.getAliasTipo()) {
+                    case "ent":
+                        if (f.getAliasSubTipo().equals("nac")) {
+                            nac = ("\"nal\":{\"dats\":true}");
+                        }
+                        if (f.getAliasSubTipo().equals("dep")) {
+                            Ldepar.add("\"" + f.getValorFiltro() + "\"");
+                        }
+                        if (f.getAliasSubTipo().equals("mun")) {
+                            Lmun.add("\"" + f.getValorFiltro() + "\"");
+                        }
+                        if (f.getAliasSubTipo().equals("reg")) {
+                            Lregi.add("\"" + f.getValorFiltro() + "\"");
+                        }
+                        if (f.getAliasSubTipo().equals("terr")) {
+                            Lterr.add("\"" + f.getValorFiltro() + "\"");
+                        }
+                        break;
+                    case "per":
+                        if (f.getAliasSubTipo().equals("an")) {
+                            Lanios.add(f.getValorFiltro());
+                        }
+                        if (f.getAliasSubTipo().equals("sem")) {
+                            Lsem.add(f.getValorFiltro());
+                        }
+                        if (f.getAliasSubTipo().equals("trim")) {
+                            Ltri.add(f.getValorFiltro());
+                        }
+                        if (f.getAliasSubTipo().equals("mens")) {
+                            Lmeses.add(f.getValorFiltro());
+                        }
+                        break;
+                    case "otr":
+                        if (f.getValorFiltro() != null) {
+                            LValotros.add(f.getValorFiltro());
+                        }
+                        if (f.getTextoTipo() != null) {
+                            nomFi = "\"nomFi\":\"" + f.getTextoTipo() + "\"";
+                        }
+                        if (f.getTipoElemento() != null) {
+                            subTFi = "\"subTFi\":\"" + f.getTipoElemento() + "\"";
+                            if (f.getTipoElemento().equals("select")) {
+                                tFi = "\"tFi\":\"input\"";
+                            }
+                        }
+                        if (f.getTipoElemtoPadre() != null) {
+                            tFiPa = "\"tFiPa\":\"" + f.getTipoElemtoPadre() + "\"";
+                        }
+                        break;
+                }
             }
-        }
-        String tmp;
+            String tmp;
         ///////////////////////////////
-        ///////Entidades//////////////
-        if(!nac.equals(""))
-            Lentidades.add(nac);
-        tmp=addComma(Ldepar);
-        if(tmp!=null)
-            Lentidades.add("\"deps\":{\"dats\":["+tmp+"]}");
-        tmp=addComma(Lmun);
-        if(tmp!=null)
-            Lentidades.add("\"muns\":{\"dats\":["+tmp+"]}");
-        tmp=addComma(Lregi);
-        if(tmp!=null)
-            Lentidades.add("\"regis\":{\"dats\":["+tmp+"]}");
-        tmp=addComma(Lterr);
-        if(tmp!=null)
-            Lentidades.add("\"terrs\":{\"dats\":["+tmp+"]}");
-        if(Lentidades.size()>0)
-            ent="\"ens\":{"+addComma(Lentidades)+"}";
+            ///////Entidades//////////////
+            if (!nac.equals("")) {
+                Lentidades.add(nac);
+            }
+            tmp = addCommaString(Ldepar);
+            if (tmp != null) {
+                Lentidades.add("\"deps\":{\"dats\":[" + tmp + "]}");
+            }
+            tmp = addCommaString(Lmun);
+            if (tmp != null) {
+                Lentidades.add("\"muns\":{\"dats\":[" + tmp + "]}");
+            }
+            tmp = addCommaString(Lregi);
+            if (tmp != null) {
+                Lentidades.add("\"regis\":{\"dats\":[" + tmp + "]}");
+            }
+            tmp = addCommaString(Lterr);
+            if (tmp != null) {
+                Lentidades.add("\"terrs\":{\"dats\":[" + tmp + "]}");
+            }
+            if (Lentidades.size() > 0) {
+                ent = "\"ens\":{" + addCommaString(Lentidades) + "}";
+            }
         //////////////////////////////////////////
-        ////////Periodos/////////////////////
-        tmp=addComma(Lanios);
-        if(tmp!=null)
-            Lperiodos.add("\"anios\":{\"dats\":["+tmp+"]}");
-        tmp=addComma(Lmeses);
-        if(tmp!=null)
-            Lperiodos.add("\"meses\":{\"dats\":["+tmp+"]}");
-        tmp=addComma(Ltri);
-        if(tmp!=null)
-            Lperiodos.add("\"trimestres\":{\"dats\":["+tmp+"]}");
-         tmp=addComma(Lsem);
-        if(tmp!=null)
-            Lperiodos.add("\"semestres\":{\"dats\":["+tmp+"]}");
-        if(Lperiodos.size()>0)
-            per="\"pers\":{\"dats\":{"+addComma(Lperiodos)+"}}";
-        //json  final
-        String json;
-        List<String> ljson=new ArrayList<>();
-        if(!ent.equals(""))
-            ljson.add(ent);
-        if(!per.equals(""))
-            ljson.add(per);
-        json=addComma(ljson);
-        json="resp({"+json+"})";
-//        System.out.println(json);
-        return json;
-        
+            ////////Periodos/////////////////////
+            tmp = addCommaString(Lanios);
+            if (tmp != null) {
+                Lperiodos.add("\"anios\":{\"dats\":[" + tmp + "]}");
+            }
+            tmp = addCommaString(Lmeses);
+            if (tmp != null) {
+                Lperiodos.add("\"meses\":{\"dats\":[" + tmp + "]}");
+            }
+            tmp = addCommaString(Ltri);
+            if (tmp != null) {
+                Lperiodos.add("\"trimestres\":{\"dats\":[" + tmp + "]}");
+            }
+            tmp = addCommaString(Lsem);
+            if (tmp != null) {
+                Lperiodos.add("\"semestres\":{\"dats\":[" + tmp + "]}");
+            }
+            if (Lperiodos.size() > 0) {
+                per = "\"pers\":{\"dats\":{" + addCommaString(Lperiodos) + "}}";
+            }
+            //json  final
+            String json;
+            List<String> ljson = new ArrayList<>();
+            if (!ent.equals("")) {
+                ljson.add(ent);
+            }
+            if (!per.equals("")) {
+                ljson.add(per);
+            }
+            json = addCommaString(ljson);
+            json = "resp({" + json + "})";
+            return json;
+        }
     }
     
     
@@ -504,7 +513,7 @@ public class Conversion {
             //            tmp="{\"caption\":\""+filtro.getAnios()[i]+"\",\"span\":\"6\"}";
             //            lColumnGroup.add(tmp);
             //        }
-            //        columnGroup="\"columnGroups\":["+addComma(lColumnGroup)+"]";
+            //        columnGroup="\"columnGroups\":["+addCommaString(lColumnGroup)+"]";
             //Creacion de las columnas
             lColumn.add("{\"field\":  \"recid\",\"caption\": \"#\",\"size\": \"50px\",\"sortable\": true,\"attr\": \"align=center\"}");
             lColumn.add("{\"field\":  \"codDane\",\"caption\": \"CódigoDANE\",\"size\": \"30px\",\"sortable\": true,\"resizable\": true}");
@@ -559,7 +568,7 @@ public class Conversion {
             //tmp="{\"field\": "+titulo+",\"caption\": \"#Peso de Transacciones\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}";
             //titulosColumnas.add(titulo);
             //lColumn.add(tmp);
-            column = "\"columns\":[" + addComma(lColumn) + "]";
+            column = "\"columns\":[" + addCommaString(lColumn) + "]";
             //creación de los registros
             int id = 1;
             Varios var = new Varios();
@@ -594,11 +603,11 @@ public class Conversion {
                 lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getEmbargo());
                 lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getEmbargo() - din.getEmbargo()));
                 lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getEmbargo(), (lista.get(i + 1)).getEmbargo())));
-                lRegistros.add("{" + addComma(lSubRegistros) + "}");
+                lRegistros.add("{" + addCommaString(lSubRegistros) + "}");
                 lSubRegistros.clear();
                 id++;
             }
-            registros = "\"records\":[" + addComma(lRegistros) + "]";
+            registros = "\"records\":[" + addCommaString(lRegistros) + "]";
             //creacion parametro show
             show = "\"show\":{\"toolbar\":false,\"footer\":false}";
             //creacion del parametro sortdata
@@ -645,7 +654,7 @@ public class Conversion {
                 tmp = "{\"name\":\"" + filtro.getAnios()[i] + "\",\"type\":\"column\"," + tmp + "}";
                 subseries.add(tmp);
             }
-            series = "\"series\":[" + addComma(subseries) + "]";
+            series = "\"series\":[" + addCommaString(subseries) + "]";
             atGras = "\"atGras\":{\"plantilla\":1,\"dats\":[{" + tipoGrafico + "," + tituloGraf + "," + ejeX + "," + ejeY + "," + tooltip
                     + "," + series + "}]}";
 //            System.out.println(atGras);
@@ -657,7 +666,7 @@ public class Conversion {
             String identificacion;
             for (int i = 0; i < filtro.getAnios().length; i++) {
                 iden.add("\"al\": \"cgDepartamentos\"");
-                iden.add("\"compCg\": \"codigodane\"");
+                iden.add("\"comp\": \"codigodane\"");
                 iden.add("\"compTab\": \"codDane\"");
                 iden.add("\"tex\":\"Transacciones "+filtro.getAnios()[i]+"\"");
                 iden.add("\"tab\":{\"ind\":0,\"cols\":[\"departamento\", \"compraventa"+filtro.getAnios()[i]+"\", \"remate"+filtro.getAnios()[i]+"\","
@@ -665,9 +674,9 @@ public class Conversion {
                 iden.add("\"gra\":{\"t\":\"pie\",\"indTab\": 0,\"cols\":[\"compraventa"+filtro.getAnios()[i]+"\", \"remate"+filtro.getAnios()[i]+"\","
                         + " \"permuta"+filtro.getAnios()[i]+"\", \"embargo"+filtro.getAnios()[i]+"\", \"hipoteca"+filtro.getAnios()[i]+"\"],"
                         + "\"colores\":[\"#FFAA00\", \"#FFFF00\", \"#FF00C5\", \"#C400B2\", \"#C500FF\", \"#FEB7E2\"]}");
-                dats.add("{"+addComma(iden)+"}");
+                dats.add("{"+addCommaString(iden)+"}");
             }
-            identificacion="\"identificacion\":{\"t\":\"auto\",\"dats\":["+addComma(dats)+"]}";
+            identificacion="\"identificacion\":{\"t\":\"auto\",\"dats\":["+addCommaString(dats)+"]}";
             String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,identificacion);
 //            System.out.println(atMaps);
             //fin seccion geográfica
@@ -719,17 +728,17 @@ public class Conversion {
             ssgs = "\"" + serv.getAlias() + "\":{" + ssgs + "}";
             listServ.add(ssgs);
         }
-        ssgs = "\"ssgs\":{" + addComma(listServ) + "}";
+        ssgs = "\"ssgs\":{" + addCommaString(listServ) + "}";
         //(capas )
         List<String> lCsgs = new ArrayList<>();
         String csgs;
         for (Capas c : capas) {
             //tmp = "";
-            tmp = "\"alGrcsgs\":\"" + c.getAliasgrupo() + "\",";
+            tmp = "\"alGr\":\"" + c.getAliasgrupo() + "\",";
             tmp += "\"alSg\":\"" + c.getAliasservicio() + "\",";
             tmp += "\"conf\":{\"reMa\":" + c.getEscmax() + ","
                     + "\"fis\":\"" + c.getFiltro() + "\","
-                    + "\"nomCg\":\"" + c.getNombre_capa() + "\","
+                    + "\"nom\":\"" + c.getNombre_capa() + "\","
                     + "\"opa\":" + c.getOpacidad() + ","
                     + "\"sire\":\"" + c.getCrs() + "\"},";
             tmp += "\"inf\":{\"anio\":" + c.getAnio() + ","
@@ -741,8 +750,8 @@ public class Conversion {
             tmp = "\"" + c.getAlias() + "\":{" + tmp + "}";
             lCsgs.add(tmp);
         }
-        csgs = "\"ssgs\":{" +addComma(lCsgs)+ "}";
-        atMaps = "\"atMaps\":{\"idAt\":\"atMaps\",\"dats\":{" + acsgs + "," + ssgs + "," + csgs +((iden.equals(""))?"":","+iden)+"}";
+        csgs = "\"csgs\":{" +addCommaString(lCsgs)+ "}";
+        atMaps = "\"atMaps\":{\"idAt\":\"atMaps\",\"dats\":{" + acsgs + "," + ssgs + "," + csgs+"}" +((iden.equals(""))?"":","+iden)+"}";
         return atMaps;
     }
     
@@ -752,7 +761,7 @@ public class Conversion {
         String identificacion="";
         for (Capas capas1 : capas) {
             if (capas1.getAutoident()) {
-                identificacion="\"identificacion\":{\"t\":\"auto\",\"dats\":[{\"al\":\""+capas1.getAlias()+"\",\"compCg\":\"id\",\"compTab\":\"recid\","
+                identificacion="\"identificacion\":{\"t\":\"auto\",\"dats\":[{\"al\":\""+capas1.getAlias()+"\",\"comp\":\"id\",\"compTab\":\"recid\","
                         + "\"tab\":{\"ind\":0,\"cols\":[\"departamento\", \"municipio\", \"rango_precio\", \"area\"]}}]},\"ext\": "
                         + "["+capas1.getLimites()+"]";
             }
@@ -777,7 +786,7 @@ public class Conversion {
         lColumn.add("{\"field\":  \"rango_precio\",\"caption\": \"Rango de Precio\",\"size\": \"10%\",\"sortable\": true,\"resizable\": true}");
         lColumn.add("{\"field\":  \"area\",\"caption\": \"Área (Ha)\",\"size\": \"10%\",\"sortable\": true,\"resizable\": true}");
         /*lColumn.add("{\"field\":  \"rango\",\"caption\": \"Rango\",\"size\": \"10%\",\"sortable\": true,\"resizable\": true}");*/
-        column = "\"columns\":[" + addComma(lColumn) + "]";
+        column = "\"columns\":[" + addCommaString(lColumn) + "]";
         ///Creación de los registros de la tabla
         int i=1;
         for (Precios p : precios) {
@@ -788,11 +797,11 @@ public class Conversion {
             lSubRegistros.add("\"rango_precio\":\""+p.getRango()+"\"");
             lSubRegistros.add("\"area\":"+p.getArea());
             lSubRegistros.add("\"rango\":\""+p.getNombre()+"\"");
-            lRegistros.add("{" + addComma(lSubRegistros) + "}");
+            lRegistros.add("{" + addCommaString(lSubRegistros) + "}");
             lSubRegistros.clear();
             i++;
         }
-        registros = "\"records\":[" + addComma(lRegistros) + "]";
+        registros = "\"records\":[" + addCommaString(lRegistros) + "]";
         //creacion parametro show
         show = "\"show\":{\"toolbar\":false,\"footer\":false}";
         //creacion del parametro sortdata
@@ -819,8 +828,8 @@ public class Conversion {
             tmp = "[\""+key+"\","+rangos.get(key)+"]";
             lSeries.add(tmp);
         }
-        graf1.add("\"series\": [{\"type\": \"pie\",\"name\": \"Porcentaje\",\"data\": ["+addComma(lSeries)+"]}]");
-        grafico1="{"+addComma(graf1)+"}";
+        graf1.add("\"series\": [{\"type\": \"pie\",\"name\": \"Porcentaje\",\"data\": ["+addCommaString(lSeries)+"]}]");
+        grafico1="{"+addCommaString(graf1)+"}";
         List<String> graf2=new ArrayList();
         String grafico2;
         graf2.add("\"chart\":{\"type\":\"column\",\"options3d\":{\"enabled\":true,\"alpha\": 45,\"beta\": 0}}");
@@ -830,7 +839,7 @@ public class Conversion {
         while(iterator.hasNext()){
           lCat.add("\""+(String)iterator.next()+"\"");
         }
-        graf2.add("\"xAxis\":{\"categories\":["+addComma(lCat)+"],\"crosshair\": true}");
+        graf2.add("\"xAxis\":{\"categories\":["+addCommaString(lCat)+"],\"crosshair\": true}");
         graf2.add("\"yAxis\":{\"min\": 0,\"title\":{\"text\":\"Área en hectáreas\"},\"labels\":{\"format\": \"{value}\"}}");
         graf2.add("\"tooltip\":{\"shared\": true}");
         //almacenar la lista de municipios
@@ -858,12 +867,85 @@ public class Conversion {
                 for (int j = 0; j < numCat-con; j++) {
                   sum.add("0");
                 }
-            lSeries.add("{\"name\":\""+munpio+"\",\"type\":\"column\",\"data\":["+addComma(sum)+"]}");
+            lSeries.add("{\"name\":\""+munpio+"\",\"type\":\"column\",\"data\":["+addCommaString(sum)+"]}");
         }
-        graf2.add("\"series\":["+addComma(lSeries)+"]");
-        grafico2="{"+addComma(graf2)+"}";
+        graf2.add("\"series\":["+addCommaString(lSeries)+"]");
+        grafico2="{"+addCommaString(graf2)+"}";
         String atGras="\"atGras\":{\"plantilla2\":2,\"dats\":["+grafico1+","+grafico2+"]}";
         String json = "resp({\"ast\":{" + atMaps + "," + atTabs + "," + atGras + "},\"atSel\":\"atMaps\"}})";
         return json;
     }
+    
+    public String crearJsonRestricciones(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Restricciones> rest){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\", \"Condicionante\", \"Exclusión\", \"Sin Restricción\", \"Área Depto (ha)\"]},\n" +
+                    "\"gra\": {\"t\": \"t\",\"indTab\": 0,\n" +
+                    "\"colums\": [\"Condicionante\", \"Exclusión\", \"Sin Restricción\"],\n" +
+                    "\"cols\": [\"#FFFFB9\", \"#FFB3B3\", \"#C4E6B2\"]}\n}]\n}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        //area trabajo tabla
+        List<String> listColumnas = new ArrayList();
+        String column="";
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"150px\"]");
+        listColumnas.add("[\"Condicionante\", \"p\", \"100px\"]");
+        listColumnas.add("[\"Exclusión\", \"p\", \"100px\"]");
+        listColumnas.add("[\"Sin Restricción\", \"p\", \"100px\"]");
+        listColumnas.add("[\"Área Depto (ha)\", \"n\", \"110px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla="";
+        for (Restricciones r : rest) {
+//            registros.add("[{},\""+r.getCodigoDane()+"\",\""+r.getDepartamento()+
+//                    "\","+v.sacarPorcentaje(r.getCondicionante(),r.getAreaDepto())+
+//                    ","+v.sacarPorcentaje(r.getExclusion(),r.getAreaDepto())+
+//                    ","+v.sacarPorcentaje(r.getSinRestriccion(),r.getAreaDepto())+
+//                    ","+r.getAreaDepto()+"]");
+            registros.add("[{},\""+r.getCodigoDane()+"\",\""+r.getDepartamento()+
+                    "\","+r.getCondicionante()+
+                    ","+r.getExclusion()+
+                    ","+r.getSinRestriccion()+
+                    ","+r.getAreaDepto()+"]");
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion de los graficos
+        String graf1="{\"tGra\":\"t\","
+             + "\"tit\":\"Porcentaje de hectáreas nacional por categoría\","
+             + "\"es\":{\"caLe\":true,\"3d\":true},"
+             + "\"cols\":[\"#FFFFB9\", \"#FFB3B3\", \"#C4E6B2\"],"
+             + "\"dats\":["
+             + "[\"Condicionante\", "+v.promedioRestricciones(rest, 1)+"],"
+             + "[\"Exclusión\", "+v.promedioRestricciones(rest, 2)+"],"
+             + "[\"Sin restricción\", "+v.promedioRestricciones(rest, 3)+"]]}";
+        List<String> depto = new ArrayList<>();
+        for (Restricciones r : rest) {
+            depto.add("\""+r.getDepartamento()+"\"");
+        }
+        String ejeX="["+addCommaString(depto)+"]";
+        String cond="["+addCommaDouble(v.totalAreaxZonaRestricciones(rest, 1))+"]";
+        String exc="["+addCommaDouble(v.totalAreaxZonaRestricciones(rest, 2))+"]";
+        String SinRes="["+addCommaDouble(v.totalAreaxZonaRestricciones(rest, 3))+"]";
+        String graf2="{\"tGra\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
+                + "\"es\":{\"3d\":true},"
+                + "\"cols\":[\"#FFFFB9\", \"#FFB3B3\", \"#C4E6B2\"],"
+                + "\"otrosDats\":{\"ejeX\":"+ejeX+",\"ejeY\":\"Área (ha)\"},"
+                + "\"es\":{\"caLe\":true,\"3d\":true},"
+                + "\"dats\":[[\"Condicionante\","+cond+"],"
+                + "[\"Exclusión\","+exc+"],"
+                + "[\"Sin restricción\","+SinRes+"]]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 3, 1]}";
+        String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
+        return json;
+    }
+    
 }

@@ -23,6 +23,7 @@ import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Precios;
+import obj.Restricciones;
 import obj.Servicios;
 import obj.Tablacontenido;
 import util.Conversion;
@@ -547,6 +548,7 @@ public class Consultas {
                 capas.setIdentific(rs.getBoolean(i++));
                 capas.setLeyenda_c(rs.getBoolean(i++));
                 capas.setAutoident(rs.getBoolean(i++));
+                capas.setTitulo(rs.getString(i++));
                 lista.add(capas);
                 i=1;
             }
@@ -645,6 +647,56 @@ public class Consultas {
             con.cerrar(rs);
         }
         return precios;
+    }
+    
+    public List consultaRestricciones() {
+        Conexion con = new Conexion();
+        Connection cn = con.getConexion();
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        List<Restricciones> list = new ArrayList<>();
+        SentenciasBD sbd = new SentenciasBD();
+        try {
+            ps = cn.prepareStatement(sbd.getRESTRICCIONES());
+            System.out.println(ps.toString());
+            rs = ps.executeQuery();
+            Restricciones r = new Restricciones();
+            int cont = 0;
+            while (rs.next()) {
+                int i = 1;
+                r.setCodigoDane(rs.getString(i++));
+                String tipoZona = rs.getString(i++);
+                r.setDepartamento(rs.getString(i++));
+                switch (tipoZona) {
+                    case "Condicionante": {
+                        r.setCondicionante(rs.getFloat(i++));
+                        break;
+                    }
+                    case "Exclusión": {
+                        r.setExclusion(rs.getFloat(i++));
+                        break;
+                    }
+                    case "Sin Restricción": {
+                        r.setSinRestriccion(rs.getFloat(i++));
+                        break;
+                    }
+                }
+                r.setAreaDepto(rs.getBigDecimal(i++));
+                cont++;
+                if (cont % 3 == 0) {
+                    list.add(r);
+                    r = new Restricciones();
+                }
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
     }
 }
 
