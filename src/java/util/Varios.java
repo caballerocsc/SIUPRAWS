@@ -6,6 +6,7 @@
 package util;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -16,7 +17,7 @@ import java.util.List;
 import obj.DinamicaMercados;
 import obj.Menuconsultas;
 import obj.Precios;
-import obj.Restricciones;
+import obj.Areas;
 
 /**
  * Clase que contiene diversos metodos que pueden ser utilizados por todas las clases
@@ -193,48 +194,53 @@ public class Varios {
         return map;
     }
     
-    public float promedioRestricciones(List<Restricciones> list, int zona){
-        float resul=0;
+    public BigDecimal promedioRestricciones(List<Areas> list, int zona){
+        BigDecimal resul = new BigDecimal(BigInteger.ZERO);
         final int cond=1;
         final int excl=2;
         final int sinRest=3;
-        for (Restricciones restricciones : list) {
+        final int incl=4;
+        for (Areas restricciones : list) {
             switch(zona){
-                case cond:{
-                    resul+=restricciones.getCondicionante();
+                case cond:{// tambien restringido
+                    resul=resul.add(restricciones.getCondicionante());
                     break;
                 }
                 case excl:{
-                    resul+=restricciones.getExclusion();
+                    resul=resul.add(restricciones.getExclusion());
                     break;
                 }
                 case sinRest:{
-                    resul+=restricciones.getSinRestriccion();
+                    resul=resul.add(restricciones.getSinRestriccion());
+                    break;
+                }
+                case incl:{
+                    resul=resul.add(restricciones.getIncluidas());
                     break;
                 }
             }
         }
-        resul=resul/list.size();
+        resul=resul.divide(new BigDecimal(list.size()),2, RoundingMode.HALF_UP);
         return resul;
     }
     
-    public List<BigDecimal> totalAreaxZonaRestricciones(List<Restricciones> list, int zona){
+    public List<BigDecimal> totalAreaxZonaRestricciones(List<Areas> list, int zona){
         List<BigDecimal> listTotal = new ArrayList<>();
         final int cond=1;
         final int excl=2;
         final int sinRest=3;
-        for (Restricciones res : list) {
+        for (Areas res : list) {
             switch(zona){
                 case cond:{
-                    listTotal.add(res.getAreaDepto().multiply(BigDecimal.valueOf(res.getCondicionante())).divide(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP));
+                    listTotal.add(res.getAreaDepto().multiply(res.getCondicionante()).divide(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP));
                     break;
                 }
                 case excl:{
-                    listTotal.add(res.getAreaDepto().multiply(BigDecimal.valueOf(res.getExclusion())).divide(new BigDecimal(100)).setScale(2,RoundingMode.HALF_UP));
+                    listTotal.add(res.getAreaDepto().multiply(res.getExclusion()).divide(new BigDecimal(100)).setScale(2,RoundingMode.HALF_UP));
                     break;
                 }
                 case sinRest:{
-                    listTotal.add(res.getAreaDepto().multiply(BigDecimal.valueOf(res.getSinRestriccion())).divide(new BigDecimal(100)).setScale(2,RoundingMode.HALF_UP));
+                    listTotal.add(res.getAreaDepto().multiply(res.getSinRestriccion()).divide(new BigDecimal(100)).setScale(2,RoundingMode.HALF_UP));
                     break;
                 }
             }
@@ -248,5 +254,29 @@ public class Varios {
         divisor=divisor.multiply(mult);
         divisor = divisor.divide(num2,2, RoundingMode.HALF_UP);
         return divisor;
+    }
+    
+    public List<BigDecimal> totalSepararExclusiones(List<Areas> list, int zona){
+        List<BigDecimal> listTotal = new ArrayList<>();
+        final int incl=1;
+        final int excl=2;
+        final int rest=3;
+        for (Areas res : list) {
+            switch(zona){
+                case incl:{
+                    listTotal.add(res.getAreaIncl().setScale(2, RoundingMode.HALF_UP));
+                    break;
+                }
+                case excl:{
+                    listTotal.add(res.getAreaExcl().setScale(2,RoundingMode.HALF_UP));
+                    break;
+                }
+                case rest:{
+                    listTotal.add(res.getAreaCond().setScale(2,RoundingMode.HALF_UP));
+                    break;
+                }
+            }
+        }
+        return listTotal;
     }
 }

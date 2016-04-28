@@ -19,7 +19,8 @@ import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Precios;
-import obj.Restricciones;
+import obj.Areas;
+import obj.InfoyDocs;
 import obj.Servicios;
 import obj.Tablacontenido;
 
@@ -876,7 +877,7 @@ public class Conversion {
         return json;
     }
     
-    public String crearJsonRestricciones(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Restricciones> rest){
+    public String crearJsonRestricciones(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Areas> rest){
         Varios v = new Varios();
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
@@ -892,7 +893,7 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         //area trabajo tabla
         List<String> listColumnas = new ArrayList();
-        String column="";
+        String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"150px\"]");
         listColumnas.add("[\"Condicionante\", \"p\", \"100px\"]");
@@ -901,13 +902,8 @@ public class Conversion {
         listColumnas.add("[\"Área Depto (ha)\", \"n\", \"110px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
-        String tabla="";
-        for (Restricciones r : rest) {
-//            registros.add("[{},\""+r.getCodigoDane()+"\",\""+r.getDepartamento()+
-//                    "\","+v.sacarPorcentaje(r.getCondicionante(),r.getAreaDepto())+
-//                    ","+v.sacarPorcentaje(r.getExclusion(),r.getAreaDepto())+
-//                    ","+v.sacarPorcentaje(r.getSinRestriccion(),r.getAreaDepto())+
-//                    ","+r.getAreaDepto()+"]");
+        String tabla;
+        for (Areas r : rest) {
             registros.add("[{},\""+r.getCodigoDane()+"\",\""+r.getDepartamento()+
                     "\","+r.getCondicionante()+
                     ","+r.getExclusion()+
@@ -926,7 +922,7 @@ public class Conversion {
              + "[\"Exclusión\", "+v.promedioRestricciones(rest, 2)+"],"
              + "[\"Sin restricción\", "+v.promedioRestricciones(rest, 3)+"]]}";
         List<String> depto = new ArrayList<>();
-        for (Restricciones r : rest) {
+        for (Areas r : rest) {
             depto.add("\""+r.getDepartamento()+"\"");
         }
         String ejeX="["+addCommaString(depto)+"]";
@@ -948,4 +944,97 @@ public class Conversion {
         return json;
     }
     
+    
+    public String crearJsonExclusiones(Tablacontenido tc, List<Servicios> serv,
+            List<Capas> capas, List<Areas> rest,List<InfoyDocs> docs,List<InfoyDocs> info){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\", \"Territorio Incluido (ha)\", \"Incluido\", " +
+                    "\"Territorio Restringido (ha)\", \"Restringido\",\"Territorio Excluido (ha)\"," +
+                    "\"Excluido\",\"Área Depto (ha)\"]},\n" +
+                    "\"gra\": {\"t\": \"t\",\"indTab\": 0,\n" +
+                    "\"colums\": [\"Incluido\", \"Restringido\", \"Excluido\"],\n" +
+                    "\"cols\": [\"#98E600\", \"#FFAA00\", \"#FFFFBE\"]}\n}]\n}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        //area trabajo tabla
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"150px\"]");
+        listColumnas.add("[\"Territorio Incluido (ha)\", \"n\", \"150px\"]");
+        listColumnas.add("[\"Incluido\", \"p\", \"100px\"]");
+        listColumnas.add("[\"Territorio Restringido (ha)\", \"n\", \"170px\"]");
+        listColumnas.add("[\"Restringido\", \"p\", \"100px\"]");
+        listColumnas.add("[\"Territorio Excluido (ha)\", \"n\", \"150px\"]");
+        listColumnas.add("[\"Excluido\", \"p\", \"100px\"]");
+        listColumnas.add("[\"Área Depto (ha)\", \"n\", \"110px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        for (Areas r : rest) {
+            registros.add("[{},\""+r.getCodigoDane()+"\",\""+r.getDepartamento()+
+                    "\","+r.getAreaIncl()+
+                    ","+r.getIncluidas()+
+                    ","+r.getAreaCond()+
+                    ","+r.getCondicionante()+
+                    ","+r.getAreaExcl()+
+                    ","+r.getExclusion()+
+                    ","+r.getAreaDepto()+"]");
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion de los graficos
+        String graf1="{\"tGra\":\"t\","
+             + "\"tit\":\"Porcentaje de hectáreas nacional por categoría\","
+             + "\"es\":{\"caLe\":true,\"3d\":true},"
+             + "\"cols\":[\"#FFAA00\", \"#FFFFBE\", \"#98E600\"],"
+             + "\"dats\":["
+             + "[\"Incluido\", "+v.promedioRestricciones(rest, 4)+"],"
+             + "[\"Restringido\", "+v.promedioRestricciones(rest, 1)+"],"
+             + "[\"Excluido\", "+v.promedioRestricciones(rest, 2)+"]]}";
+        List<String> depto = new ArrayList<>();
+        for (Areas r : rest) {
+            depto.add("\""+r.getDepartamento()+"\"");
+        }
+        String ejeX="["+addCommaString(depto)+"]";
+        String incl="["+addCommaDouble(v.totalSepararExclusiones(rest, 1))+"]";
+        String exc="["+addCommaDouble(v.totalSepararExclusiones(rest, 2))+"]";
+        String restr="["+addCommaDouble(v.totalSepararExclusiones(rest, 3))+"]";
+        String graf2="{\"tGra\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
+                + "\"es\":{\"3d\":true},"
+                + "\"cols\":[\"#FFAA00\", \"#FFFFBE\", \"#98E600\"],"
+                + "\"otrosDats\":{\"ejeX\":"+ejeX+",\"ejeY\":\"Área (ha)\"},"
+                + "\"es\":{\"caLe\":true,\"3d\":true},"
+                + "\"dats\":[[\"Incluido\","+incl+"],"
+                + "[\"Restringido\","+restr+"],"
+                + "[\"Excluido\","+exc+"]]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //area de trabajo documentos
+        List<String> ldocs = new ArrayList<>();
+        for (InfoyDocs d : docs) {
+            String doc="{\"desc\":\""+d.getDescripcion()+"\","
+                    + "\"nom\":\""+d.getNombre()+"\","
+                    + "\"tit\":\""+d.getTitulo()+"\"}";
+            ldocs.add(doc);
+        }
+        String atDocs="\"atDocs\":{\"dats\":["+addCommaString(ldocs)+"]}";
+         //area de trabajo informacion
+        List<String> linfo = new ArrayList<>();
+        for (InfoyDocs inf : info) {
+            String i="{\"tit\":\""+inf.getTitulo()+"\","
+                    + "\"tex\":\""+inf.getDescripcion()+"\"}";
+            linfo.add(i);
+        }
+        String atInf="\"atInf\":{\"dats\":["+addCommaString(linfo)+"]}";
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 3, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
+        return json;
+    }
 }

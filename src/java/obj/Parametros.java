@@ -44,6 +44,7 @@ public class Parametros {
     public static final String INDICADORES="iadt";
     public static final String AVALUOS="av";
     public static final String RESTRICCIONES="celaaf";
+    public static final String EXCLUSIONES="clmt";
             
     public Parametros() {
     }

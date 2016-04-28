@@ -6,6 +6,7 @@
 
 package db;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,7 +24,8 @@ import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Precios;
-import obj.Restricciones;
+import obj.Areas;
+import obj.InfoyDocs;
 import obj.Servicios;
 import obj.Tablacontenido;
 import util.Conversion;
@@ -654,13 +656,13 @@ public class Consultas {
         Connection cn = con.getConexion();
         ResultSet rs = null;
         PreparedStatement ps = null;
-        List<Restricciones> list = new ArrayList<>();
+        List<Areas> list = new ArrayList<>();
         SentenciasBD sbd = new SentenciasBD();
         try {
             ps = cn.prepareStatement(sbd.getRESTRICCIONES());
             System.out.println(ps.toString());
             rs = ps.executeQuery();
-            Restricciones r = new Restricciones();
+            Areas r = new Areas();
             int cont = 0;
             while (rs.next()) {
                 int i = 1;
@@ -669,15 +671,15 @@ public class Consultas {
                 r.setDepartamento(rs.getString(i++));
                 switch (tipoZona) {
                     case "Condicionante": {
-                        r.setCondicionante(rs.getFloat(i++));
+                        r.setCondicionante(rs.getBigDecimal(i++));
                         break;
                     }
                     case "Exclusión": {
-                        r.setExclusion(rs.getFloat(i++));
+                        r.setExclusion(rs.getBigDecimal(i++));
                         break;
                     }
                     case "Sin Restricción": {
-                        r.setSinRestriccion(rs.getFloat(i++));
+                        r.setSinRestriccion(rs.getBigDecimal(i++));
                         break;
                     }
                 }
@@ -685,13 +687,118 @@ public class Consultas {
                 cont++;
                 if (cont % 3 == 0) {
                     list.add(r);
-                    r = new Restricciones();
+                    r = new Areas();
                 }
             }
 
         } catch (SQLException e) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
         } finally {
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
+    
+    public List consultaExclusiones() {
+        Conexion con = new Conexion();
+        Connection cn = con.getConexion();
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        List<Areas> list = new ArrayList<>();
+        SentenciasBD sbd = new SentenciasBD();
+        String cod="91";//codigo del primer departamento
+        try {
+            ps = cn.prepareStatement(sbd.getEXCLUSIONES());
+            System.out.println(ps.toString());
+            rs = ps.executeQuery();
+            Areas r = new Areas();
+            //int cont = 0;
+            while (rs.next()) {
+                int i = 1;
+                if(!cod.equals(rs.getString(i))){
+                    list.add(r);
+                    r=new Areas();
+                }
+                r.setCodigoDane(rs.getString(i++));
+                cod=r.getCodigoDane();
+                String tipoZona = rs.getString(i++);
+                r.setDepartamento(rs.getString(i++));
+                switch (tipoZona) {
+                    case "Excluidos": {
+                        r.setAreaExcl(rs.getBigDecimal(i++));
+                        r.setExclusion(rs.getBigDecimal(i++));
+                        break;
+                    }
+                    case "Incluidos": {
+                        r.setAreaIncl(rs.getBigDecimal(i++));
+                        r.setIncluidas(rs.getBigDecimal(i++));
+                        break;
+                    }
+                    case "Condicionante": {//en la aplicacion web se le dice restringido
+                        r.setAreaCond(rs.getBigDecimal(i++));
+                        r.setCondicionante(rs.getBigDecimal(i++));
+                        break;
+                    }
+                }
+                r.setAreaDepto(rs.getBigDecimal(i++));
+//                cont++;
+//                if (cont % 3 == 0) {
+//                    if(r.getAreaExcl()==null)
+//                        r.setAreaExcl(BigDecimal.ZERO);
+//                    if(r.getExclusion()==null)
+//                        r.setExclusion(BigDecimal.ZERO);
+//                    if(r.getAreaIncl()==null)
+//                        r.setIncluidas(BigDecimal.ZERO);
+//                    if(r.getAreaIncl()==null)
+//                        r.setAreaIncl(BigDecimal.ZERO);
+//                    if(r.getAreaCond()==null)
+//                        r.setAreaCond(BigDecimal.ZERO);
+//                    if(r.getCondicionante()==null)
+//                        r.setCondicionante(BigDecimal.ZERO);
+                    
+//                    r = new Areas();
+//                }
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
+    
+    public List<InfoyDocs> consultarInfoyDocs(String alias, boolean tipo){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        //String clausula=filtrosEntidadesToString(filtros);
+        PreparedStatement ps=null;
+        List<InfoyDocs> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+            ps=cn.prepareStatement(sbd.getDOCINFO());
+            ps.setString(1, alias);
+            ps.setBoolean(2, tipo);
+            System.out.println(ps.toString());
+            rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              InfoyDocs docs=new InfoyDocs();
+                if (tipo) {
+                    docs.setTitulo(rs.getString(i++));
+                }
+              docs.setDescripcion(rs.getString(i++));
+              docs.setNombre(rs.getString(i++));
+              list.add(docs);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
             con.cerrar(cn);
             con.cerrar(ps);
             con.cerrar(rs);

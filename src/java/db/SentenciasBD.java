@@ -88,10 +88,20 @@ public class SentenciasBD {
     private String GRAFICOSDATOS="select gd.valor from mod.plantilla_grafico_datos gd inner join mod.plantilla_grafico pg on gd.plantgrafseridfk=pg.plantgrafid"
             + " where pg.plantgrafid = ? order by gd.orden asc";
     private String GRAFICOSCOLORES="select gc.color from mod.plantilla_grafico_colores gc inner join mod.plantilla_grafico pg on gc.plantgrafidfk=pg.plantgrafid  where pg.plantgrafid =? order by gc.orden asc";
-        private String RESTRICCIONES="select codigodanedepto,tipo_zona,departamento,round((sum(area_ha_rest_agro)*100)/area_ha_depto,2) , round(area_ha_depto,2) \n" +
-"    from areas_disponibles_ordenamiento_productivo.v_restricciones_agropecuarias \n" +
-"    group by tipo_zona,departamento,codigodanedepto,area_ha_depto \n" +
-"    order by departamento,tipo_zona";
+    private String RESTRICCIONES="select codigodanedepto,tipo_zona,departamento,round((sum(area_ha_rest_agro)*100)/area_ha_depto,2) , round(area_ha_depto,2) \n" +
+            "from areas_disponibles_ordenamiento_productivo.v_restricciones_agropecuarias \n" +
+            "group by tipo_zona,departamento,codigodanedepto,area_ha_depto \n" +
+            "order by departamento,tipo_zona";
+    private String EXCLUSIONES="select cod_depart,diss_f,nombre,round(sum(areaha),2),round((sum(areaha)*100)/areadptoha,2) , round(areadptoha,2) \n" +
+            "from areas_disponibles_ordenamiento_productivo.exclusiones_mercado_tierras \n" +
+            "group by diss_f,nombre,cod_depart,areadptoha \n" +
+            "order by nombre,diss_f";
+    private String DOCSINFO="SELECT d.titulo,d.descripcion, d.nombre\n" +
+        "FROM adminsiupra.documentos d\n" +
+        "inner join adminsiupra.menuconsultas_documentos mcd on mcd.documentosid=d.documentoid\n" +
+        "inner join adminsiupra.menuconsultas mc on mc.menuconsultaid=mcd.menuconsultasid \n" +
+        "where mc.alias like ? and d.docs = ? \n" +
+        "order by d.orden";
 
     public SentenciasBD() {
     }
@@ -100,176 +110,95 @@ public class SentenciasBD {
         return DEPARTAMENTOSMUN;
     }
 
-    public void setDEPARTAMENTOSMUN(String DEPARTAMENTOSMUN) {
-        this.DEPARTAMENTOSMUN = DEPARTAMENTOSMUN;
-    }
-
     public String getMUNICIPIOS() {
         return MUNICIPIOS;
-    }
-
-    public void setMUNICIPIOS(String MUNICIPIOS) {
-        this.MUNICIPIOS = MUNICIPIOS;
     }
 
     public String getTABLADECONTENIDO() {
         return TABLADECONTENIDO;
     }
 
-    public void setTABLADECONTENIDO(String TABLADECONTENIDO) {
-        this.TABLADECONTENIDO = TABLADECONTENIDO;
-    }
-
     public String getSERVICIOS() {
         return SERVICIOS;
-    }
-
-    public void setSERVICIOS(String SERVICIOS) {
-        this.SERVICIOS = SERVICIOS;
     }
 
     public String getCAPAS() {
         return CAPAS;
     }
 
-    public void setCAPAS(String CAPAS) {
-        this.CAPAS = CAPAS;
-    }
-
     public String getMENUCONSULTAS() {
         return MENUCONSULTAS;
-    }
-
-    public void setMENUCONSULTAS(String MENUCONSULTAS) {
-        this.MENUCONSULTAS = MENUCONSULTAS;
     }
 
     public String getCONSULTAFILTROS() {
         return CONSULTAFILTROS;
     }
 
-    public void setCONSULTAFILTROS(String CONSULTAFILTROS) {
-        this.CONSULTAFILTROS = CONSULTAFILTROS;
-    }
-
     public String getDINAMICAMERCADO() {
         return DINAMICAMERCADO;
-    }
-
-    public void setDINAMICAMERCADO(String DINAMICAMERCADO) {
-        this.DINAMICAMERCADO = DINAMICAMERCADO;
     }
 
     public String getTABLACONTENIDO_MENUCONSULTAS() {
         return TABLACONTENIDO_MENUCONSULTAS;
     }
 
-    public void setTABLACONTENIDO_MENUCONSULTAS(String TABLACONTENIDO_MENUCONSULTAS) {
-        this.TABLACONTENIDO_MENUCONSULTAS = TABLACONTENIDO_MENUCONSULTAS;
-    }
-
     public String getCAPAS_MENUCONSULTAS() {
         return CAPAS_MENUCONSULTAS;
-    }
-
-    public void setCAPAS_MENUCONSULTAS(String CAPAS_MENUCONSULTAS) {
-        this.CAPAS_MENUCONSULTAS = CAPAS_MENUCONSULTAS;
     }
 
     public String getSERVICIOS_MENUCONSULTAS() {
         return SERVICIOS_MENUCONSULTAS;
     }
 
-    public void setSERVICIOS_MENUCONSULTAS(String SERVICIOS_MENUCONSULTAS) {
-        this.SERVICIOS_MENUCONSULTAS = SERVICIOS_MENUCONSULTAS;
-    }
-
     public String getPRECIOS() {
         return PRECIOS;
-    }
-
-    public void setPRECIOS(String PRECIOS) {
-        this.PRECIOS = PRECIOS;
     }
 
     public String getPRECIOSSUMATORIARANGOS() {
         return PRECIOSSUMATORIARANGOS;
     }
 
-    public void setPRECIOSSUMATORIARANGOS(String PRECIOSSUMATORIARANGOS) {
-        this.PRECIOSSUMATORIARANGOS = PRECIOSSUMATORIARANGOS;
-    }
-
     public String getPLANTILLAGENERALGRAFICOS() {
         return PLANTILLAGENERALGRAFICOS;
-    }
-
-    public void setPLANTILLAGENERALGRAFICOS(String PLANTILLAGENERALGRAFICOS) {
-        this.PLANTILLAGENERALGRAFICOS = PLANTILLAGENERALGRAFICOS;
     }
 
     public String getGRAFICOSCOLUMNAS() {
         return GRAFICOSCOLUMNAS;
     }
 
-    public void setGRAFICOSCOLUMNAS(String GRAFICOSCOLUMNAS) {
-        this.GRAFICOSCOLUMNAS = GRAFICOSCOLUMNAS;
-    }
-
     public String getPLANTILLAGRAFICOS() {
         return PLANTILLAGRAFICOS;
-    }
-
-    public void setPLANTILLAGRAFICOS(String PLANTILLAGRAFICOS) {
-        this.PLANTILLAGRAFICOS = PLANTILLAGRAFICOS;
     }
 
     public String getGRAFICOSEJEY() {
         return GRAFICOSEJEY;
     }
 
-    public void setGRAFICOSEJEY(String GRAFICOSEJEY) {
-        this.GRAFICOSEJEY = GRAFICOSEJEY;
-    }
-
     public String getGRAFICOSEJEX() {
         return GRAFICOSEJEX;
-    }
-
-    public void setGRAFICOSEJEX(String GRAFICOSEJEX) {
-        this.GRAFICOSEJEX = GRAFICOSEJEX;
     }
 
     public String getGRAFICOSSERIES() {
         return GRAFICOSSERIES;
     }
 
-    public void setGRAFICOSSERIES(String GRAFICOSSERIES) {
-        this.GRAFICOSSERIES = GRAFICOSSERIES;
-    }
-
     public String getGRAFICOSDATOS() {
         return GRAFICOSDATOS;
-    }
-
-    public void setGRAFICOSDATOS(String GRAFICOSDATOS) {
-        this.GRAFICOSDATOS = GRAFICOSDATOS;
     }
 
     public String getGRAFICOSCOLORES() {
         return GRAFICOSCOLORES;
     }
 
-    public void setGRAFICOSCOLORES(String GRAFICOSCOLORES) {
-        this.GRAFICOSCOLORES = GRAFICOSCOLORES;
-    }
-
     public String getRESTRICCIONES() {
         return RESTRICCIONES;
     }
-
-    public void setRESTRICCIONES(String RESTRICCIONES) {
-        this.RESTRICCIONES = RESTRICCIONES;
+    
+    public String getEXCLUSIONES() {
+        return EXCLUSIONES;
     }
     
+    public String getDOCINFO(){
+        return DOCSINFO;
+    }
 }

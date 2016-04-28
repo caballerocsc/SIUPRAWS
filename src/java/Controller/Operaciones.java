@@ -106,6 +106,11 @@ public class Operaciones {
             case Parametros.RESTRICCIONES:
                 resultado=conv.crearJsonRestricciones(con.consultarTablaContenidoporMenuConsulta(alias),
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias), con.consultaRestricciones());
+                break;
+            case Parametros.EXCLUSIONES:
+                resultado=conv.crearJsonExclusiones(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.consultaExclusiones(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
         }
         return resultado;
     }
