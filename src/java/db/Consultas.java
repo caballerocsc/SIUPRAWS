@@ -492,7 +492,12 @@ public class Consultas {
         }
         return clausula;
     }
-    
+    /**
+     * Método que consulta la tabla de contenido asociada a una consulta de usuario por 
+     * medio del alias de la consulta
+     * @param alias alias de la consulta de usuario en la base de datos
+     * @return objeto de tipo tablaContenido asociado a la consulta
+     */
     public Tablacontenido consultarTablaContenidoporMenuConsulta(String alias){
         Tablacontenido tablacontenido=new Tablacontenido();
         SentenciasBD sbd=new SentenciasBD();
@@ -521,6 +526,12 @@ public class Consultas {
         return tablacontenido;
     }
     
+    /**
+     * Método que permite consultar las capas asociadas a un consuilta de usuario
+     * por medio del alias de la consulta
+     * @param alias alias de la consulta de usuario en la base de datos
+     * @return lista de tipo Capas, con las capas asociadas a la consulta
+     */
     public List<Capas> consultarCapasporMenuConsulta(String alias){
         List<Capas> lista=new ArrayList<>();
         SentenciasBD sbd=new SentenciasBD();
@@ -564,6 +575,12 @@ public class Consultas {
         return lista;
     }
     
+    /**
+     * Método que consulta los servicios geográficas asociados a una consulta de
+     * usuario, por medio del alias de la consulta
+     * @param alias alias de la consulta de usuario en la base de datos
+     * @return lista de tipo Servicios con los servicios asociados a la consulta seleccionada
+     */
     public List<Servicios> consultarServicioporMenuConsulta(String alias){
         Servicios servicios=new Servicios();
         SentenciasBD sbd=new SentenciasBD();
@@ -597,6 +614,11 @@ public class Consultas {
         return list;
     }
     
+    /**
+     * @deprecated 
+     * @param filtro
+     * @return 
+     */
     public String filtrosEntidadesToString(FiltroJson filtro){
         String clausula="";
         List<String> lista=new ArrayList<>();
@@ -619,6 +641,11 @@ public class Consultas {
         return clausula;
     }
     
+    /**
+     * @deprecated 
+     * @param filtros
+     * @return 
+     */
     public List<Precios> consultaSumatoriaPrecios(FiltroJson filtros){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -651,7 +678,12 @@ public class Consultas {
         return precios;
     }
     
-    public List consultaRestricciones() {
+    /**
+     * Método que que se encarga de consultar la información de la cancha de restricciones agropecuarias
+     * de la UPRA
+     * @return lista de tipo Areas donde se encuentra la informacion de las restricciones por departamento.
+     */
+    public List<Areas> consultaRestricciones() {
         Conexion con = new Conexion();
         Connection cn = con.getConexion();
         ResultSet rs = null;
@@ -701,7 +733,11 @@ public class Consultas {
         return list;
     }
     
-    public List consultaExclusiones() {
+    /**
+     * Método que consulta la información de la cancha de exclusiones de la UPRA
+     * @return lista de tipo Areas con la información de las exclusiones por departamento
+     */
+    public List<Areas> consultaExclusiones() {
         Conexion con = new Conexion();
         Connection cn = con.getConexion();
         ResultSet rs = null;
@@ -743,23 +779,6 @@ public class Consultas {
                     }
                 }
                 r.setAreaDepto(rs.getBigDecimal(i++));
-//                cont++;
-//                if (cont % 3 == 0) {
-//                    if(r.getAreaExcl()==null)
-//                        r.setAreaExcl(BigDecimal.ZERO);
-//                    if(r.getExclusion()==null)
-//                        r.setExclusion(BigDecimal.ZERO);
-//                    if(r.getAreaIncl()==null)
-//                        r.setIncluidas(BigDecimal.ZERO);
-//                    if(r.getAreaIncl()==null)
-//                        r.setAreaIncl(BigDecimal.ZERO);
-//                    if(r.getAreaCond()==null)
-//                        r.setAreaCond(BigDecimal.ZERO);
-//                    if(r.getCondicionante()==null)
-//                        r.setCondicionante(BigDecimal.ZERO);
-                    
-//                    r = new Areas();
-//                }
             }
 
         } catch (SQLException e) {
@@ -772,11 +791,17 @@ public class Consultas {
         return list;
     }
     
+    /**
+     * Método que se encarga de consultar los datos de documentos e información adicional
+     * de las consultas de usuario de acuerdo al alias suministrado
+     * @param alias alias de la consulta en la base de datos
+     * @param tipo true: si es para consultar documentos, false: para consultar información adicional
+     * @return 
+     */
     public List<InfoyDocs> consultarInfoyDocs(String alias, boolean tipo){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
-        //String clausula=filtrosEntidadesToString(filtros);
         PreparedStatement ps=null;
         List<InfoyDocs> list=new ArrayList<>();
         SentenciasBD sbd=new SentenciasBD();

@@ -9,8 +9,8 @@ package obj;
 import java.math.BigDecimal;
 
 /**
- *
- * @author Usuario
+ * Clase encargada de mapaear las consultas de restricciones y exlusiones agropecuarias
+ * @author cesar.solano
  */
 public class Areas {
 
@@ -29,7 +29,7 @@ public class Areas {
     
     
     private String codigoDane;
-    private BigDecimal condicionante;
+    private BigDecimal condicionante;//para la consulta de exclusiones se utiliza este campo homologando a restringido
     private BigDecimal exclusion;
     private BigDecimal sinRestriccion;
     private String departamento;

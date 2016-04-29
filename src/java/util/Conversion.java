@@ -487,7 +487,15 @@ public class Conversion {
         }
     }
     
-    
+    /**
+     * @deprecated 
+     * @param filtro
+     * @param lista
+     * @param tc
+     * @param serv
+     * @param capas
+     * @return 
+     */
     public String crearJsonDinamMerc(FiltroJson filtro, List<DinamicaMercados> lista,Tablacontenido tc, List<Servicios> serv, List<Capas> capas){
         String tmp;
         String json;
@@ -707,6 +715,16 @@ public class Conversion {
              return "";
      }
     
+    /**
+     * Método encargado de crear el json con la información geográfica para cualquier consulta de usuario, a partir
+     * de los parametros que se le envian.
+     * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
+     * @param lServ Lista de tipo Servicios con los servicios asociadas la consulta
+     * @param capas Lista de tipo Capas con las capas asociadas a la consulta
+     * @param iden json con el parametro de identificacion para la consulta, este parametro no se construye en el 
+     * método ya que es único para cada consulta.
+     * @return String en formato json con la información geográfica de una consulta 
+     */
     public String crearJsonInfGeoConsultas(Tablacontenido tc, List<Servicios> lServ, List<Capas> capas,String iden){
         String tmp;
         String atMaps;
@@ -756,6 +774,16 @@ public class Conversion {
         return atMaps;
     }
     
+    /**
+     * @deprecated 
+     * @param tc
+     * @param serv
+     * @param capas
+     * @param fil
+     * @param precios
+     * @param sumatoria
+     * @return 
+     */
     public String crearJsonPrecios(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, FiltroJson fil, List<Precios> precios, List<Precios> sumatoria){
         String tmp;
         //Creación del json para el área de trabajo del mapa
@@ -877,7 +905,15 @@ public class Conversion {
         return json;
     }
     
-    public String crearJsonRestricciones(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Areas> rest){
+    /**
+     * Método que se encarga de crear el json para la consulta de usuario de restricciones 
+     * @param tc tabla de contenido asociada a la consulta
+     * @param serv servicios asociados a la consulta
+     * @param capas capas asociadas a la consulta
+     * @param areas información de las areas de restricciones 
+     * @return String en formato json con toda la inforacion de la consulta de usuario
+     */
+    public String crearJsonRestricciones(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Areas> areas){
         Varios v = new Varios();
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
@@ -903,7 +939,7 @@ public class Conversion {
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
-        for (Areas r : rest) {
+        for (Areas r : areas) {
             registros.add("[{},\""+r.getCodigoDane()+"\",\""+r.getDepartamento()+
                     "\","+r.getCondicionante()+
                     ","+r.getExclusion()+
@@ -918,17 +954,17 @@ public class Conversion {
              + "\"es\":{\"caLe\":true,\"3d\":true},"
              + "\"cols\":[\"#FFFFB9\", \"#FFB3B3\", \"#C4E6B2\"],"
              + "\"dats\":["
-             + "[\"Condicionante\", "+v.promedioRestricciones(rest, 1)+"],"
-             + "[\"Exclusión\", "+v.promedioRestricciones(rest, 2)+"],"
-             + "[\"Sin restricción\", "+v.promedioRestricciones(rest, 3)+"]]}";
+             + "[\"Condicionante\", "+v.promedioRestricciones(areas, 1)+"],"
+             + "[\"Exclusión\", "+v.promedioRestricciones(areas, 2)+"],"
+             + "[\"Sin restricción\", "+v.promedioRestricciones(areas, 3)+"]]}";
         List<String> depto = new ArrayList<>();
-        for (Areas r : rest) {
+        for (Areas r : areas) {
             depto.add("\""+r.getDepartamento()+"\"");
         }
         String ejeX="["+addCommaString(depto)+"]";
-        String cond="["+addCommaDouble(v.totalAreaxZonaRestricciones(rest, 1))+"]";
-        String exc="["+addCommaDouble(v.totalAreaxZonaRestricciones(rest, 2))+"]";
-        String SinRes="["+addCommaDouble(v.totalAreaxZonaRestricciones(rest, 3))+"]";
+        String cond="["+addCommaDouble(v.PorcentajeAreaxZonaRestricciones(areas, 1))+"]";
+        String exc="["+addCommaDouble(v.PorcentajeAreaxZonaRestricciones(areas, 2))+"]";
+        String SinRes="["+addCommaDouble(v.PorcentajeAreaxZonaRestricciones(areas, 3))+"]";
         String graf2="{\"tGra\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#FFFFB9\", \"#FFB3B3\", \"#C4E6B2\"],"
@@ -944,9 +980,18 @@ public class Conversion {
         return json;
     }
     
-    
+    /**
+     * Método que se encarga de crear el json para la consulta de usuario de exclusiones de la UPRA
+     * @param tc tabla de contenido de la consulta asociada
+     * @param serv lista de servicios asociados a la consulta
+     * @param capas lista de capas asociadas a la consulta de usuario
+     * @param areas lista de areas con exclusiones 
+     * @param docs lista de documentos asociados a la consulta
+     * @param info lista de con objetos de tipo InfoyDocs con la información adicional a la consulta
+     * @return String en formato json con toda la información de la consulta de exclusiones.
+     */
     public String crearJsonExclusiones(Tablacontenido tc, List<Servicios> serv,
-            List<Capas> capas, List<Areas> rest,List<InfoyDocs> docs,List<InfoyDocs> info){
+            List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
         Varios v = new Varios();
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
@@ -977,7 +1022,7 @@ public class Conversion {
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
-        for (Areas r : rest) {
+        for (Areas r : areas) {
             registros.add("[{},\""+r.getCodigoDane()+"\",\""+r.getDepartamento()+
                     "\","+r.getAreaIncl()+
                     ","+r.getIncluidas()+
@@ -995,17 +1040,17 @@ public class Conversion {
              + "\"es\":{\"caLe\":true,\"3d\":true},"
              + "\"cols\":[\"#FFAA00\", \"#FFFFBE\", \"#98E600\"],"
              + "\"dats\":["
-             + "[\"Incluido\", "+v.promedioRestricciones(rest, 4)+"],"
-             + "[\"Restringido\", "+v.promedioRestricciones(rest, 1)+"],"
-             + "[\"Excluido\", "+v.promedioRestricciones(rest, 2)+"]]}";
+             + "[\"Incluido\", "+v.promedioRestricciones(areas, 4)+"],"
+             + "[\"Restringido\", "+v.promedioRestricciones(areas, 1)+"],"
+             + "[\"Excluido\", "+v.promedioRestricciones(areas, 2)+"]]}";
         List<String> depto = new ArrayList<>();
-        for (Areas r : rest) {
+        for (Areas r : areas) {
             depto.add("\""+r.getDepartamento()+"\"");
         }
         String ejeX="["+addCommaString(depto)+"]";
-        String incl="["+addCommaDouble(v.totalSepararExclusiones(rest, 1))+"]";
-        String exc="["+addCommaDouble(v.totalSepararExclusiones(rest, 2))+"]";
-        String restr="["+addCommaDouble(v.totalSepararExclusiones(rest, 3))+"]";
+        String incl="["+addCommaDouble(v.totalSepararExclusiones(areas, 1))+"]";
+        String exc="["+addCommaDouble(v.totalSepararExclusiones(areas, 2))+"]";
+        String restr="["+addCommaDouble(v.totalSepararExclusiones(areas, 3))+"]";
         String graf2="{\"tGra\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#FFAA00\", \"#FFFFBE\", \"#98E600\"],"

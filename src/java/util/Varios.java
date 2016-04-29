@@ -194,6 +194,13 @@ public class Varios {
         return map;
     }
     
+    /**
+     * Método encargado de tomar una lista de areas y dependiendo del paramtro de zona sacar el promedio
+     * de determinada area
+     * @param list lista con las areas de cada departamento 
+     * @param zona 1:condicionante 2:exlusión 3:Sin restricción 4:inclusión
+     * @return BigDecimal con el promedio de la zona elegida
+     */
     public BigDecimal promedioRestricciones(List<Areas> list, int zona){
         BigDecimal resul = new BigDecimal(BigInteger.ZERO);
         final int cond=1;
@@ -224,7 +231,14 @@ public class Varios {
         return resul;
     }
     
-    public List<BigDecimal> totalAreaxZonaRestricciones(List<Areas> list, int zona){
+    /**
+     * Método encargado de sacar el porcentaje de una zona con respecto al total del departamento
+     * @param list Lista de las areas por departamento
+     * @param zona tipo de zona a la cual se le saca el porcentaje. 
+     * 1:Condicionante, 2:Exclusiones, 3:Sin Restricciones
+     * @return 
+     */
+    public List<BigDecimal> PorcentajeAreaxZonaRestricciones(List<Areas> list, int zona){
         List<BigDecimal> listTotal = new ArrayList<>();
         final int cond=1;
         final int excl=2;
@@ -248,14 +262,22 @@ public class Varios {
         return listTotal;
     }
     
-    public BigDecimal sacarPorcentaje(float num1, BigDecimal num2){
-        BigDecimal divisor = new BigDecimal(num1);
-        BigDecimal mult = new BigDecimal(100);
-        divisor=divisor.multiply(mult);
-        divisor = divisor.divide(num2,2, RoundingMode.HALF_UP);
-        return divisor;
-    }
+//    public BigDecimal sacarPorcentaje(float num1, BigDecimal num2){
+//        BigDecimal divisor = new BigDecimal(num1);
+//        BigDecimal mult = new BigDecimal(100);
+//        divisor=divisor.multiply(mult);
+//        divisor = divisor.divide(num2,2, RoundingMode.HALF_UP);
+//        return divisor;
+//    }
     
+    /**
+     * Método que se encarga de crear una lista con los valores de todos los
+     * departamentos para una zona específica. 
+     * @param list lista de areas por departamento
+     * @param zona parametro que indica a cual tipo de área sacar el listado
+     * 1: inclusión, 2:exclusión, 3:restricción
+     * @return lista de tipo BigDecimal con todos los valores de un area específica
+     */
     public List<BigDecimal> totalSepararExclusiones(List<Areas> list, int zona){
         List<BigDecimal> listTotal = new ArrayList<>();
         final int incl=1;

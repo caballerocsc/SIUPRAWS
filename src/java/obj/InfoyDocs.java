@@ -7,8 +7,8 @@
 package obj;
 
 /**
- *
- * @author Usuario
+ * Clase encargada de mapear los documentos y la informacion adicional de las consultas de usuario
+ * @author Cesar.Solano
  */
 public class InfoyDocs {
     private String nombre;

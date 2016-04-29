@@ -11,13 +11,13 @@ package db;
  */
 public class SentenciasBD {
     
-    private String DEPARTAMENTOSMUN="SELECT d.codigodane, d.deptoid, d.nomcorto, d.nombre, d.nomlargo, d.ext FROM carto_basica.departamentos d";
-    private String MUNICIPIOS="SELECT m.codigodane, m.nombre, m.nomcorto, m.nomlargo, m.ext, m.deptosfk  FROM carto_basica.municipios m where m.deptosfk = ?";
-    private String TABLADECONTENIDO="SELECT tablacontenidoupraid, alias, descripcion, imagen, nombre, palabrasclave," +
+    private final String DEPARTAMENTOSMUN="SELECT d.codigodane, d.deptoid, d.nomcorto, d.nombre, d.nomlargo, d.ext FROM carto_basica.departamentos d";
+    private final String MUNICIPIOS="SELECT m.codigodane, m.nombre, m.nomcorto, m.nomlargo, m.ext, m.deptosfk  FROM carto_basica.municipios m where m.deptosfk = ?";
+    private final String TABLADECONTENIDO="SELECT tablacontenidoupraid, alias, descripcion, imagen, nombre, palabrasclave," +
         "orden, desplegado  FROM adminsiupra.tablacontenido order by orden;";
-    private String SERVICIOS="SELECT serviciosupraid, alias, tiposervidor, url, versionservicio, estado, importado, descripcion, nombre, palabrasclave, orden, " +
+    private final String SERVICIOS="SELECT serviciosupraid, alias, tiposervidor, url, versionservicio, estado, importado, descripcion, nombre, palabrasclave, orden, " +
         "accesofkid FROM adminsiupra.servicios;";
-    private String CAPAS="SELECT C.capasupraid, C.alias, C.aliasgrupo, C.aliasservicio, C.resolucionmax, \n" +
+    private final String CAPAS="SELECT C.capasupraid, C.alias, C.aliasgrupo, C.aliasservicio, C.resolucionmax, \n" +
         "C.resolucionmin, C.filtro, C.limites, C.nombrecapa, C.opacidad, C.titulo, \n" +
         "C.estado, C.autoidentificable, C.base, C.leyendacargada, C.identificable, \n" +
         "C.ordenable, C.transparente, C.visible, C.anio, C.descripcion, C.escala, \n" +
@@ -30,9 +30,9 @@ public class SentenciasBD {
         "FROM adminsiupra.capas C inner join adminsiupra.tablacontenido_capas tcc on C.capasupraid=tcc.capasupraid\n" +
         "inner join adminsiupra.tablacontenido tc on tcc.tablacontenidoupraid=tc.tablacontenidoupraid "+ 
         " where C.estado=true order by C.orden asc ;";
-    private String MENUCONSULTAS="SELECT menuconsultaid, alias, nombre, texto, dependede, consultable\n" +
+    private final String MENUCONSULTAS="SELECT menuconsultaid, alias, nombre, texto, dependede, consultable\n" +
         "FROM adminsiupra.menuconsultas where estado = true order by orden asc;";
-    private String CONSULTAFILTROS="select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, tfp.valor, d.texto, '' as tipofiltropadre  \n" +
+    private final String CONSULTAFILTROS="select f.alias, f.nombre, f.texto, sf.alias, sf.nombre, tfp.valor, d.texto, '' as tipofiltropadre  \n" +
         "from adminsiupra.tipofiltros f  \n" +
         "inner join adminsiupra.subtipofiltros sf on f.tipofiltroid=sf.tipofiltrofkid  \n" +
         "inner join adminsiupra.filtroperiodos tfp on tfp.subttipovalorfkid=sf.subtipofiltroid  \n" +
@@ -57,46 +57,46 @@ public class SentenciasBD {
         "inner join dominios  d on tipoelementofkid=dominioid \n" +
         "inner join adminsiupra.menuconsultas mc on mc.menuconsultaid=fvm.menuconsultaid\n" +
         "where mc.alias like ?";
-    private String DINAMICAMERCADO="SELECT mercado_tierras_rurales.funcion_parametros_dinamica_mercados=?);";
-    private String TABLACONTENIDO_MENUCONSULTAS="select tc.alias,tc.nombre, tc.palabrasclave from adminsiupra.tablacontenido tc\n" +
+    private final String DINAMICAMERCADO="SELECT mercado_tierras_rurales.funcion_parametros_dinamica_mercados=?);";
+    private final String TABLACONTENIDO_MENUCONSULTAS="select tc.alias,tc.nombre, tc.palabrasclave from adminsiupra.tablacontenido tc\n" +
         "inner join adminsiupra.menuconsultas_tablacontenido mtc on tc.tablacontenidoupraid=mtc.tablacontenidoid\n" +
         "inner join adminsiupra.menuconsultas mc on mtc.menuconsultaid=mc.menuconsultaid\n" +
         "where mc.alias like ? ";
-    private String CAPAS_MENUCONSULTAS="select c.alias,c.aliasgrupo,c.aliasservicio,c.resolucionmax,c.filtro,c.nombrecapa,c.opacidad,(select texto from dominios where dominioid=c.crsfkid),c.anio,c.fuente,c.nombre,\n" +
+    private final String CAPAS_MENUCONSULTAS="select c.alias,c.aliasgrupo,c.aliasservicio,c.resolucionmax,c.filtro,c.nombrecapa,c.opacidad,(select texto from dominios where dominioid=c.crsfkid),c.anio,c.fuente,c.nombre,\n" +
         "c.visible, c.identificable, c.leyendacargada, c.autoidentificable, c.titulo from adminsiupra.capas c\n" +
         "inner join adminsiupra.menuconsultas_capas mcc on mcc.capasid=c.capasupraid\n" +
         "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
         "where mc.alias like ?";
-    private String SERVICIOS_MENUCONSULTAS="select distinct s.alias, s.tiposervidor, s.url, s.importado,s.nombre,s.palabrasclave from adminsiupra.capas c\n" +
+    private final String SERVICIOS_MENUCONSULTAS="select distinct s.alias, s.tiposervidor, s.url, s.importado,s.nombre,s.palabrasclave from adminsiupra.capas c\n" +
     "inner join adminsiupra.menuconsultas_capas mcc on mcc.capasid=c.capasupraid\n" +
     "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
     "inner join adminsiupra.servicios s on c.servicioid=s.serviciosupraid\n" +
     "where mc.alias like ?";
-    private String PRECIOS="SELECT mercado_tierras_rurales.funcion_parametros_precios=?);";
-    private String PRECIOSSUMATORIARANGOS="SELECT  rango_precios, sum=area_hectareas;municipioid,municipio\n" +
+    private final String PRECIOS="SELECT mercado_tierras_rurales.funcion_parametros_precios=?);";
+    private final String PRECIOSSUMATORIARANGOS="SELECT  rango_precios, sum=area_hectareas;municipioid,municipio\n" +
         "FROM mercado_tierras_rurales.v_precios_mpios P where deptoid=? group by municipio,municipioid, rango_precios order by municipioid;";
-    private String  PLANTILLAGENERALGRAFICOS="select pe.plantelemenid, pe.alias, pe.compcg, pe.comptab, pe.indtab,pe.indgraf from mod.plantilla_elementos pe "
+    private final String  PLANTILLAGENERALGRAFICOS="select pe.plantelemenid, pe.alias, pe.compcg, pe.comptab, pe.indtab,pe.indgraf from mod.plantilla_elementos pe "
             + "inner join adminsiupra.areastrabajo_plantillas_menuconsultas atpmc on pe.plantillaidfk=atpmc.plantillaid where areatrabajoid=? and menuconsultaid=?";
-    private String GRAFICOSCOLUMNAS="select pc.columnas, pc.tipo from mod.plantilla_columnas pc "
+    private final String GRAFICOSCOLUMNAS="select pc.columnas, pc.tipo from mod.plantilla_columnas pc "
             + "inner join  mod.plantilla_elementos pe on pc.plantelemidfk=pe.plantelemenid where pe.plantelemenid=? and pc.tipo=1 order by pc.orden asc";
-    private String PLANTILLAGRAFICOS="select pg.plantgrafid, pg.tipo, pg.titulo from mod.plantilla_grafico pg "
+    private final String PLANTILLAGRAFICOS="select pg.plantgrafid, pg.tipo, pg.titulo from mod.plantilla_grafico pg "
             + "inner join mod.plantilla_elementos pe on pg.plantelemidfk=pe.plantelemenid where pe.plantelemenid=? ";
-    private String GRAFICOSEJEY="select pgy.valor from mod.plantilla_graficoy pgy inner join mod.plantilla_grafico pg on pgy.plantgrafidfk=pg.plantgrafid where pg.plantgrafid = ?";
-    private String GRAFICOSEJEX="select pgx.valor from mod.plantilla_graficox pgx inner join mod.plantilla_grafico pg on pgx.plantgrafidfk=pg.plantgrafid where pg.plantgrafid = ?";
-    private String GRAFICOSSERIES="select gs.valor from mod.plantilla_graficos_series gs "
+    private final String GRAFICOSEJEY="select pgy.valor from mod.plantilla_graficoy pgy inner join mod.plantilla_grafico pg on pgy.plantgrafidfk=pg.plantgrafid where pg.plantgrafid = ?";
+    private final String GRAFICOSEJEX="select pgx.valor from mod.plantilla_graficox pgx inner join mod.plantilla_grafico pg on pgx.plantgrafidfk=pg.plantgrafid where pg.plantgrafid = ?";
+    private final String GRAFICOSSERIES="select gs.valor from mod.plantilla_graficos_series gs "
             + "inner join mod.plantilla_grafico pg on gs.plantillagrafidfk=pg.plantgrafid where pg.plantgrafid = ? order by gs.orden asc ";
-    private String GRAFICOSDATOS="select gd.valor from mod.plantilla_grafico_datos gd inner join mod.plantilla_grafico pg on gd.plantgrafseridfk=pg.plantgrafid"
+    private final String GRAFICOSDATOS="select gd.valor from mod.plantilla_grafico_datos gd inner join mod.plantilla_grafico pg on gd.plantgrafseridfk=pg.plantgrafid"
             + " where pg.plantgrafid = ? order by gd.orden asc";
-    private String GRAFICOSCOLORES="select gc.color from mod.plantilla_grafico_colores gc inner join mod.plantilla_grafico pg on gc.plantgrafidfk=pg.plantgrafid  where pg.plantgrafid =? order by gc.orden asc";
-    private String RESTRICCIONES="select codigodanedepto,tipo_zona,departamento,round((sum(area_ha_rest_agro)*100)/area_ha_depto,2) , round(area_ha_depto,2) \n" +
+    private final String GRAFICOSCOLORES="select gc.color from mod.plantilla_grafico_colores gc inner join mod.plantilla_grafico pg on gc.plantgrafidfk=pg.plantgrafid  where pg.plantgrafid =? order by gc.orden asc";
+    private final String RESTRICCIONES="select codigodanedepto,tipo_zona,departamento,round((sum(area_ha_rest_agro)*100)/area_ha_depto,2) , round(area_ha_depto,2) \n" +
             "from areas_disponibles_ordenamiento_productivo.v_restricciones_agropecuarias \n" +
             "group by tipo_zona,departamento,codigodanedepto,area_ha_depto \n" +
             "order by departamento,tipo_zona";
-    private String EXCLUSIONES="select cod_depart,diss_f,nombre,round(sum(areaha),2),round((sum(areaha)*100)/areadptoha,2) , round(areadptoha,2) \n" +
+    private final String EXCLUSIONES="select cod_depart,diss_f,nombre,round(sum(areaha),2),round((sum(areaha)*100)/areadptoha,2) , round(areadptoha,2) \n" +
             "from areas_disponibles_ordenamiento_productivo.exclusiones_mercado_tierras \n" +
             "group by diss_f,nombre,cod_depart,areadptoha \n" +
             "order by nombre,diss_f";
-    private String DOCSINFO="SELECT d.titulo,d.descripcion, d.nombre\n" +
+    private final String DOCSINFO="SELECT d.titulo,d.descripcion, d.nombre\n" +
         "FROM adminsiupra.documentos d\n" +
         "inner join adminsiupra.menuconsultas_documentos mcd on mcd.documentosid=d.documentoid\n" +
         "inner join adminsiupra.menuconsultas mc on mc.menuconsultaid=mcd.menuconsultasid \n" +
