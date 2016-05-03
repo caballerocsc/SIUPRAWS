@@ -1082,4 +1082,51 @@ public class Conversion {
          String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
         return json;
     }
+    
+    public String crearJsonIndiceFraccionamiento(Tablacontenido tc, List<Servicios> serv,
+            List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
+        
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"Índice de Fraccionamiento\"]},\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
+        listColumnas.add("[\"Índice de Fraccionamiento\", \"n\", \"165px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        for (Areas r : areas) {
+            registros.add("[{},\""+r.getCodigoDane()+"\","
+                    + "\""+r.getDepartamento()+"\","
+                    + "\""+r.getArea()+"\"]");
+        }
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ff5500\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+"]");
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        for (Areas a : areas) {
+            datGraf.add("[\""+a.getDepartamento()+"\","+a.getArea()+"]");
+        }
+        graf1="\"dats\":["+addCommaString(datGraf)+"]";
+        String atGraf="\"atGras\":{\"dats\":[{\"tGra\":\"c\","
+                + "\"tit\":\"\","
+                + "\"otrosDats\":{\"ejeY\":\"Índice de Fraccionamiento\"},"
+                + "\"es\":{\"3d\":true},"
+                + "\"col\":[\"#4472c4\"],"
+                + graf1+"}]}";
+        //area de trabajo documentos
+        return null;
+    }
 }

@@ -24,6 +24,7 @@ public class Areas {
         this.areaCond = BigDecimal.ZERO;
         this.areaIncl = BigDecimal.ZERO;
         this.areaExcl = BigDecimal.ZERO;
+        this.area = BigDecimal.ZERO;
     }
     
     
@@ -38,6 +39,7 @@ public class Areas {
     private BigDecimal areaCond;
     private BigDecimal areaIncl;
     private BigDecimal areaExcl;
+    private BigDecimal area;
 
     public String getCodigoDane() {
         return codigoDane;
@@ -119,4 +121,11 @@ public class Areas {
         this.areaExcl = areaExcl;
     }
 
+    public BigDecimal getArea() {
+        return area;
+    }
+
+    public void setArea(BigDecimal area) {
+        this.area = area;
+    }
 }

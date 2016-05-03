@@ -195,7 +195,7 @@ public class Varios {
     }
     
     /**
-     * Método encargado de tomar una lista de areas y dependiendo del paramtro de zona sacar el promedio
+     * Método encargado de tomar una lista de tipo areas y dependiendo del paramtro zona sacar el promedio
      * de determinada area
      * @param list lista con las areas de cada departamento 
      * @param zona 1:condicionante 2:exlusión 3:Sin restricción 4:inclusión
@@ -207,6 +207,7 @@ public class Varios {
         final int excl=2;
         final int sinRest=3;
         final int incl=4;
+        final int ifpr=5;
         for (Areas restricciones : list) {
             switch(zona){
                 case cond:{// tambien restringido
@@ -223,6 +224,10 @@ public class Varios {
                 }
                 case incl:{
                     resul=resul.add(restricciones.getIncluidas());
+                    break;
+                }
+                case ifpr:{
+                    resul=resul.add(restricciones.getArea());
                     break;
                 }
             }

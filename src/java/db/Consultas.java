@@ -6,7 +6,6 @@
 
 package db;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -809,7 +808,6 @@ public class Consultas {
             ps=cn.prepareStatement(sbd.getDOCINFO());
             ps.setString(1, alias);
             ps.setBoolean(2, tipo);
-            System.out.println(ps.toString());
             rs=ps.executeQuery();
             while (rs.next()) {                
               int i=1;
@@ -830,6 +828,39 @@ public class Consultas {
         }
         return list;
     }
+    
+    /**
+     * Método encargado de consultar la información de la vista del indice de 
+     * fracionamiento de la propiedad
+     * @return lista de tipo areas con la informacion de fracionamiento en cada departamento
+     */
+    public List<Areas> consultarIndiceFraccionamiento(){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Areas> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+             ps=cn.prepareStatement(sbd.getIFPR());
+             rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              Areas a = new Areas();
+              a.setCodigoDane(rs.getString(i++));
+              a.setDepartamento(rs.getString(i++));
+              a.setArea(rs.getBigDecimal(i++));
+              list.add(a);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    } 
 }
 
 

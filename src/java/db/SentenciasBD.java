@@ -97,11 +97,13 @@ public class SentenciasBD {
             "group by diss_f,nombre,cod_depart,areadptoha \n" +
             "order by nombre,diss_f";
     private final String DOCSINFO="SELECT d.titulo,d.descripcion, d.nombre\n" +
-        "FROM adminsiupra.documentos d\n" +
-        "inner join adminsiupra.menuconsultas_documentos mcd on mcd.documentosid=d.documentoid\n" +
-        "inner join adminsiupra.menuconsultas mc on mc.menuconsultaid=mcd.menuconsultasid \n" +
-        "where mc.alias like ? and d.docs = ? \n" +
-        "order by d.orden";
+            "FROM adminsiupra.documentos d\n" +
+            "inner join adminsiupra.menuconsultas_documentos mcd on mcd.documentosid=d.documentoid\n" +
+            "inner join adminsiupra.menuconsultas mc on mc.menuconsultaid=mcd.menuconsultasid \n" +
+            "where mc.alias like ? and d.docs = ? \n" +
+            "order by d.orden";
+    private final String IFPR="select cod_dane_depto, departamento, fraccionamiento "+ 
+            "from indicadores.v_fraccionamiento order by cod_dane_depto";
 
     public SentenciasBD() {
     }
@@ -200,5 +202,9 @@ public class SentenciasBD {
     
     public String getDOCINFO(){
         return DOCSINFO;
+    }
+    
+    public String getIFPR(){
+        return IFPR;
     }
 }
