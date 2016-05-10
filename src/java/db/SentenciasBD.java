@@ -68,10 +68,10 @@ public class SentenciasBD {
         "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
         "where mc.alias like ?";
     private final String SERVICIOS_MENUCONSULTAS="select distinct s.alias, s.tiposervidor, s.url, s.importado,s.nombre,s.palabrasclave from adminsiupra.capas c\n" +
-    "inner join adminsiupra.menuconsultas_capas mcc on mcc.capasid=c.capasupraid\n" +
-    "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
-    "inner join adminsiupra.servicios s on c.servicioid=s.serviciosupraid\n" +
-    "where mc.alias like ?";
+        "inner join adminsiupra.menuconsultas_capas mcc on mcc.capasid=c.capasupraid\n" +
+        "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
+        "inner join adminsiupra.servicios s on c.servicioid=s.serviciosupraid\n" +
+        "where mc.alias like ?";
     private final String PRECIOS="SELECT mercado_tierras_rurales.funcion_parametros_precios=?);";
     private final String PRECIOSSUMATORIARANGOS="SELECT  rango_precios, sum=area_hectareas;municipioid,municipio\n" +
         "FROM mercado_tierras_rurales.v_precios_mpios P where deptoid=? group by municipio,municipioid, rango_precios order by municipioid;";
@@ -104,6 +104,22 @@ public class SentenciasBD {
             "order by d.orden";
     private final String IFPR="select cod_dane_depto, departamento, fraccionamiento "+ 
             "from indicadores.v_fraccionamiento order by cod_dane_depto";
+    private final String DISTRITOSDATS="SELECT gid, id, id_incoder, nom_dat, cod_depto, depto, cod_mcpio, mcpio, \n" +
+            "vereda, area_neta, area_bruta, escala, coorn1, coorn2, coore1, \n" +
+            "coore2, altitud, tipo_dat, etapa_dat, funciona, usuarios, inversion, \n" +
+            "admin, asoc_usuar, resol_asoc, repr_asoc, tel_asoc, e_mail, direc_asoc, \n" +
+            "cultivos, car, fuent_hidr, captacion, concesion, szh, zh, georef, \n" +
+            "id_polig, observac\n" +
+            "FROM adecuacion_tierras_rurales.v_distritos_riego_alfa_total;";
+    private final String DISTRITOSGRAN="select count(*),departamento from adecuacion_tierras_rurales."
+            + "v_distritos_riego_total_gran group by departamento order by departamento;";
+    private final String DISTRITOSMED="select count(*),departamento from adecuacion_tierras_rurales."
+            + "v_distritos_riego_total_mediana group by departamento order by departamento;";
+    private final String DISTRITOPEQ="select count(*),departamento from adecuacion_tierras_rurales."
+            + "v_distritos_riego_total_pequena group by departamento order by departamento;";
+    private final String DEPARTAMENTOS="SELECT  nombre\n" +
+            "FROM carto_basica.v_departamentos\n" +
+            "order by nombre;";
 
     public SentenciasBD() {
     }
@@ -200,11 +216,32 @@ public class SentenciasBD {
         return EXCLUSIONES;
     }
     
-    public String getDOCINFO(){
+    public String getDOCSINFO(){
         return DOCSINFO;
     }
     
     public String getIFPR(){
         return IFPR;
     }
+
+    public String getDISTRITOSDATS() {
+        return DISTRITOSDATS;
+    }
+
+    public String getDISTRITOSGRAN() {
+        return DISTRITOSGRAN;
+    }
+
+    public String getDISTRITOSMED() {
+        return DISTRITOSMED;
+    }
+
+    public String getDISTRITOPEQ() {
+        return DISTRITOPEQ;
+    }
+
+    public String getDEPARTAMENTOS() {
+        return DEPARTAMENTOS;
+    }
+    
 }

@@ -24,6 +24,7 @@ import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Precios;
 import obj.Areas;
+import obj.DistritosRiego;
 import obj.InfoyDocs;
 import obj.Servicios;
 import obj.Tablacontenido;
@@ -805,7 +806,7 @@ public class Consultas {
         List<InfoyDocs> list=new ArrayList<>();
         SentenciasBD sbd=new SentenciasBD();
         try {
-            ps=cn.prepareStatement(sbd.getDOCINFO());
+            ps=cn.prepareStatement(sbd.getDOCSINFO());
             ps.setString(1, alias);
             ps.setBoolean(2, tipo);
             rs=ps.executeQuery();
@@ -861,6 +862,136 @@ public class Consultas {
         }
         return list;
     } 
+    
+    public List<DistritosRiego> conteoDistritosRiego(int tipo){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<DistritosRiego> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        final int peq=1;
+        final int med=2;
+        final int gran=3;
+        try {
+            switch(tipo){
+                case peq:{
+                    ps=cn.prepareStatement(sbd.getDISTRITOPEQ());
+                    break;
+                }
+                case med:{
+                    ps=cn.prepareStatement(sbd.getDISTRITOSMED());
+                    break;
+                }
+                case gran:{
+                    ps=cn.prepareStatement(sbd.getDISTRITOSGRAN());
+                    break;
+                }
+            }
+            rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              DistritosRiego dr = new DistritosRiego();
+              dr.setCantDist(rs.getInt(i++));
+              dr.setDepto(rs.getString(i++));
+              list.add(dr);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
+    
+    public List<DistritosRiego> datosDistritosRiego(){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<DistritosRiego> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+            ps=cn.prepareStatement(sbd.getDISTRITOSDATS());
+            rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              DistritosRiego dr = new DistritosRiego();
+              dr.setIdUpra(rs.getString(i++));
+              dr.setIdIncoder(rs.getInt(i++));
+              dr.setNomDistrito(rs.getString(i++));
+              dr.setCodDaneDepto(rs.getString(i++));
+              dr.setDepto(rs.getString(i++));
+              dr.setCodDaneMpio(rs.getString(i++));
+              dr.setMpio(rs.getString(i++));
+              dr.setVereda(rs.getString(i++));
+              dr.setAreaNeta(rs.getBigDecimal(i++));
+              dr.setAreaBruta(rs.getBigDecimal(i++));
+              dr.setEscala(rs.getString(i++));
+              dr.setCoor1(rs.getString(i++));
+              dr.setCoor2(rs.getString(i++));
+              dr.setCoor3(rs.getString(i++));
+              dr.setCoor4(rs.getString(i++));
+              dr.setAltitud(rs.getBigDecimal(i++));
+              dr.setTipo(rs.getString(i++));
+              dr.setEtapa(rs.getString(i++));
+              dr.setFunciona(rs.getString(i++));
+              dr.setUsuarios(rs.getInt(i++));
+              dr.setInversion(rs.getInt(i++));
+              dr.setAdmin(rs.getString(i++));
+              dr.setAsoUsuarios(rs.getString(i++));
+              dr.setResolucion(rs.getString(i++));
+              dr.setRepresentante(rs.getString(i++));
+              dr.setTel(rs.getString(i++));
+              dr.setEmail(rs.getString(i++));
+              dr.setDir(rs.getString(i++));
+              dr.setCultivos(rs.getString(i++));
+              dr.setCar(rs.getString(i++));
+              dr.setFuenteHid(rs.getString(i++));
+              dr.setCaptacion(rs.getString(i++));
+              dr.setConcesion(rs.getString(i++));
+              dr.setSzh(rs.getString(i++));
+              dr.setZh(rs.getString(i++));
+              dr.setGeoref(rs.getString(i++));
+              dr.setIdPol(rs.getString(i++));
+              dr.setObser(rs.getString(i++));
+              list.add(dr);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
+    
+    public List<String> consultarDepartamentos(){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<String> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+             ps=cn.prepareStatement(sbd.getDEPARTAMENTOS());
+             rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              list.add(rs.getString(i++));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
 }
 
 

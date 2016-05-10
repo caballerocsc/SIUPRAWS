@@ -20,6 +20,7 @@ import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Precios;
 import obj.Areas;
+import obj.DistritosRiego;
 import obj.InfoyDocs;
 import obj.Servicios;
 import obj.Tablacontenido;
@@ -117,11 +118,29 @@ public class Conversion {
      }
      
     /**
-     *
-     * @param lista
-     * @return
+     * Método toma una lista de objetos y los concatena separados por comas
+     * @param lista Lista de tipo bigdecimal
+     * @return texto concatenado
      */
-    public String addCommaDouble(List<BigDecimal> lista){
+    public String addCommaBigDecimal(List<BigDecimal> lista){
+         if (lista.size()>0) {
+             int cont = lista.size();
+             String json = "";
+             for (int i = 0; i < cont - 1; i++) {
+                 json += lista.get(i) + ",";
+             }
+             json += lista.get(cont - 1);
+             return json;
+         }else
+             return "";
+     }
+    
+    /**
+     * Método toma una lista de objetos y los concatena separados por comas
+     * @param lista Lista de tipo Integer
+     * @return texto concatenado
+     */
+    public String addCommaInteger(List<Integer> lista){
          if (lista.size()>0) {
              int cont = lista.size();
              String json = "";
@@ -962,9 +981,9 @@ public class Conversion {
             depto.add("\""+r.getDepartamento()+"\"");
         }
         String ejeX="["+addCommaString(depto)+"]";
-        String cond="["+addCommaDouble(v.PorcentajeAreaxZonaRestricciones(areas, 1))+"]";
-        String exc="["+addCommaDouble(v.PorcentajeAreaxZonaRestricciones(areas, 2))+"]";
-        String SinRes="["+addCommaDouble(v.PorcentajeAreaxZonaRestricciones(areas, 3))+"]";
+        String cond="["+addCommaBigDecimal(v.PorcentajeAreaxZonaRestricciones(areas, 1))+"]";
+        String exc="["+addCommaBigDecimal(v.PorcentajeAreaxZonaRestricciones(areas, 2))+"]";
+        String SinRes="["+addCommaBigDecimal(v.PorcentajeAreaxZonaRestricciones(areas, 3))+"]";
         String graf2="{\"tGra\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#FFFFB9\", \"#FFB3B3\", \"#C4E6B2\"],"
@@ -1048,9 +1067,9 @@ public class Conversion {
             depto.add("\""+r.getDepartamento()+"\"");
         }
         String ejeX="["+addCommaString(depto)+"]";
-        String incl="["+addCommaDouble(v.totalSepararExclusiones(areas, 1))+"]";
-        String exc="["+addCommaDouble(v.totalSepararExclusiones(areas, 2))+"]";
-        String restr="["+addCommaDouble(v.totalSepararExclusiones(areas, 3))+"]";
+        String incl="["+addCommaBigDecimal(v.totalSepararExclusiones(areas, 1))+"]";
+        String exc="["+addCommaBigDecimal(v.totalSepararExclusiones(areas, 2))+"]";
+        String restr="["+addCommaBigDecimal(v.totalSepararExclusiones(areas, 3))+"]";
         String graf2="{\"tGra\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#FFAA00\", \"#FFFFBE\", \"#98E600\"],"
@@ -1158,5 +1177,164 @@ public class Conversion {
             linfo.add(i);
         }
         return "\"atInf\":{\"dats\":["+addCommaString(linfo)+"]}";
+    }
+    
+    public String crearJsonDistritosRiegos(Tablacontenido tc, List<Servicios> serv,
+            List<Capas> capas, List<DistritosRiego> dats, List<DistritosRiego> peq, 
+            List<DistritosRiego> med, List<DistritosRiego> gran, List<String> dpto){
+        Varios v = new Varios();
+        List<String> temCap = new ArrayList<>();
+        for(Capas c: capas){
+            temCap.add(c.getAlias());
+        }
+        String iden="\"ext\":[],\"orCsgs\":[\""+addCommaString(temCap)+"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": [\"distGranPolCg\",\"distMedianaPolCg\",\"distPequenaPolCg\"],\n" +
+                    "\"compCg\": \"id_incoder\",\n" +
+                    "\"compTab\": \"ID INCODER\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"ID INCODER\",\"Nombre Distrito\",\"Departamento\",\"Municipio\","
+                + "\"Escala\",\"Usuarios\",\"Cultivos\",\"Tipo\",\"Etapa\",\"Área Neta\",\"Fuente Hídrica\","
+                + "\"¿Funciona?\",\"Concesión\"]},\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        //creacion de la columnas
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"ID UPRA\", \"t\", \"10%\"]");
+        listColumnas.add("[\"ID INCODER\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Nombre Distrito\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Código DANE Depto\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Código DANE Mpio\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Municipio\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Vereda\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Área Neta\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Área Bruta\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Escala\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Coordenada 1\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Coordenada 2\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Coordenada 3\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Coordenada 4\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Altitud\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Tipo\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Etapa\", \"t\", \"10%\"]");
+        listColumnas.add("[\"¿Funciona?\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Usuarios\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Inversión\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Administrador\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Asociación de Usuarios\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Resolución de la Asociación\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Representante de la Asociación\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Teléfono de la Asociación\", \"t\", \"10%\"]");
+        listColumnas.add("[\"E-mail de la Asociación\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Dirección de la Asociación\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Cultivos\", \"t\", \"10%\"]");
+        listColumnas.add("[\"CAR\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Fuente Hídrica\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Captación\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Concesión\", \"t\", \"10%\"]");
+        listColumnas.add("[\"SZH\", \"t\", \"10%\"]");
+        listColumnas.add("[\"ZH\", \"t\", \"10%\"]");
+        listColumnas.add("[\"¿Georeferenciado?\", \"t\", \"10%\"]");
+        listColumnas.add("[\"ID Polígono\", \"t\", \"10%\"]");
+        listColumnas.add("[\"Observaciones\", \"t\", \"10%\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        //llenar la tabla con los datos
+        for (DistritosRiego dr : dats) {
+            registros.add("[{},\""+dr.getIdUpra()+"\","
+                    + dr.getIdIncoder()+","
+                    + "\""+dr.getNomDistrito()+"\","
+                    + "\""+dr.getCodDaneDepto()+"\","
+                    + "\""+dr.getDepto()+"\","
+                    + "\""+dr.getCodDaneMpio()+"\","
+                    + "\""+dr.getMpio()+"\","
+                    + "\""+dr.getVereda()+"\","
+                    + "\""+dr.getAreaNeta()+"\","
+                    + "\""+dr.getAreaBruta()+"\","
+                    + "\""+dr.getEscala()+"\","
+                    + "\""+dr.getCoor1()+"\","
+                    + "\""+dr.getCoor2()+"\","
+                    + "\""+dr.getCoor3()+"\","
+                    + "\""+dr.getCoor4()+"\","
+                    + dr.getAltitud()+","
+                    + "\""+dr.getTipo()+"\","
+                    + "\""+dr.getEtapa()+"\","
+                    + "\""+dr.getFunciona()+"\","
+                    + dr.getUsuarios()+","
+                    + dr.getInversion()+","
+                    + "\""+dr.getAdmin()+"\","
+                    + "\""+dr.getAsoUsuarios()+"\","
+                    + "\""+dr.getResolucion()+"\","
+                    + "\""+dr.getRepresentante()+"\","
+                    + "\""+dr.getTel()+"\","
+                    + "\""+dr.getEmail()+"\","
+                    + "\""+dr.getDir()+"\","
+                    + "\""+dr.getCultivos()+"\","
+                    + "\""+dr.getCar()+"\","
+                    + "\""+dr.getFuenteHid()+"\","
+                    + "\""+dr.getCaptacion()+"\","
+                    + "\""+dr.getConcesion()+"\","
+                    + "\""+dr.getSzh()+"\","
+                    + "\""+dr.getZh()+"\","
+                    + "\""+dr.getGeoref()+"\","
+                    + "\""+dr.getIdPol()+"\","
+                    + "\""+dr.getObser()+"\"]");
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        List<Integer> datGrafPeq = new ArrayList<>();
+        List<Integer> datGrafMed = new ArrayList<>();
+        List<Integer> datGrafGran = new ArrayList<>();
+        //compara la lista de departamentos contra las de distritos
+        //si no encuentra un departamento agrega cero, del lo contrario 
+        //la cantidad de distritos en ese departamento
+        for (int i = 0; i < dpto.size(); i++) {
+            boolean igualPeq=false;
+            boolean igualMed=false;
+            boolean igualGrand=false;
+            for (int j = 0; j < peq.size(); j++) {
+                if (dpto.get(i).equals(peq.get(j).getDepto())) {
+                    datGrafPeq.add(peq.get(j).getCantDist());
+                    igualPeq=true;
+                }
+            }
+            if(igualPeq)
+                datGrafPeq.add(0);
+            for (int j = 0; j < med.size(); j++) {
+                if (dpto.get(i).equals(med.get(j).getDepto())) {
+                    datGrafMed.add(med.get(j).getCantDist());
+                    igualMed=true;
+                }
+            }
+            if(igualMed)
+                datGrafMed.add(0);
+            for (int j = 0; j < gran.size(); j++) {
+                if (dpto.get(i).equals(gran.get(j).getDepto())) {
+                    datGrafGran.add(gran.get(j).getCantDist());
+                    igualGrand=true;
+                }
+            }
+            if(igualGrand)
+                datGrafGran.add(0);
+        }
+        String atGraf="\"atGras\":{\"dats\":[{\"tGra\":\"p\","
+                + "\"tit\":\"Número de distritos de riego y drenaje por departamento y escala\","
+                + "\"es\":{\"3d\":true, \"caLe\":true},"
+                + "\"col\":[\"#ab4d6b\",\"#d593a7\",\"#40ff40\"],"
+                + "\"otrosDats\":{\"ejeX\":["+addCommaString(dpto)+"],\"ejeY\":\"Número de distritos\"},"
+                + "\"dats\":[ [\"Gran escala\","+addCommaInteger(datGrafGran)+"],"
+                + "[\"Mediana escala\","+addCommaInteger(datGrafMed)+"],"
+                + "[\"Pequeña escala\","+addCommaInteger(datGrafPeq)+"] ]"
+                + "}]}";
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [0, 1, 1, 1, 0]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
+        return json;
     }
 }
