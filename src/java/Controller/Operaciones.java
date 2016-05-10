@@ -91,26 +91,38 @@ public class Operaciones {
         Conversion conv=new Conversion();
         String resultado="";
         switch(alias){
-            case Parametros.PRECIOS:
+            case Parametros.PRECIOS:{
                 resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
                         con.consultarCapasporMenuConsulta(alias), fil, con.consultaPrecios(fil),con.consultaSumatoriaPrecios(fil));
                 break;
-            case Parametros.AVALUOS:
+            }
+            case Parametros.AVALUOS:{
                 con.consultaAvaluos(fil);
                 break;
-            case Parametros.TRANSACCIONES:
+            }
+            case Parametros.TRANSACCIONES:{
                 //List<DinamicaMercados> dm=;
                 resultado=conv.crearJsonDinamMerc(fil, con.consultaDinamicaMerc(fil), con.consultarTablaContenidoporMenuConsulta(alias), 
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias));
                 break;
-            case Parametros.RESTRICCIONES:
+            }
+            case Parametros.RESTRICCIONES:{
                 resultado=conv.crearJsonRestricciones(con.consultarTablaContenidoporMenuConsulta(alias),
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias), con.consultaRestricciones());
                 break;
-            case Parametros.EXCLUSIONES:
+            }
+            case Parametros.EXCLUSIONES:{
                 resultado=conv.crearJsonExclusiones(con.consultarTablaContenidoporMenuConsulta(alias),
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
                         con.consultaExclusiones(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                break;
+            }
+            case Parametros.INDICEFRACCIONAMIENTO:{
+                resultado=conv.crearJsonExclusiones(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.consultaExclusiones(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                break;
+            }
         }
         return resultado;
     }

@@ -1061,22 +1061,10 @@ public class Conversion {
                 + "[\"Excluido\","+exc+"]]}";
         String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
         //area de trabajo documentos
-        List<String> ldocs = new ArrayList<>();
-        for (InfoyDocs d : docs) {
-            String doc="{\"desc\":\""+d.getDescripcion()+"\","
-                    + "\"nom\":\""+d.getNombre()+"\","
-                    + "\"tit\":\""+d.getTitulo()+"\"}";
-            ldocs.add(doc);
-        }
-        String atDocs="\"atDocs\":{\"dats\":["+addCommaString(ldocs)+"]}";
+        String atDocs=jsonDocs(docs);
          //area de trabajo informacion
-        List<String> linfo = new ArrayList<>();
-        for (InfoyDocs inf : info) {
-            String i="{\"tit\":\""+inf.getTitulo()+"\","
-                    + "\"tex\":\""+inf.getDescripcion()+"\"}";
-            linfo.add(i);
-        }
-        String atInf="\"atInf\":{\"dats\":["+addCommaString(linfo)+"]}";
+        String atInf=jsonInfo(info);
+        //configuracion de la consulta
         String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
                     "\"plantillas\": [1, 1, 1, 3, 1]}";
          String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
@@ -1127,6 +1115,48 @@ public class Conversion {
                 + "\"col\":[\"#4472c4\"],"
                 + graf1+"}]}";
         //area de trabajo documentos
-        return null;
+        String atDocs=jsonDocs(docs);
+         //area de trabajo informacion
+        String atInf=jsonInfo(info);
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 1, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
+        return json;
+    }
+    
+    /**
+     * Método que se encarga de crear el json para el area de trabajo 
+     * de documentos en una consulta de usuario
+     * @param docs lista de tipo InfoyDocs con las informacion de los documentos
+     * asociados a la consulta
+     * @return String en formato json con la informacion de los documentos de la consulta
+     */
+    public String jsonDocs(List<InfoyDocs> docs){
+        List<String> ldocs = new ArrayList<>();
+        for (InfoyDocs d : docs) {
+            String doc="{\"desc\":\""+d.getDescripcion()+"\","
+                    + "\"nom\":\""+d.getNombre()+"\","
+                    + "\"tit\":\""+d.getTitulo()+"\"}";
+            ldocs.add(doc);
+        }
+        return "\"atDocs\":{\"dats\":["+addCommaString(ldocs)+"]}";
+    }
+    
+    /**
+     * Método que se encarga de crear el json para el area de trabajo 
+     * de información adicional en una consulta de usuario
+     * @param info lista de tipo InfoyDocs con las informacion 
+     * adicional a la consulta de usuario
+     * @return String en formato json con la informacion adicional de la consulta
+     */
+    public String jsonInfo(List<InfoyDocs> info){
+        List<String> linfo = new ArrayList<>();
+        for (InfoyDocs inf : info) {
+            String i="{\"tit\":\""+inf.getTitulo()+"\","
+                    + "\"tex\":\""+inf.getDescripcion()+"\"}";
+            linfo.add(i);
+        }
+        return "\"atInf\":{\"dats\":["+addCommaString(linfo)+"]}";
     }
 }
