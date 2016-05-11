@@ -46,6 +46,10 @@ public class Parametros {
     public static final String RESTRICCIONES="celaaf";
     public static final String EXCLUSIONES="clmt";
     public static final String INDICEFRACCIONAMIENTO="ifpr";
+    public static final String AREAS_FORMALIZACION="afpp";
+    public static final String INTERRELACION_CAT_REG="icare";
+    public static final String VIGENCIA_CATASTRAL2014="vcn";
+    
             
     public Parametros() {
     }

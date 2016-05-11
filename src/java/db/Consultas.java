@@ -390,44 +390,44 @@ public class Consultas {
      * @param filtro parametro where de la sentencia sql
      * @return lista de tipo Avaluos con la información 
      */
-    public List<Avaluos> consultaAvaluos(FiltroJson filtro){
-        String clausula=filtrosAniosToString(filtro);
-        Conexion con=new Conexion();
-        Connection cn=con.getConexion();
-        ResultSet rs=null;
-        PreparedStatement ps=null;
-        List<Avaluos> avaluos=new ArrayList<>();
-        try {
-            if(clausula.equals(""))
-                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('');");
-            else
-                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('"+clausula+"');");
-            rs=ps.executeQuery();int j=0;
-            while (rs.next()) {                
-                int i=0;
-                String[] row=rs.getString(1).split(",");
-                Avaluos ava=new Avaluos();
-                ava.setId(row[i++]);
-                ava.setAno(Integer.parseInt(row[i++]));
-                ava.setIdDepart(Integer.parseInt(row[i++]));
-                ava.setDepartamento(row[i++]);
-                ava.setIdMun(Integer.parseInt(row[i++]));
-                ava.setMunicipio(row[i++]);
-                ava.setRango(row[i++]);
-                ava.setArea(row[i++]);
-                avaluos.add(ava);
-                System.out.println(i++);
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
-        }finally{
-            con.cerrar(cn);
-            con.cerrar(ps);
-            con.cerrar(rs);
-        }
-        System.out.println(avaluos.size());
-        return avaluos;
-    }
+//    public List<Avaluos> consultaAvaluos(FiltroJson filtro){
+//        String clausula=filtrosAniosToString(filtro);
+//        Conexion con=new Conexion();
+//        Connection cn=con.getConexion();
+//        ResultSet rs=null;
+//        PreparedStatement ps=null;
+//        List<Avaluos> avaluos=new ArrayList<>();
+//        try {
+//            if(clausula.equals(""))
+//                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('');");
+//            else
+//                ps=cn.prepareStatement("SELECT mercado_tierras_rurales.funcion_parametros_avaluos_catastrales('"+clausula+"');");
+//            rs=ps.executeQuery();int j=0;
+//            while (rs.next()) {                
+//                int i=0;
+//                String[] row=rs.getString(1).split(",");
+//                Avaluos ava=new Avaluos();
+//                ava.setId(row[i++]);
+//                ava.setAno(Integer.parseInt(row[i++]));
+//                ava.setIdDepart(Integer.parseInt(row[i++]));
+//                ava.setDepartamento(row[i++]);
+//                ava.setIdMun(Integer.parseInt(row[i++]));
+//                ava.setMunicipio(row[i++]);
+//                ava.setRango(row[i++]);
+//                ava.setArea(row[i++]);
+//                avaluos.add(ava);
+//                System.out.println(i++);
+//            }
+//        } catch (SQLException e) {
+//            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+//        }finally{
+//            con.cerrar(cn);
+//            con.cerrar(ps);
+//            con.cerrar(rs);
+//        }
+//        System.out.println(avaluos.size());
+//        return avaluos;
+//    }
     
     /**
      * Método que obtiene los filtros de las diferentes tablas asociados a una 
@@ -897,6 +897,7 @@ public class Consultas {
               list.add(dr);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
         }finally{
             con.cerrar(cn);

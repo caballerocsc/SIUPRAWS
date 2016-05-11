@@ -104,7 +104,7 @@ public class SentenciasBD {
             "order by d.orden";
     private final String IFPR="select cod_dane_depto, departamento, fraccionamiento "+ 
             "from indicadores.v_fraccionamiento order by cod_dane_depto";
-    private final String DISTRITOSDATS="SELECT gid, id, id_incoder, nom_dat, cod_depto, depto, cod_mcpio, mcpio, \n" +
+    private final String DISTRITOSDATS="SELECT id, id_incoder, nom_dat, cod_depto, depto, cod_mcpio, mcpio, \n" +
             "vereda, area_neta, area_bruta, escala, coorn1, coorn2, coore1, \n" +
             "coore2, altitud, tipo_dat, etapa_dat, funciona, usuarios, inversion, \n" +
             "admin, asoc_usuar, resol_asoc, repr_asoc, tel_asoc, e_mail, direc_asoc, \n" +

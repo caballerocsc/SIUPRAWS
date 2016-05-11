@@ -1185,9 +1185,9 @@ public class Conversion {
         Varios v = new Varios();
         List<String> temCap = new ArrayList<>();
         for(Capas c: capas){
-            temCap.add(c.getAlias());
+            temCap.add("\""+c.getAlias()+"\"");
         }
-        String iden="\"ext\":[],\"orCsgs\":[\""+addCommaString(temCap)+"],\n" +
+        String iden="\"ext\":[],\"orCsgs\":["+addCommaString(temCap)+"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": [\"distGranPolCg\",\"distMedianaPolCg\",\"distPequenaPolCg\"],\n" +
                     "\"compCg\": \"id_incoder\",\n" +
@@ -1196,7 +1196,7 @@ public class Conversion {
                     "\"ind\": 0,\n" +
                     "\"colums\": [\"ID INCODER\",\"Nombre Distrito\",\"Departamento\",\"Municipio\","
                 + "\"Escala\",\"Usuarios\",\"Cultivos\",\"Tipo\",\"Etapa\",\"Área Neta\",\"Fuente Hídrica\","
-                + "\"¿Funciona?\",\"Concesión\"]},\n" +
+                + "\"¿Funciona?\",\"Concesión\"]}\n" +
                     "}]}";
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         //creacion de la columnas
@@ -1322,6 +1322,10 @@ public class Conversion {
             if(igualGrand)
                 datGrafGran.add(0);
         }
+        //agregar comillas a la lista de departamentos
+        for (int i = 0; i < dpto.size(); i++) {
+            dpto.add(i, "\""+dpto.get(i)+"\"");
+        }
         String atGraf="\"atGras\":{\"dats\":[{\"tGra\":\"p\","
                 + "\"tit\":\"Número de distritos de riego y drenaje por departamento y escala\","
                 + "\"es\":{\"3d\":true, \"caLe\":true},"
@@ -1337,4 +1341,15 @@ public class Conversion {
          String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
         return json;
     }
+     
+     public String crearJsonConsultaGenericaInfoGeo(Tablacontenido tc, List<Servicios> serv,
+            List<Capas> capas){
+        Varios v = new Varios();
+        String iden="\"orCsgs\":[\""+capas.get(0).getAlias()+"\"]";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        //configuracion de la consulta
+        String conf="\"atSel\": \"atMaps\"";
+         String json="resp({\"ast\":{"+atMaps+"},"+conf+"})";
+        return json;
+     }
 }

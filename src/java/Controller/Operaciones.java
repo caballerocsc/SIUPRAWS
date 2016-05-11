@@ -96,10 +96,12 @@ public class Operaciones {
                         con.consultarCapasporMenuConsulta(alias), fil, con.consultaPrecios(fil),con.consultaSumatoriaPrecios(fil));
                 break;
             }
-            case Parametros.AVALUOS:{
-                con.consultaAvaluos(fil);
-                break;
-            }
+//            case Parametros.AVALUOS:{
+////                con.consultaAvaluos(fil);
+//                resultado=conv.crearJsonAvaluos(con.consultarTablaContenidoporMenuConsulta(alias),
+//                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias));
+//                break;
+//            }
             case Parametros.TRANSACCIONES:{
                 //List<DinamicaMercados> dm=;
                 resultado=conv.crearJsonDinamMerc(fil, con.consultaDinamicaMerc(fil), con.consultarTablaContenidoporMenuConsulta(alias), 
@@ -123,6 +125,19 @@ public class Operaciones {
                         con.consultaExclusiones(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
                 break;
             }
+            case Parametros.DISTRITOS_RIEGO_DRENAJE:{
+                resultado=conv.crearJsonDistritosRiegos(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.datosDistritosRiego(), con.conteoDistritosRiego(1), con.conteoDistritosRiego(2), 
+                        con.conteoDistritosRiego(3), con.consultarDepartamentos());
+                break;
+            }
+            default:
+                if(alias.equals(Parametros.AVALUOS)||alias.equals(Parametros.AREAS_FORMALIZACION)||
+                        alias.equals(Parametros.INTERRELACION_CAT_REG)||alias.equals(Parametros.VIGENCIA_CATASTRAL2014)){
+                     resultado=conv.crearJsonConsultaGenericaInfoGeo(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias));
+                }
         }
         return resultado;
     }
