@@ -993,6 +993,64 @@ public class Consultas {
         }
         return list;
     }
+    
+    public List<Areas> consultarIndicadorConcentracion(){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Areas> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+             ps=cn.prepareStatement(sbd.getINDICE_CONCENTRACION());
+             rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              Areas a = new Areas();
+              a.setCodigoDane(rs.getString(i++));
+              a.setDepartamento(rs.getString(i++));
+              a.setArea(rs.getBigDecimal(i++));
+              list.add(a);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
+    
+    
+    public List<Areas> consultarSuperficieSinRestric(){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Areas> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+             ps=cn.prepareStatement(sbd.getSUP_SIN_REST_LEG());
+             rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              Areas a = new Areas();
+              a.setCodigoDane(rs.getString(i++));
+              a.setDepartamento(rs.getString(i++));
+              a.setArea(rs.getBigDecimal(i++));
+              a.setTipo(rs.getString(i++));
+              list.add(a);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
 }
 
 

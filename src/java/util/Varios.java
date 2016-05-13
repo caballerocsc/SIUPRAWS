@@ -306,4 +306,17 @@ public class Varios {
         }
         return listTotal;
     }
+    
+    public BigDecimal promedioCategoriaZonas(List<Areas> area, String tipo){
+        BigDecimal total = new BigDecimal(BigInteger.ZERO);
+        BigDecimal cont = new BigDecimal(BigInteger.ZERO);
+        BigDecimal uno = new BigDecimal(BigInteger.ONE);
+        for (Areas a : area) {
+            if(a.getTipo().equals(tipo)){
+                total.add(a.getArea());
+                cont.add(uno);
+            }
+        }
+        return total.divide(cont, 2,RoundingMode.HALF_DOWN);
+    }
 }

@@ -40,6 +40,7 @@ public class Areas {
     private BigDecimal areaIncl;
     private BigDecimal areaExcl;
     private BigDecimal area;
+    private String tipo;
 
     public String getCodigoDane() {
         return codigoDane;
@@ -128,4 +129,13 @@ public class Areas {
     public void setArea(BigDecimal area) {
         this.area = area;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String categoria) {
+        this.tipo = categoria;
+    }
+    
 }

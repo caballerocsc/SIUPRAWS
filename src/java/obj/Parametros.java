@@ -49,6 +49,8 @@ public class Parametros {
     public static final String AREAS_FORMALIZACION="afpp";
     public static final String INTERRELACION_CAT_REG="icare";
     public static final String VIGENCIA_CATASTRAL2014="vcn";
+    public static final String INDICE_CONCENTRACION="icpr";
+    public static final String SUPERFICIESINREST="susr";
     
             
     public Parametros() {

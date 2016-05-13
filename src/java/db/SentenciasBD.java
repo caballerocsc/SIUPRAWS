@@ -120,6 +120,12 @@ public class SentenciasBD {
     private final String DEPARTAMENTOS="SELECT  nombre\n" +
             "FROM carto_basica.v_departamentos\n" +
             "order by nombre;";
+    private final String INDICE_CONCENTRACION="SELECT cod_dane_depto, departamento, concentracion\n" +
+            "FROM indicadores.v_concentracion "
+            + "order by concentracion desc;";
+    private final String SUP_SIN_REST_LEG="SELECT cod_dane_depto, departamento, porc_superf_suelo_sin_restr_act_ag_pec_for, \n" +
+            "categoria FROM indicadores.v_biof_e01 \n" +
+            "order by porc_superf_suelo_sin_restr_act_ag_pec_for desc;";
 
     public SentenciasBD() {
     }
@@ -243,5 +249,14 @@ public class SentenciasBD {
     public String getDEPARTAMENTOS() {
         return DEPARTAMENTOS;
     }
+
+    public String getINDICE_CONCENTRACION() {
+        return INDICE_CONCENTRACION;
+    }
+
+    public String getSUP_SIN_REST_LEG() {
+        return SUP_SIN_REST_LEG;
+    }
+    
     
 }

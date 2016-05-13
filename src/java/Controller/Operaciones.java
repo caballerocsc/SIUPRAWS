@@ -120,9 +120,9 @@ public class Operaciones {
                 break;
             }
             case Parametros.INDICEFRACCIONAMIENTO:{
-                resultado=conv.crearJsonExclusiones(con.consultarTablaContenidoporMenuConsulta(alias),
+                resultado=conv.crearJsonIndiceFraccionamiento(con.consultarTablaContenidoporMenuConsulta(alias),
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
-                        con.consultaExclusiones(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                        con.consultarIndiceFraccionamiento(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
                 break;
             }
             case Parametros.DISTRITOS_RIEGO_DRENAJE:{
@@ -130,6 +130,18 @@ public class Operaciones {
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
                         con.datosDistritosRiego(), con.conteoDistritosRiego(1), con.conteoDistritosRiego(2), 
                         con.conteoDistritosRiego(3), con.consultarDepartamentos());
+                break;
+            }
+            case Parametros.INDICE_CONCENTRACION:{
+                resultado=conv.crearJsonConcentracionRelativa(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.consultarIndicadorConcentracion(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                break;
+            }
+            case Parametros.SUPERFICIESINREST:{
+                resultado=conv.crearJsonSuperficieSinRest(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.consultarSuperficieSinRestric(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
                 break;
             }
             default:
