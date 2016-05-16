@@ -813,11 +813,11 @@ public class Consultas {
             while (rs.next()) {                
               int i=1;
               InfoyDocs docs=new InfoyDocs();
-                if (tipo) {
-                    docs.setTitulo(rs.getString(i++));
-                }
+              docs.setTitulo(rs.getString(i++));
               docs.setDescripcion(rs.getString(i++));
-              docs.setNombre(rs.getString(i++));
+                if (tipo) {
+                    docs.setNombre(rs.getString(i++));
+                }
               list.add(docs);
             }
         } catch (SQLException e) {
@@ -863,6 +863,13 @@ public class Consultas {
         return list;
     } 
     
+    /**
+     * Método que se encarga de contar cuantos distritos de riego existen 
+     * para la escala elegida por el parametro tipo
+     * @param tipo 1 para distritos pequeños, 2 para medianos, 3 para grandes
+     * @return lista de tipo DistritosRiego con el conteo de cuantos distritos de riego por departamento
+     * existen para la escala elegida
+     */
     public List<DistritosRiego> conteoDistritosRiego(int tipo){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -907,6 +914,10 @@ public class Consultas {
         return list;
     }
     
+    /**
+     * Método que se encarga de consultar tioda la informacion de los distritos de riego existentes en el país
+     * @return lista de tipo DistritosRiego con toda la información de los distritos de riegos
+     */
     public List<DistritosRiego> datosDistritosRiego(){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -970,6 +981,10 @@ public class Consultas {
         return list;
     }
     
+    /**
+     * Metodo que obtiene la lista de departamentos
+     * @return Lista de departamentos de Colombia
+     */
     public List<String> consultarDepartamentos(){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -994,6 +1009,11 @@ public class Consultas {
         return list;
     }
     
+    /**
+     * Método que obtiene la información del indicador 
+     * de concentración de la propiedad 
+     * @return Lista de tipo Areas con la información del indicador
+     */
     public List<Areas> consultarIndicadorConcentracion(){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -1022,8 +1042,14 @@ public class Consultas {
         return list;
     }
     
-    
-    public List<Areas> consultarSuperficieSinRestric(){
+    /**
+     * Método que se encarga de obtener de la base de datos la información de cualquiera de los indicadores
+     * de superficie 
+     * @param ind Indice que hace referencia al indicador que se quiere consultar.
+     * 1: SUP_SIN_REST_LEG, 2: SUP_EXC_LEG
+     * @return 
+     */
+    public List<Areas> consultarIndicadoresSuperficie(int ind){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
@@ -1031,7 +1057,14 @@ public class Consultas {
         List<Areas> list=new ArrayList<>();
         SentenciasBD sbd=new SentenciasBD();
         try {
-             ps=cn.prepareStatement(sbd.getSUP_SIN_REST_LEG());
+            switch(ind){
+                case 1:
+                    ps=cn.prepareStatement(sbd.getSUP_SIN_REST_LEG());
+                    break;
+                case 2:
+                    ps=cn.prepareStatement(sbd.getSUP_EXC_LEG());
+                    break;
+        }
              rs=ps.executeQuery();
             while (rs.next()) {                
               int i=1;

@@ -138,10 +138,16 @@ public class Operaciones {
                         con.consultarIndicadorConcentracion(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
                 break;
             }
-            case Parametros.SUPERFICIESINREST:{
+            case Parametros.SUPERFICIE_SIN_REST:{
                 resultado=conv.crearJsonSuperficieSinRest(con.consultarTablaContenidoporMenuConsulta(alias),
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
-                        con.consultarSuperficieSinRestric(), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                        con.consultarIndicadoresSuperficie(1), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                break;
+            }
+            case Parametros.SUPERFICIE_CON_EXC_LEGAL:{
+                resultado=conv.crearJsonSuperficieConExcLeg(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.consultarIndicadoresSuperficie(2), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
                 break;
             }
             default:

@@ -1178,6 +1178,18 @@ public class Conversion {
         return "\"atInf\":{\"dats\":["+addCommaString(linfo)+"]}";
     }
     
+    /**
+     * Metodo encargado de hacer el json para la consulta de usuario de los distritos de riego
+     * @param tc tabla de contenido de la consulta asociada
+     * @param serv lista de servicios asociados a la consulta
+     * @param capas lista de capas asociadas a la consulta de usuario
+     * @param dats Lista de DistritosRiego con el consolidado de toda la información
+     * @param peq Lista de DistritosRiego con el discriminado de los distritos pequeños
+     * @param med Lista de DistritosRiego con el discriminado de los distritos medianos
+     * @param gran Lista de DistritosRiego con el discriminado de los distritos grandes
+     * @param dpto Lista de los departamentos de Colombia
+     * @return String en formato json con toda la información de la consulta
+     */
     public String crearJsonDistritosRiegos(Tablacontenido tc, List<Servicios> serv,
             List<Capas> capas, List<DistritosRiego> dats, List<DistritosRiego> peq, 
             List<DistritosRiego> med, List<DistritosRiego> gran, List<String> dpto){
@@ -1345,6 +1357,14 @@ public class Conversion {
         return json;
     }
      
+    /**
+     * Método que se encarga de crear el json para las consutas que solo disponen de
+     * la información geográfica, solo mapa
+     * @param tc tabla de contenido de la consulta asociada
+     * @param serv lista de servicios asociados a la consulta
+     * @param capas lista de capas asociadas a la consulta de usuario
+     * @return String del json con la información de la consulta con solo mapa
+     */
      public String crearJsonConsultaGenericaInfoGeo(Tablacontenido tc, List<Servicios> serv,
             List<Capas> capas){
         Varios v = new Varios();
@@ -1356,6 +1376,17 @@ public class Conversion {
         return json;
      }
      
+     /**
+      * Método encargado de crear el json para la consulta del indicador 
+      * de indice de concentración relativa de la propiedad
+      * @param tc tabla de contenido de la consulta asociada
+      * @param serv lista de servicios asociados a la consulta
+      * @param capas lista de capas asociadas a la consulta de usuario
+      * @param areas lista de tipo Areas con la información del indicador de concentración
+      * @param docs lista de tipo InfoyDocs con los documentos asociados a la consulta
+      * @param info lista de tipo InfoyDocs con la información adicional asociada a la consulta
+      * @return String en json con toda la información de la consulta de concentración relativa de la propiedad
+      */
      public String crearJsonConcentracionRelativa(Tablacontenido tc, List<Servicios> serv,
             List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
         Varios v = new Varios();
@@ -1409,7 +1440,17 @@ public class Conversion {
         return json;
      }
      
-     
+     /**
+      * Método encargado de crear el json para la consulta del indicador 
+      * de superficie sin restricción legal
+      * @param tc tabla de contenido de la consulta asociada
+      * @param serv lista de servicios asociados a la consulta
+      * @param capas lista de capas asociadas a la consulta de usuario
+      * @param areas lista de tipo Areas con la información del indicador 
+      * @param docs lista de tipo InfoyDocs con los documentos asociados a la consulta
+      * @param info lista de tipo InfoyDocs con la información adicional asociada a la consulta
+      * @return String en json con toda la información de la consulta de superficie sin restricción legal
+      */
      public String crearJsonSuperficieSinRest(Tablacontenido tc, List<Servicios> serv,
             List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
         Varios v = new Varios();
@@ -1420,7 +1461,7 @@ public class Conversion {
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
                     "\"ind\": 0,\n" +
-                    "\"colums\": [\"Departamento\",\"% del suelo deptal sin restricción legal\",\"Categoría\"]},\n" +
+                    "\"colums\": [\"Departamento\",\"% del suelo deptal sin restricción legal\",\"Categoría\"]}\n" +
                     "}]}";
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
@@ -1460,7 +1501,80 @@ public class Conversion {
         }
         graf2="{\"tGra\":\"c\",\"tit\":\"Porcentaje del suelo departamental sin restricción legal\","
                 + "\"otrosDats\":{\"ejeY\":\"Porcentaje del suelo departamental sin restricción legal\"},"
-                + "es:{\"3d\":true},"
+                + "\"es\":{\"3d\":true},"
+                + "\"cols\":[\"#4472c4\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //area de trabajo documentos
+        String atDocs=jsonDocs(docs);
+         //area de trabajo informacion
+        String atInf=jsonInfo(info);
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 3, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
+        return json;
+     }
+     
+     /**
+      * Método encargado de crear el json para la consulta del indicador 
+      * de superficie con Exclusión legal
+      * @param tc tabla de contenido de la consulta asociada
+      * @param serv lista de servicios asociados a la consulta
+      * @param capas lista de capas asociadas a la consulta de usuario
+      * @param areas lista de tipo Areas con la información del indicador 
+      * @param docs lista de tipo InfoyDocs con los documentos asociados a la consulta
+      * @param info lista de tipo InfoyDocs con la información adicional asociada a la consulta
+      * @return String en json con toda la información de la consulta de superficie con exclusión legal
+      */
+     public String crearJsonSuperficieConExcLeg(Tablacontenido tc, List<Servicios> serv,
+            List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"% del suelo deptal con exclusión legal\",\"Categoría\"]}\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
+        listColumnas.add("[\"% del suelo deptal con exclusión legal\", \"n\", \"240px\"]");
+        listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        for (Areas r : areas) {
+            registros.add("[{},\""+r.getCodigoDane()+"\","
+                    + "\""+r.getDepartamento()+"\","
+                    + r.getArea()+","
+                    + "\""+r.getTipo()+"\"]");
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
+        datGraf.add("[\"Muy Bajo\","+v.promedioCategoriaZonas(areas, "Muy Bajo")+"]");
+        graf1="{\"tGra\":\"t\","
+                + "\"tit\":\"Porcentaje del suelo nacional con exclusión legal\","
+                + "\"es\":{\"3d\":true},"
+                + "\"col\":[\"#C6E0B3\",\"#70AD46\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String graf2;
+        datGraf.clear();
+        for (Areas r : areas) {
+            datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
+        }
+        graf2="{\"tGra\":\"c\",\"tit\":\"Porcentaje del suelo departamental con exclusión legal\","
+                + "\"otrosDats\":{\"ejeY\":\"Porcentaje del suelo departamental con exclusión legal\"},"
+                + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#4472c4\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";

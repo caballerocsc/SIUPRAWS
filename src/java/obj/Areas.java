@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 
 /**
  * Clase encargada de mapaear las consultas de restricciones y exlusiones agropecuarias
+ * tambien se utiliza para las consultas de indicadores
  * @author cesar.solano
  */
 public class Areas {

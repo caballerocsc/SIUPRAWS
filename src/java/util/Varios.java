@@ -83,30 +83,6 @@ public class Varios {
         return ordenada;
     }
     
-    /**
-     *  Método recursivo que verifica si el padre de un elemento ya se encuentra en la lista
-     * @param lista lista de elementos en la base de datos
-     * @param actual elemento que se revisa para saber si el padre ya se inserto a la nueva lista
-     */
-//    public void verificarPadreMenuConsulta(List<Menuconsultas> lista, Menuconsultas actual) {
-//        Menuconsultas tmp=null;
-//        boolean existe=false;
-//        for (int i = 0; i < listaOrdenada.size(); i++) {
-//            tmp=listaOrdenada.get(i);
-//            if(tmp.getMenuconsultaid()==actual.getDependede()){
-//                listaOrdenada.add(actual);
-//                existe=true;
-//            }
-//        }
-//        if(!existe){
-//            for (int i = 0; i < lista.size(); i++) {
-//                tmp=lista.get(i);
-//                if(tmp.getMenuconsultaid()==actual.getDependede()){
-//                    verificarPadreMenuConsulta(lista, tmp);
-//                }
-//            }
-//        }
-//    }
     
     /**
      * Método que se encarga de realizar la sumatoria de todas las transacciones de 
@@ -307,14 +283,21 @@ public class Varios {
         return listTotal;
     }
     
+    /**
+     * Método encargado de sacar el promedio del area de cada una de las categorias
+     * de los indicadores 
+     * @param area lista con las areas de cada uno de los departamentos
+     * @param tipo categoria en que se encuentra cada area, las opciones pueden ser Alto, Medio, Bajo y Muy Bajo 
+     * @return promedio del area de la zona elegina con el paramentro tipo
+     */
     public BigDecimal promedioCategoriaZonas(List<Areas> area, String tipo){
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
         BigDecimal cont = new BigDecimal(BigInteger.ZERO);
         BigDecimal uno = new BigDecimal(BigInteger.ONE);
         for (Areas a : area) {
             if(a.getTipo().equals(tipo)){
-                total.add(a.getArea());
-                cont.add(uno);
+                total=total.add(a.getArea());
+                cont=cont.add(uno);
             }
         }
         return total.divide(cont, 2,RoundingMode.HALF_DOWN);

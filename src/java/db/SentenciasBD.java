@@ -126,6 +126,9 @@ public class SentenciasBD {
     private final String SUP_SIN_REST_LEG="SELECT cod_dane_depto, departamento, porc_superf_suelo_sin_restr_act_ag_pec_for, \n" +
             "categoria FROM indicadores.v_biof_e01 \n" +
             "order by porc_superf_suelo_sin_restr_act_ag_pec_for desc;";
+    private final String SUP_EXC_LEG="SELECT cod_dane_depto, departamento, porc_superficie_suelo_rural_exclusion_legal, \n" +
+            "categoria FROM indicadores.v_biof_e02\n" +
+            "order by porc_superficie_suelo_rural_exclusion_legal desc";
 
     public SentenciasBD() {
     }
@@ -256,6 +259,10 @@ public class SentenciasBD {
 
     public String getSUP_SIN_REST_LEG() {
         return SUP_SIN_REST_LEG;
+    }
+
+    public String getSUP_EXC_LEG() {
+        return SUP_EXC_LEG;
     }
     
     
