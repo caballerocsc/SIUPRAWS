@@ -1046,7 +1046,7 @@ public class Consultas {
      * Método que se encarga de obtener de la base de datos la información de cualquiera de los indicadores
      * de superficie 
      * @param ind Indice que hace referencia al indicador que se quiere consultar.
-     * 1: SUP_SIN_REST_LEG, 2: SUP_EXC_LEG
+     * 1: SUP_SIN_REST_LEG, 2: SUP_EXC_LEG, 3: SUP_USO_COND
      * @return 
      */
     public List<Areas> consultarIndicadoresSuperficie(int ind){
@@ -1063,6 +1063,18 @@ public class Consultas {
                     break;
                 case 2:
                     ps=cn.prepareStatement(sbd.getSUP_EXC_LEG());
+                    break;
+                case 3: 
+                    ps=cn.prepareStatement(sbd.getSUP_USO_COND());
+                    break;
+                case 4:
+                    ps=cn.prepareStatement(sbd.getSUP_SOBRE());
+                    break;
+                case 5:
+                    ps=cn.prepareStatement(sbd.getSUP_SUB());
+                    break;
+                case 6:
+                    ps=cn.prepareStatement(sbd.getSUP_SIN_CONFLICTO());
                     break;
         }
              rs=ps.executeQuery();

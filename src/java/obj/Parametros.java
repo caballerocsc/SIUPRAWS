@@ -52,6 +52,10 @@ public class Parametros {
     public static final String INDICE_CONCENTRACION="icpr";
     public static final String SUPERFICIE_SIN_REST="susr";
     public static final String SUPERFICIE_CON_EXC_LEGAL="susel";
+    public static final String SUPERFICIE_USO_COND="szelag";
+    public static final String SUPERFICIE_USO_SOBRE="scut";
+    public static final String SUPERFICIE_USO_SUB="scust";
+    public static final String SUPERFICIE_SIN_CONFLICTO="sua";
     
             
     public Parametros() {

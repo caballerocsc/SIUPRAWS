@@ -1588,4 +1588,313 @@ public class Conversion {
          String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
         return json;
      }
+     
+     
+     /**
+      * Método encargado de crear el json para la consulta del indicador 
+      * de superficie con uso condicionado
+      * @param tc tabla de contenido de la consulta asociada
+      * @param serv lista de servicios asociados a la consulta
+      * @param capas lista de capas asociadas a la consulta de usuario
+      * @param areas lista de tipo Areas con la información del indicador 
+      * @param docs lista de tipo InfoyDocs con los documentos asociados a la consulta
+      * @param info lista de tipo InfoyDocs con la información adicional asociada a la consulta
+      * @return String en json con toda la información de la consulta de superficie 
+      * con uso condicionado
+      */
+     public String crearJsonSuperficieUsoCond(Tablacontenido tc, List<Servicios> serv,
+            List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"% del suelo deptal con uso condicionado\",\"Categoría\"]}\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
+        listColumnas.add("[\"% del suelo deptal con uso condicionado\", \"n\", \"250px\"]");
+        listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        for (Areas r : areas) {
+            registros.add("[{},\""+r.getCodigoDane()+"\","
+                    + "\""+r.getDepartamento()+"\","
+                    + r.getArea()+","
+                    + "\""+r.getTipo()+"\"]");
+        }
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ED7D31\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Alto\"]");
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"Muy Alto\","+v.promedioCategoriaZonas(areas, "Muy Alto")+"]");
+        datGraf.add("[\"Alto\","+v.promedioCategoriaZonas(areas, "Alto")+"]");
+        datGraf.add("[\"Medio\","+v.promedioCategoriaZonas(areas, "Medio")+"]");
+        datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
+        graf1="{\"tGra\":\"t\","
+                + "\"tit\":\"Porcentaje del suelo nacional con uso condicionado\","
+                + "\"es\":{\"3d\":true},"
+                + "\"col\":[\"#FF0000\",\"#ED7D31\",\"#FFFF00\",\"#C6E0B4\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String graf2;
+        datGraf.clear();
+        for (Areas r : areas) {
+            datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
+        }
+        graf2="{\"tGra\":\"c\",\"tit\":\"Porcentaje del suelo departamental con uso condicionado\","
+                + "\"otrosDats\":{\"ejeY\":\"Porcentaje del suelo departamental con uso condicionado\"},"
+                + "\"es\":{\"3d\":true},"
+                + "\"cols\":[\"#4472c4\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //area de trabajo documentos
+        String atDocs=jsonDocs(docs);
+         //area de trabajo informacion
+        String atInf=jsonInfo(info);
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 3, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
+        return json;
+     }
+     
+     /**
+      * Método encargado de crear el json para la consulta del indicador 
+      * de superficie con conflicto de uso por sobreutlización
+      * @param tc tabla de contenido de la consulta asociada
+      * @param serv lista de servicios asociados a la consulta
+      * @param capas lista de capas asociadas a la consulta de usuario
+      * @param areas lista de tipo Areas con la información del indicador 
+      * @param docs lista de tipo InfoyDocs con los documentos asociados a la consulta
+      * @param info lista de tipo InfoyDocs con la información adicional asociada a la consulta
+      * @return String en json con toda la información de la consulta de superficie
+      * con conflicto de uso de uso por sobreutilización
+      */
+     public String crearJsonSuperficieSobreUtilizacion(Tablacontenido tc, List<Servicios> serv,
+            List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"% del suelo deptal con conflicto por sobreutilización\",\"Categoría\"]}\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
+        listColumnas.add("[\"% del suelo deptal con conflicto por sobreutilización\", \"n\", \"315px\"]");
+        listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        for (Areas r : areas) {
+            registros.add("[{},\""+r.getCodigoDane()+"\","
+                    + "\""+r.getDepartamento()+"\","
+                    + r.getArea()+","
+                    + "\""+r.getTipo()+"\"]");
+        }
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Muy Bajo\"]");
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"Medio\","+v.promedioCategoriaZonas(areas, "Medio")+"]");
+        datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
+        datGraf.add("[\"Muy Bajo\","+v.promedioCategoriaZonas(areas, "Muy Bajo")+"]");
+        graf1="{\"tGra\":\"t\","
+                + "\"tit\":\"Porcentaje del suelo nacional con conflicto de uso por sobreutilización\","
+                + "\"es\":{\"3d\":true},"
+                + "\"col\":[\"#FF0000\",\"#C6E0B3\",\"#70AD46\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String graf2;
+        datGraf.clear();
+        for (Areas r : areas) {
+            datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
+        }
+        graf2="{\"tGra\":\"c\",\"tit\":\"Porcentaje del suelo departamental con conflicto de uso por sobreutilización\","
+                + "\"otrosDats\":{\"ejeY\":\"% del suelo departamental con conflicto de uso por sobreutilización\"},"
+                + "\"es\":{\"3d\":true},"
+                + "\"cols\":[\"#4472c4\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //area de trabajo documentos
+        String atDocs=jsonDocs(docs);
+         //area de trabajo informacion
+        String atInf=jsonInfo(info);
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 3, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
+        return json;
+     }
+     
+     /**
+      * Método encargado de crear el json para la consulta del indicador 
+      * de superficie con conflicto de uso por subutilización
+      * @param tc tabla de contenido de la consulta asociada
+      * @param serv lista de servicios asociados a la consulta
+      * @param capas lista de capas asociadas a la consulta de usuario
+      * @param areas lista de tipo Areas con la información del indicador 
+      * @param docs lista de tipo InfoyDocs con los documentos asociados a la consulta
+      * @param info lista de tipo InfoyDocs con la información adicional asociada a la consulta
+      * @return String en json con toda la información de la consulta de superficie 
+      * con conflicto de uso por subutilización
+      */
+     public String crearJsonSuperficieSubUtilizacion(Tablacontenido tc, List<Servicios> serv,
+            List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"% del suelo deptal con conflicto por subutilización\",\"Categoría\"]}\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
+        listColumnas.add("[\"% del suelo deptal con conflicto por subutilización\", \"n\", \"300px\"]");
+        listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        for (Areas r : areas) {
+            registros.add("[{},\""+r.getCodigoDane()+"\","
+                    + "\""+r.getDepartamento()+"\","
+                    + r.getArea()+","
+                    + "\""+r.getTipo()+"\"]");
+        }
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Muy Bajo\"]");
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"Muy Alto\","+v.promedioCategoriaZonas(areas, "Muy Alto")+"]");
+        datGraf.add("[\"Medio\","+v.promedioCategoriaZonas(areas, "Medio")+"]");
+        datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
+        datGraf.add("[\"Muy Bajo\","+v.promedioCategoriaZonas(areas, "Muy Bajo")+"]");
+        graf1="{\"tGra\":\"t\","
+                + "\"tit\":\"Porcentaje del suelo nacional con conflicto de uso por subutilización\","
+                + "\"es\":{\"3d\":true},"
+                + "\"col\":[\"#FF0000\",\"#FFFF00\",\"#C6E0B4\",\"#70AD4F\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String graf2;
+        datGraf.clear();
+        for (Areas r : areas) {
+            datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
+        }
+        graf2="{\"tGra\":\"c\",\"tit\":\"Porcentaje del suelo departamental con conflicto de uso por subutilización\","
+                + "\"otrosDats\":{\"ejeY\":\"% del suelo departamental con conflicto de uso por subutilización\"},"
+                + "\"es\":{\"3d\":true},"
+                + "\"cols\":[\"#4472c4\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //area de trabajo documentos
+        String atDocs=jsonDocs(docs);
+         //area de trabajo informacion
+        String atInf=jsonInfo(info);
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 3, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
+        return json;
+     }
+     
+     /**
+      * Método encargado de crear el json para la consulta del indicador 
+      * de superficie sin conflicto de uso
+      * @param tc tabla de contenido de la consulta asociada
+      * @param serv lista de servicios asociados a la consulta
+      * @param capas lista de capas asociadas a la consulta de usuario
+      * @param areas lista de tipo Areas con la información del indicador 
+      * @param docs lista de tipo InfoyDocs con los documentos asociados a la consulta
+      * @param info lista de tipo InfoyDocs con la información adicional asociada a la consulta
+      * @return String en json con toda la información de la consulta de superficie 
+      * con conflicto de uso por subutilización
+      */
+     public String crearJsonSuperficieSinConflicto(Tablacontenido tc, List<Servicios> serv,
+            List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"% del suelo deptal con uso adecuado\",\"Categoría\"]}\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
+        listColumnas.add("[\"% del suelo deptal con uso adecuado\", \"n\", \"230px\"]");
+        listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        for (Areas r : areas) {
+            registros.add("[{},\""+r.getCodigoDane()+"\","
+                    + "\""+r.getDepartamento()+"\","
+                    + r.getArea()+","
+                    + "\""+r.getTipo()+"\"]");
+        }
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ed7d31\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Alto\"]");
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"Muy Alto\","+v.promedioCategoriaZonas(areas, "Muy Alto")+"]");
+        datGraf.add("[\"Alto\","+v.promedioCategoriaZonas(areas, "Alto")+"]");
+        datGraf.add("[\"Medio\","+v.promedioCategoriaZonas(areas, "Medio")+"]");
+        datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
+        datGraf.add("[\"Muy Bajo\","+v.promedioCategoriaZonas(areas, "Muy Bajo")+"]");
+        graf1="{\"tGra\":\"t\","
+                + "\"tit\":\"Porcentaje del suelo nacional con uso adecuado de la tierra\","
+                + "\"es\":{\"3d\":true},"
+                + "\"col\":[\"#FF0000\",\"#ED7D31\",\"#FFFF00\",\"#C6E0B4\",\"#70AD4F\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String graf2;
+        datGraf.clear();
+        for (Areas r : areas) {
+            datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
+        }
+        graf2="{\"tGra\":\"c\",\"tit\":\"Porcentaje del suelo departamental con uso adecuado de la tierra\","
+                + "\"otrosDats\":{\"ejeY\":\"Porcentaje del suelo departamental con uso adecuado de la tierra\"},"
+                + "\"es\":{\"3d\":true},"
+                + "\"cols\":[\"#4472c4\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //area de trabajo documentos
+        String atDocs=jsonDocs(docs);
+         //area de trabajo informacion
+        String atInf=jsonInfo(info);
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 3, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
+        return json;
+     }
 }

@@ -129,6 +129,18 @@ public class SentenciasBD {
     private final String SUP_EXC_LEG="SELECT cod_dane_depto, departamento, porc_superficie_suelo_rural_exclusion_legal, \n" +
             "categoria FROM indicadores.v_biof_e02\n" +
             "order by porc_superficie_suelo_rural_exclusion_legal desc";
+    private final String SUP_USO_COND="SELECT codigodane, nombre, zuc, categoria FROM indicadores.biof_e03\n" +
+            "order by zuc desc";
+    private final String SUP_SOBRE="SELECT cod_dane_depto, departamento, porc_superficie_suelo_rural_conflicto_sobreutilizacion,"
+            + " categoria FROM indicadores.v_biof_e04"
+            + " order by porc_superficie_suelo_rural_conflicto_sobreutilizacion desc";
+    private final String SUP_SUB="SELECT cod_dane_depto, departamento, porc_superf_suelo_conf_uso_sin_subut,"
+            + " categoria FROM indicadores.v_biof_e05"
+            + " order by porc_superf_suelo_conf_uso_sin_subut desc";
+    private final String SUP_SIN_CONFLICTO="SELECT cod_dane_depto, departamento, porc_superf_suelo_u_a,"
+            + " categoria FROM indicadores.v_biof_e06"
+            + " order by porc_superf_suelo_u_a desc";
+    
 
     public SentenciasBD() {
     }
@@ -264,6 +276,21 @@ public class SentenciasBD {
     public String getSUP_EXC_LEG() {
         return SUP_EXC_LEG;
     }
-    
+
+    public String getSUP_USO_COND() {
+        return SUP_USO_COND;
+    }
+
+    public String getSUP_SOBRE() {
+        return SUP_SOBRE;
+    }
+
+    public String getSUP_SUB() {
+        return SUP_SUB;
+    }
+
+    public String getSUP_SIN_CONFLICTO() {
+        return SUP_SIN_CONFLICTO;
+    }
     
 }

@@ -295,6 +295,9 @@ public class Varios {
         BigDecimal cont = new BigDecimal(BigInteger.ZERO);
         BigDecimal uno = new BigDecimal(BigInteger.ONE);
         for (Areas a : area) {
+            System.out.println(a.getTipo());
+            System.out.println(tipo);
+            System.out.println(a.getTipo().equals(tipo));
             if(a.getTipo().equals(tipo)){
                 total=total.add(a.getArea());
                 cont=cont.add(uno);

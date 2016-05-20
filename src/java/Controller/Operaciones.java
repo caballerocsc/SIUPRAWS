@@ -150,6 +150,30 @@ public class Operaciones {
                         con.consultarIndicadoresSuperficie(2), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
                 break;
             }
+            case Parametros.SUPERFICIE_USO_COND:{
+                resultado=conv.crearJsonSuperficieUsoCond(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.consultarIndicadoresSuperficie(3), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                break;
+            }
+            case Parametros.SUPERFICIE_USO_SOBRE:{
+                resultado=conv.crearJsonSuperficieSobreUtilizacion(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.consultarIndicadoresSuperficie(4), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                break;
+            }
+            case Parametros.SUPERFICIE_USO_SUB:{
+                resultado=conv.crearJsonSuperficieSubUtilizacion(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.consultarIndicadoresSuperficie(5), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                break;
+            }
+            case Parametros.SUPERFICIE_SIN_CONFLICTO:{
+                resultado=conv.crearJsonSuperficieSinConflicto(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
+                        con.consultarIndicadoresSuperficie(6), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
+                break;
+            }
             default:
                 if(alias.equals(Parametros.AVALUOS)||alias.equals(Parametros.AREAS_FORMALIZACION)||
                         alias.equals(Parametros.INTERRELACION_CAT_REG)||alias.equals(Parametros.VIGENCIA_CATASTRAL2014)){
