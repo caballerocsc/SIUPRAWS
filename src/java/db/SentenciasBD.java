@@ -57,7 +57,7 @@ public class SentenciasBD {
         "inner join dominios  d on tipoelementofkid=dominioid \n" +
         "inner join adminsiupra.menuconsultas mc on mc.menuconsultaid=fvm.menuconsultaid\n" +
         "where mc.alias like ?";
-    private final String DINAMICAMERCADO="SELECT mercado_tierras_rurales.funcion_parametros_dinamica_mercados=?);";
+    private final String DINAMICAMERCADO="SELECT mercado_tierras_rurales.funcion_parametros_dinamica_mercados(?);";
     private final String TABLACONTENIDO_MENUCONSULTAS="select tc.alias,tc.nombre, tc.palabrasclave from adminsiupra.tablacontenido tc\n" +
         "inner join adminsiupra.menuconsultas_tablacontenido mtc on tc.tablacontenidoupraid=mtc.tablacontenidoid\n" +
         "inner join adminsiupra.menuconsultas mc on mtc.menuconsultaid=mc.menuconsultaid\n" +

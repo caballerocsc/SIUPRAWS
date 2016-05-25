@@ -507,7 +507,6 @@ public class Conversion {
     }
     
     /**
-     * @deprecated 
      * @param filtro
      * @param lista
      * @param tc
@@ -516,203 +515,328 @@ public class Conversion {
      * @return 
      */
     public String crearJsonDinamMerc(FiltroJson filtro, List<DinamicaMercados> lista,Tablacontenido tc, List<Servicios> serv, List<Capas> capas){
-        String tmp;
-        String json;
-        //inicio seccion tabla de información
-        int numAnios=filtro.getAnios().length;
-        if (numAnios==2) {
-            String columnGroup = "";
-            String column;
-            String registros;
-            String show;
-            String sortData;
-            String atTabs;
-            List<String> titulosColumnas = new ArrayList<>();
-            List<String> lSubRegistros = new ArrayList<>();
-            List<String> lRegistros = new ArrayList<>();
-            List<String> lColumnGroup = new ArrayList<>();
-            List<String> lColumn = new ArrayList<>();
-        //////Creacion de los ColumnGroups 
-            //        for (int i = 0; i < 3; i++) {
-            //            tmp="{\"caption\":\"\",\"span\":\"1\"}";
-            //            lColumnGroup.add(tmp);
-            //        }
-            //        for (int i = 0; i < numAnios; i++) {
-            //            tmp="{\"caption\":\""+filtro.getAnios()[i]+"\",\"span\":\"6\"}";
-            //            lColumnGroup.add(tmp);
-            //        }
-            //        columnGroup="\"columnGroups\":["+addCommaString(lColumnGroup)+"]";
-            //Creacion de las columnas
-            lColumn.add("{\"field\":  \"recid\",\"caption\": \"#\",\"size\": \"50px\",\"sortable\": true,\"attr\": \"align=center\"}");
-            lColumn.add("{\"field\":  \"codDane\",\"caption\": \"CódigoDANE\",\"size\": \"30px\",\"sortable\": true,\"resizable\": true}");
-            lColumn.add("{\"field\":  \"departamento\",\"caption\": \"Departamento\",\"size\": \"100px\",\"sortable\": true,\"resizable\": true}");
-            String titulo;
-            //compraventa
-            titulosColumnas.add("\"compraventa" + filtro.getAnios()[0] + "\"");
-            lColumn.add("{\"field\":" + "\"compraventa" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de compraventas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"compraventa " + filtro.getAnios()[1] + "\"");
-            lColumn.add("{\"field\":" + "\"compraventa " + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de compraventas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacion1\"");
-            lColumn.add("{\"field\":" + "\"variacion1\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacionPorcentual1\"");
-            lColumn.add("{\"field\":" + "\"variacionPorcentual1\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            //hipoteca
-            titulosColumnas.add("\"hipoteca" + filtro.getAnios()[0] + "\"");
-            lColumn.add("{\"field\":" + "\"hipoteca" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de hipotecas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"hipoteca" + filtro.getAnios()[1] + "\"");
-            lColumn.add("{\"field\":" + "\"hipoteca" + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de hipotecas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacion2\"");
-            lColumn.add("{\"field\":" + "\"variacion2\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacionPorcentual2\"");
-            lColumn.add("{\"field\":" + "\"variacionPorcentual2\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            //remate
-            titulosColumnas.add("\"remate" + filtro.getAnios()[0] + "\"");
-            lColumn.add("{\"field\": " + "\"remate" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de remates\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"remate" + filtro.getAnios()[1] + "\"");
-            lColumn.add("{\"field\": " + "\"remate" + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de remates\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacion3\"");
-            lColumn.add("{\"field\":" + "\"variacion3\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacionPorcentual3\"");
-            lColumn.add("{\"field\":" + "\"variacionPorcentual3\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            //permuta
-            titulosColumnas.add("\"permuta" + filtro.getAnios()[0] + "\"");
-            lColumn.add("{\"field\": " + "\"permuta" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de permutas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"permuta" + filtro.getAnios()[1] + "\"");
-            lColumn.add("{\"field\": " + "\"permuta" + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de permutas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacion4\"");
-            lColumn.add("{\"field\":" + "\"variacion4\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacionPorcentual4\"");
-            lColumn.add("{\"field\":" + "\"variacionPorcentual4\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            //embargo
-            titulosColumnas.add("\"embargo" + filtro.getAnios()[0] + "\"");
-            lColumn.add("{\"field\": " + "\"embargo" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de embargos\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"embargo" + filtro.getAnios()[1] + "\"");
-            lColumn.add("{\"field\": " + "\"embargo" + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de embargos\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacion5\"");
-            lColumn.add("{\"field\":" + "\"variacion5\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            titulosColumnas.add("\"variacionPorcentual5\"");
-            lColumn.add("{\"field\":" + "\"variacionPorcentual5\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
-            //titulo="\"pesoTransaccion"+i+"\"";
-            //tmp="{\"field\": "+titulo+",\"caption\": \"#Peso de Transacciones\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}";
-            //titulosColumnas.add(titulo);
-            //lColumn.add(tmp);
-            column = "\"columns\":[" + addCommaString(lColumn) + "]";
-            //creación de los registros
-            int id = 1;
-            Varios var = new Varios();
-            for (int i = 0; i < lista.size(); i += numAnios) {
-                int cont = 0;
-                DinamicaMercados din = lista.get(i);
-                lSubRegistros.add("\"recid\":" + id);
-                lSubRegistros.add("\"codDane\":\"" + din.getIdDepart() + "\"");
-                lSubRegistros.add("\"departamento\":\"" + din.getDepartamento() + "\"");
-                //Compraventa
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getCompraventa());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getCompraventa());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getCompraventa() - din.getCompraventa()));
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getCompraventa(), lista.get(i + 1).getCompraventa())));
-                //hipoteca
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getHipoteca());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getHipoteca());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getHipoteca() - din.getHipoteca()));
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getHipoteca(), (lista.get(i + 1)).getHipoteca())));
-                //remate
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getRemate());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getRemate());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getRemate() - din.getRemate()));
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getRemate(), (lista.get(i + 1)).getRemate())));
-                //Permuta
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getPermuta());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getPermuta());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getPermuta() - din.getPermuta()));
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getPermuta(), (lista.get(i + 1)).getPermuta())));
-                //embargo
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getEmbargo());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getEmbargo());
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getEmbargo() - din.getEmbargo()));
-                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getEmbargo(), (lista.get(i + 1)).getEmbargo())));
-                lRegistros.add("{" + addCommaString(lSubRegistros) + "}");
-                lSubRegistros.clear();
-                id++;
-            }
-            registros = "\"records\":[" + addCommaString(lRegistros) + "]";
-            //creacion parametro show
-            show = "\"show\":{\"toolbar\":false,\"footer\":false}";
-            //creacion del parametro sortdata
-            sortData = "\"sortData\": [{\"field\": \"recid\",\"direction\": \"ASC\"}]";
-            atTabs = "\"atTabs\":{\"plantilla\":1,\"dats\":[{" + show + "," + column + "," + sortData + "," + registros + "}]}";
-//            System.out.println(atTabs);
-        //fin seccion tabla de información
-            /////////////////////////////////
-            //inicio seccion gráfico
-            String tipoGrafico;
-            String tituloGraf;
-            String ejeX;
-            String ejeY;
-            String tooltip;
-            String series;
-            String atGras;
-            List<String> subseries = new ArrayList<>();
-            //creació tpo de grafico
-            tipoGrafico = "\"chart\":{\"type\":\"column\"}";
-            //Creación del titulo del gráfico
-            tmp = "";
-            for (int i = 0; i < filtro.getAnios().length - 1; i++) {
-                if (i == filtro.getAnios().length - 2) {
-                    tmp += filtro.getAnios()[i] + " y ";
-                } else {
-                    tmp += filtro.getAnios()[i] + ", ";
-                }
-            }
-            tmp += filtro.getAnios()[filtro.getAnios().length - 1];
-//            System.out.println(tmp);
-            tituloGraf = "\"titulo\":{\"text\":\"Número de Transacciones y Actos Registrales " + tmp + "\"}";
-            //Creación del eje X
-            ejeX = "\"xAxis\":{\"categories\":[\"Compraventas\",\"Hipotecas\",\"Remates\",\"Remates\",\"Embargos\"],\"crosshair\":true}";
-            //Creación del eje Y
-            ejeY = "\"yAxis\": {\"min\":0,\"title\":{\"text\": \"# de Transacciones y Actos Registrales\"},"
-                    + "\"labels\": {\"format\": \"{value}\"}}";
-            //Creación del tooltip
-            tooltip = "\"tooltip\": {\"shared\": true}";
-            //Creación de las series
-            for (int i = 0; i < filtro.getAnios().length; i++) {
-                List<Integer> sum = var.sumatoriaTransaccionesPorAnio(Integer.parseInt(filtro.getAnios()[i]), lista);
-                tmp = "";
-                tmp += "\"data\":[" + sum.get(0) + "," + sum.get(1) + "," + sum.get(2) + "," + sum.get(3) + "," + sum.get(4) + "]";
-                tmp = "{\"name\":\"" + filtro.getAnios()[i] + "\",\"type\":\"column\"," + tmp + "}";
-                subseries.add(tmp);
-            }
-            series = "\"series\":[" + addCommaString(subseries) + "]";
-            atGras = "\"atGras\":{\"plantilla\":1,\"dats\":[{" + tipoGrafico + "," + tituloGraf + "," + ejeX + "," + ejeY + "," + tooltip
-                    + "," + series + "}]}";
-//            System.out.println(atGras);
-            //fin sección gráfico
-            //////////////////////////////////////
-            //inicio sección geográfica (tabla de contenido)
-            List<String> iden=new ArrayList<>();
-            List<String> dats=new ArrayList<>();
-            String identificacion;
-            for (int i = 0; i < filtro.getAnios().length; i++) {
-                iden.add("\"al\": \"cgDepartamentos\"");
-                iden.add("\"comp\": \"codigodane\"");
-                iden.add("\"compTab\": \"codDane\"");
-                iden.add("\"tex\":\"Transacciones "+filtro.getAnios()[i]+"\"");
-                iden.add("\"tab\":{\"ind\":0,\"cols\":[\"departamento\", \"compraventa"+filtro.getAnios()[i]+"\", \"remate"+filtro.getAnios()[i]+"\","
-                        + " \"permuta"+filtro.getAnios()[i]+"\", \"embargo"+filtro.getAnios()[i]+"\", \"hipoteca"+filtro.getAnios()[i]+"\"]}");
-                iden.add("\"gra\":{\"t\":\"pie\",\"indTab\": 0,\"cols\":[\"compraventa"+filtro.getAnios()[i]+"\", \"remate"+filtro.getAnios()[i]+"\","
-                        + " \"permuta"+filtro.getAnios()[i]+"\", \"embargo"+filtro.getAnios()[i]+"\", \"hipoteca"+filtro.getAnios()[i]+"\"],"
-                        + "\"colores\":[\"#FFAA00\", \"#FFFF00\", \"#FF00C5\", \"#C400B2\", \"#C500FF\", \"#FEB7E2\"]}");
-                dats.add("{"+addCommaString(iden)+"}");
-            }
-            identificacion="\"identificacion\":{\"t\":\"auto\",\"dats\":["+addCommaString(dats)+"]}";
-            String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,identificacion);
-//            System.out.println(atMaps);
-            //fin seccion geográfica
-            json = "resp({\"ast\":{" + atMaps + "," + atTabs + "," + atGras + "},\"atSel\":\"atMaps\"}})";
-            return json;
-        } else {
-            return "resp(\"la consulta contiene mas de dos años como filtro de búsqueda\")";
+        Varios v = new Varios();
+        boolean opcional = (capas.size() != 1);
+        String iden2 = "";
+        String orCsgs = (opcional)?"[\""+capas.get(0).getAlias()+"\",\""+capas.get(1).getAlias()+"\", \"cgDepartamentos\"]":"[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"]";
+        String iden1="{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tex\": \"Transacciones "+filtro.getAnios()[0]+"\"," +    
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"compraventa1\",\"remate1\",\"permuta1\",\"embargo1\",\"hipoteca1\",\"total1\"]," +
+                    "\"otros\":{\"texRemplazar\":\""+filtro.getAnios()[0]+"\"}}," +
+                    "\"gra\":{\"t\": \"pie\",\n" +
+                    "\"indTab\": 0,\n" +
+                    "\"colums\": [\"compraventa1\", \"remate1\", \"permuta1\", \"embargo1\", \"hipoteca1\"],\n" +
+                    "\"cols\": [\"#FFAA00\", \"#FFFF00\", \"#FF00C5\", \"#C400B2\", \"#C500FF\", \"#FEB7E2\"], \n" +
+                    "\"otros\": {\"texRemplazar\": \""+filtro.getAnios()[0]+"\"}}" +
+                    "}";
+        if(opcional){
+            iden2="{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tex\": \"Transacciones "+filtro.getAnios()[1]+"\"," +    
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"compraventa2\",\"remate2\",\"permuta2\",\"embargo2\",\"hipoteca2\",\"total2\"]," +
+                    "\"otros\":{\"texRemplazar\":\""+filtro.getAnios()[1]+"\"}}," +
+                    "\"gra\":{\"t\": \"pie\",\n" +
+                    "\"indTab\": 0,\n" +
+                    "\"colums\": [\"compraventa2\", \"remate2\", \"permuta2\", \"embargo2\", \"hipoteca2\"],\n" +
+                    "\"cols\": [\"#FFAA00\", \"#FFFF00\", \"#FF00C5\", \"#C400B2\", \"#C500FF\", \"#FEB7E2\"], \n" +
+                    "\"otros\": {\"texRemplazar\": \""+filtro.getAnios()[1]+"\"}}" +
+                    "}";
         }
+        String identificacion="\"ext\":[],\"orCsgs\":"+orCsgs+",\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": ["+iden1+","+iden2+"]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,identificacion);
+        //creacion de los encabezados de la tabla
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Departamento\", \"t\", \"150px\"]");
+        listColumnas.add("[\"Compraventa1\", \"n\", \"120px\"]");
+        if (opcional) {
+            listColumnas.add("[\"Compraventa2\", \"n\", \"120px\"]");
+            listColumnas.add("[\"Variación Compraventa\", \"n\", \"120px\"]");
+            listColumnas.add("[\"Variación Porcentual Compraventa\", \"n\", \"50px\"]");
+        }
+        listColumnas.add("[\"Remate1\", \"n\", \"120px\"]");
+        if (opcional) {
+            listColumnas.add("[\"Remate2\", \"n\", \"120px\"]");
+            listColumnas.add("[\"Variación Remate\", \"n\", \"120px\"]");
+            listColumnas.add("[\"Variación Porcentual Remate\", \"n\", \"50px\"]");
+        }
+        listColumnas.add("[\"Permuta1\", \"n\", \"120px\"]");
+        if (opcional) {
+            listColumnas.add("[\"Permuta2\", \"n\", \"120px\"]");
+            listColumnas.add("[\"Variación Permuta\", \"n\", \"120px\"]");
+            listColumnas.add("[\"Variación Porcentual Permuta\", \"n\", \"50px\"]");
+        }
+        listColumnas.add("[\"Hipoteca1\", \"n\", \"120px\"]");
+        if (opcional) {
+            listColumnas.add("[\"Hipoteca2\", \"n\", \"120px\"]");
+            listColumnas.add("[\"Variación Hipoteca\", \"n\", \"120px\"]");
+            listColumnas.add("[\"Variación Porcentual Hipoteca\", \"n\", \"50px\"]");
+        }
+        listColumnas.add("[\"Total Transacciones\", \"n\", \"150px\"]");
+        if (opcional) {
+            listColumnas.add("[\"Total Transacciones2\", \"n\", \"150px\"]");
+        }
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        int inc = (opcional)?2:1;
+        for (int i = 0; i < lista.size(); i+=inc) {
+            List<String> subReg = new ArrayList<>();
+            DinamicaMercados dm =lista.get(i);
+            subReg.add("\""+dm.getDepartamento()+"\"");
+            subReg.add(""+dm.getCompraventa());
+            if (opcional) {
+                subReg.add(""+lista.get(i+1).getCompraventa());
+                subReg.add(""+(lista.get(i+1).getCompraventa()-dm.getCompraventa()));
+                subReg.add(""+v.calcularVariacionPorcentual(dm.getCompraventa(),lista.get(i+1).getCompraventa()));
+            }
+            subReg.add(""+dm.getRemate());
+            if (opcional) {
+                subReg.add(""+lista.get(i+1).getRemate());
+                subReg.add(""+(lista.get(i+1).getRemate()-dm.getRemate()));
+                subReg.add(""+v.calcularVariacionPorcentual(dm.getRemate(),lista.get(i+1).getRemate()));
+            }
+            subReg.add(""+dm.getPermuta());
+            if (opcional) {
+                subReg.add(""+lista.get(i+1).getPermuta());
+                subReg.add(""+(lista.get(i+1).getPermuta()-dm.getPermuta()));
+                subReg.add(""+v.calcularVariacionPorcentual(dm.getPermuta(),lista.get(i+1).getPermuta()));
+            }
+            subReg.add(""+dm.getEmbargo());
+            if (opcional) {
+                subReg.add(""+lista.get(i+1).getEmbargo());
+                subReg.add(""+(lista.get(i+1).getEmbargo()-dm.getEmbargo()));
+                subReg.add(""+v.calcularVariacionPorcentual(dm.getEmbargo(),lista.get(i+1).getEmbargo()));
+            }
+            subReg.add(""+dm.getHipoteca());
+            if (opcional) {
+                subReg.add(""+lista.get(i+1).getHipoteca());
+                subReg.add(""+(lista.get(i+1).getHipoteca()-dm.getHipoteca()));
+                subReg.add(""+v.calcularVariacionPorcentual(dm.getHipoteca(),lista.get(i+1).getHipoteca()));
+            }
+            subReg.add(""+(dm.getCompraventa()+dm.getRemate()+dm.getPermuta()+dm.getEmbargo()+dm.getHipoteca()));
+            if (opcional) {
+                subReg.add(""+(lista.get(i+1).getCompraventa()+lista.get(i+1).getRemate()+lista.get(i+1).getPermuta()
+                        +lista.get(i+1).getEmbargo()+lista.get(i+1).getHipoteca()));
+            }
+            registros.add("[{},"+addCommaString(subReg)+"]");
+            subReg.clear();
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 1, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+"},"+conf+"})";
+        return json;
+        ////////////////////////////////////////////////////////////
+//        String tmp;
+//        String json;
+//        //inicio seccion tabla de información
+//        int numAnios=filtro.getAnios().length;
+//        if (numAnios==2) {
+//            String columnGroup = "";
+//            String column;
+//            String registros;
+//            String show;
+//            String sortData;
+//            String atTabs;
+//            List<String> titulosColumnas = new ArrayList<>();
+//            List<String> lSubRegistros = new ArrayList<>();
+//            List<String> lRegistros = new ArrayList<>();
+//            List<String> lColumnGroup = new ArrayList<>();
+//            List<String> lColumn = new ArrayList<>();
+//        //////Creacion de los ColumnGroups 
+//            //        for (int i = 0; i < 3; i++) {
+//            //            tmp="{\"caption\":\"\",\"span\":\"1\"}";
+//            //            lColumnGroup.add(tmp);
+//            //        }
+//            //        for (int i = 0; i < numAnios; i++) {
+//            //            tmp="{\"caption\":\""+filtro.getAnios()[i]+"\",\"span\":\"6\"}";
+//            //            lColumnGroup.add(tmp);
+//            //        }
+//            //        columnGroup="\"columnGroups\":["+addCommaString(lColumnGroup)+"]";
+//            //Creacion de las columnas
+//            lColumn.add("{\"field\":  \"recid\",\"caption\": \"#\",\"size\": \"50px\",\"sortable\": true,\"attr\": \"align=center\"}");
+//            lColumn.add("{\"field\":  \"codDane\",\"caption\": \"CódigoDANE\",\"size\": \"30px\",\"sortable\": true,\"resizable\": true}");
+//            lColumn.add("{\"field\":  \"departamento\",\"caption\": \"Departamento\",\"size\": \"100px\",\"sortable\": true,\"resizable\": true}");
+//            String titulo;
+//            //compraventa
+//            titulosColumnas.add("\"compraventa" + filtro.getAnios()[0] + "\"");
+//            lColumn.add("{\"field\":" + "\"compraventa" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de compraventas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"compraventa " + filtro.getAnios()[1] + "\"");
+//            lColumn.add("{\"field\":" + "\"compraventa " + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de compraventas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacion1\"");
+//            lColumn.add("{\"field\":" + "\"variacion1\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacionPorcentual1\"");
+//            lColumn.add("{\"field\":" + "\"variacionPorcentual1\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            //hipoteca
+//            titulosColumnas.add("\"hipoteca" + filtro.getAnios()[0] + "\"");
+//            lColumn.add("{\"field\":" + "\"hipoteca" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de hipotecas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"hipoteca" + filtro.getAnios()[1] + "\"");
+//            lColumn.add("{\"field\":" + "\"hipoteca" + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de hipotecas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacion2\"");
+//            lColumn.add("{\"field\":" + "\"variacion2\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacionPorcentual2\"");
+//            lColumn.add("{\"field\":" + "\"variacionPorcentual2\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            //remate
+//            titulosColumnas.add("\"remate" + filtro.getAnios()[0] + "\"");
+//            lColumn.add("{\"field\": " + "\"remate" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de remates\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"remate" + filtro.getAnios()[1] + "\"");
+//            lColumn.add("{\"field\": " + "\"remate" + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de remates\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacion3\"");
+//            lColumn.add("{\"field\":" + "\"variacion3\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacionPorcentual3\"");
+//            lColumn.add("{\"field\":" + "\"variacionPorcentual3\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            //permuta
+//            titulosColumnas.add("\"permuta" + filtro.getAnios()[0] + "\"");
+//            lColumn.add("{\"field\": " + "\"permuta" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de permutas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"permuta" + filtro.getAnios()[1] + "\"");
+//            lColumn.add("{\"field\": " + "\"permuta" + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de permutas\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacion4\"");
+//            lColumn.add("{\"field\":" + "\"variacion4\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacionPorcentual4\"");
+//            lColumn.add("{\"field\":" + "\"variacionPorcentual4\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            //embargo
+//            titulosColumnas.add("\"embargo" + filtro.getAnios()[0] + "\"");
+//            lColumn.add("{\"field\": " + "\"embargo" + filtro.getAnios()[0] + "\"" + ",\"caption\": \"# de embargos\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"embargo" + filtro.getAnios()[1] + "\"");
+//            lColumn.add("{\"field\": " + "\"embargo" + filtro.getAnios()[1] + "\"" + ",\"caption\": \"# de embargos\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacion5\"");
+//            lColumn.add("{\"field\":" + "\"variacion5\"" + ",\"caption\": \"Variación\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            titulosColumnas.add("\"variacionPorcentual5\"");
+//            lColumn.add("{\"field\":" + "\"variacionPorcentual5\"" + ",\"caption\": \"Variación Porcentual\",\"size\": \"10%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}");
+//            //titulo="\"pesoTransaccion"+i+"\"";
+//            //tmp="{\"field\": "+titulo+",\"caption\": \"#Peso de Transacciones\",\"size\": \"8%\",\"sortable\": true,\"attr\": \"align=center\",\"resizable\": true}";
+//            //titulosColumnas.add(titulo);
+//            //lColumn.add(tmp);
+//            column = "\"columns\":[" + addCommaString(lColumn) + "]";
+//            //creación de los registros
+//            int id = 1;
+//            Varios var = new Varios();
+//            for (int i = 0; i < lista.size(); i += numAnios) {
+//                int cont = 0;
+//                DinamicaMercados din = lista.get(i);
+//                lSubRegistros.add("\"recid\":" + id);
+//                lSubRegistros.add("\"codDane\":\"" + din.getIdDepart() + "\"");
+//                lSubRegistros.add("\"departamento\":\"" + din.getDepartamento() + "\"");
+//                //Compraventa
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getCompraventa());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getCompraventa());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getCompraventa() - din.getCompraventa()));
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getCompraventa(), lista.get(i + 1).getCompraventa())));
+//                //hipoteca
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getHipoteca());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getHipoteca());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getHipoteca() - din.getHipoteca()));
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getHipoteca(), (lista.get(i + 1)).getHipoteca())));
+//                //remate
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getRemate());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getRemate());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getRemate() - din.getRemate()));
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getRemate(), (lista.get(i + 1)).getRemate())));
+//                //Permuta
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getPermuta());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getPermuta());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getPermuta() - din.getPermuta()));
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getPermuta(), (lista.get(i + 1)).getPermuta())));
+//                //embargo
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + din.getEmbargo());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + lista.get(i + 1).getEmbargo());
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + ((lista.get(i + 1)).getEmbargo() - din.getEmbargo()));
+//                lSubRegistros.add(titulosColumnas.get(cont++) + ":" + (var.calcularVariacionPorcentual(din.getEmbargo(), (lista.get(i + 1)).getEmbargo())));
+//                lRegistros.add("{" + addCommaString(lSubRegistros) + "}");
+//                lSubRegistros.clear();
+//                id++;
+//            }
+//            registros = "\"records\":[" + addCommaString(lRegistros) + "]";
+//            //creacion parametro show
+//            show = "\"show\":{\"toolbar\":false,\"footer\":false}";
+//            //creacion del parametro sortdata
+//            sortData = "\"sortData\": [{\"field\": \"recid\",\"direction\": \"ASC\"}]";
+//            atTabs = "\"atTabs\":{\"plantilla\":1,\"dats\":[{" + show + "," + column + "," + sortData + "," + registros + "}]}";
+////            System.out.println(atTabs);
+//        //fin seccion tabla de información
+//            /////////////////////////////////
+//            //inicio seccion gráfico
+//            String tipoGrafico;
+//            String tituloGraf;
+//            String ejeX;
+//            String ejeY;
+//            String tooltip;
+//            String series;
+//            String atGras;
+//            List<String> subseries = new ArrayList<>();
+//            //creació tpo de grafico
+//            tipoGrafico = "\"chart\":{\"type\":\"column\"}";
+//            //Creación del titulo del gráfico
+//            tmp = "";
+//            for (int i = 0; i < filtro.getAnios().length - 1; i++) {
+//                if (i == filtro.getAnios().length - 2) {
+//                    tmp += filtro.getAnios()[i] + " y ";
+//                } else {
+//                    tmp += filtro.getAnios()[i] + ", ";
+//                }
+//            }
+//            tmp += filtro.getAnios()[filtro.getAnios().length - 1];
+////            System.out.println(tmp);
+//            tituloGraf = "\"titulo\":{\"text\":\"Número de Transacciones y Actos Registrales " + tmp + "\"}";
+//            //Creación del eje X
+//            ejeX = "\"xAxis\":{\"categories\":[\"Compraventas\",\"Hipotecas\",\"Remates\",\"Remates\",\"Embargos\"],\"crosshair\":true}";
+//            //Creación del eje Y
+//            ejeY = "\"yAxis\": {\"min\":0,\"title\":{\"text\": \"# de Transacciones y Actos Registrales\"},"
+//                    + "\"labels\": {\"format\": \"{value}\"}}";
+//            //Creación del tooltip
+//            tooltip = "\"tooltip\": {\"shared\": true}";
+//            //Creación de las series
+//            for (int i = 0; i < filtro.getAnios().length; i++) {
+//                List<Integer> sum = var.sumatoriaTransaccionesPorAnio(Integer.parseInt(filtro.getAnios()[i]), lista);
+//                tmp = "";
+//                tmp += "\"data\":[" + sum.get(0) + "," + sum.get(1) + "," + sum.get(2) + "," + sum.get(3) + "," + sum.get(4) + "]";
+//                tmp = "{\"name\":\"" + filtro.getAnios()[i] + "\",\"type\":\"column\"," + tmp + "}";
+//                subseries.add(tmp);
+//            }
+//            series = "\"series\":[" + addCommaString(subseries) + "]";
+//            atGras = "\"atGras\":{\"plantilla\":1,\"dats\":[{" + tipoGrafico + "," + tituloGraf + "," + ejeX + "," + ejeY + "," + tooltip
+//                    + "," + series + "}]}";
+////            System.out.println(atGras);
+//            //fin sección gráfico
+//            //////////////////////////////////////
+//            //inicio sección geográfica (tabla de contenido)
+//            List<String> iden=new ArrayList<>();
+//            List<String> dats=new ArrayList<>();
+//            String identificacion;
+//            for (int i = 0; i < filtro.getAnios().length; i++) {
+//                iden.add("\"al\": \"cgDepartamentos\"");
+//                iden.add("\"comp\": \"codigodane\"");
+//                iden.add("\"compTab\": \"codDane\"");
+//                iden.add("\"tex\":\"Transacciones "+filtro.getAnios()[i]+"\"");
+//                iden.add("\"tab\":{\"ind\":0,\"cols\":[\"departamento\", \"compraventa"+filtro.getAnios()[i]+"\", \"remate"+filtro.getAnios()[i]+"\","
+//                        + " \"permuta"+filtro.getAnios()[i]+"\", \"embargo"+filtro.getAnios()[i]+"\", \"hipoteca"+filtro.getAnios()[i]+"\"]}");
+//                iden.add("\"gra\":{\"t\":\"pie\",\"indTab\": 0,\"cols\":[\"compraventa"+filtro.getAnios()[i]+"\", \"remate"+filtro.getAnios()[i]+"\","
+//                        + " \"permuta"+filtro.getAnios()[i]+"\", \"embargo"+filtro.getAnios()[i]+"\", \"hipoteca"+filtro.getAnios()[i]+"\"],"
+//                        + "\"colores\":[\"#FFAA00\", \"#FFFF00\", \"#FF00C5\", \"#C400B2\", \"#C500FF\", \"#FEB7E2\"]}");
+//                dats.add("{"+addCommaString(iden)+"}");
+//            }
+//            identificacion="\"identificacion\":{\"t\":\"auto\",\"dats\":["+addCommaString(dats)+"]}";
+//            String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,identificacion);
+////            System.out.println(atMaps);
+//            //fin seccion geográfica
+//            json = "resp({\"ast\":{" + atMaps + "," + atTabs + "," + atGras + "},\"atSel\":\"atMaps\"}})";
+//            return json;
+//        } else {
+//            return "resp(\"la consulta contiene mas de dos años como filtro de búsqueda\")";
+//        }
     }
     
     /**
@@ -1778,12 +1902,12 @@ public class Conversion {
         List<String> registros = new ArrayList();
         String tabla;
         for (Areas r : areas) {
-            registros.add("[{},\""+r.getCodigoDane()+"\","
+            registros.add("[{\"c\":\"#"+coloresCategorias(r.getTipo())+"\"},\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Muy Bajo\"]");
+        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Muy Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1855,12 +1979,12 @@ public class Conversion {
         List<String> registros = new ArrayList();
         String tabla;
         for (Areas r : areas) {
-            registros.add("[{},\""+r.getCodigoDane()+"\","
+            registros.add("[{\"c\":\"#"+coloresCategorias(r.getTipo())+"\"},\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ed7d31\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Alto\"]");
+        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ed7d31\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Alto\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1896,5 +2020,29 @@ public class Conversion {
                     "\"plantillas\": [1, 1, 1, 3, 1]}";
          String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+","+atInf+"},"+conf+"})";
         return json;
+     }
+     
+     /**
+      * método que se encarga de tomar una categoria de las consultas de indicadores y devolver
+      * el color correspondiente a esa categoria
+      * @param categoria Categoria de la zona en las consultas de indicadores, los valores son: Muy Alto,
+      * Alto, Medio, Bajo y Muy Bajo.
+      * @return color en formato hexagesimal
+      */
+     public String coloresCategorias(String categoria){
+         switch(categoria){
+            case "Muy Alto":
+                 return "FF0000";
+            case "Alto":
+                return "ED7D31";
+            case "Medio":
+                return "FFFF00";
+            case "Bajo":
+                return "C6E0B4";
+            case "Muy Bajo":
+                return "70AD4F";
+            default:
+                return "";
+         }
      }
 }

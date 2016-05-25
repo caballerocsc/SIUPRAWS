@@ -11,6 +11,7 @@ import db.Consultas;
 import obj.FiltroJson;
 import obj.Parametros;
 import util.Conversion;
+import util.Varios;
 
 /**
  *
@@ -104,8 +105,9 @@ public class Operaciones {
 //            }
             case Parametros.TRANSACCIONES:{
                 //List<DinamicaMercados> dm=;
+                Varios var = new Varios();
                 resultado=conv.crearJsonDinamMerc(fil, con.consultaDinamicaMerc(fil), con.consultarTablaContenidoporMenuConsulta(alias), 
-                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias));
+                        con.consultarServicioporMenuConsulta(alias), var.buscarCapaXfiltroAnio(con.consultarCapasporMenuConsulta(alias), fil));
                 break;
             }
             case Parametros.RESTRICCIONES:{
@@ -176,7 +178,8 @@ public class Operaciones {
             }
             default:
                 if(alias.equals(Parametros.AVALUOS)||alias.equals(Parametros.AREAS_FORMALIZACION)||
-                        alias.equals(Parametros.INTERRELACION_CAT_REG)||alias.equals(Parametros.VIGENCIA_CATASTRAL2014)){
+                        alias.equals(Parametros.INTERRELACION_CAT_REG)||alias.equals(Parametros.VIGENCIA_CATASTRAL2014)||
+                        alias.equals(Parametros.ZONAS_RECONV_PROD)){
                      resultado=conv.crearJsonConsultaGenericaInfoGeo(con.consultarTablaContenidoporMenuConsulta(alias),
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias));
                 }

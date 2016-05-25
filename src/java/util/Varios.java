@@ -18,6 +18,8 @@ import obj.DinamicaMercados;
 import obj.Menuconsultas;
 import obj.Precios;
 import obj.Areas;
+import obj.Capas;
+import obj.FiltroJson;
 
 /**
  * Clase que contiene diversos metodos que pueden ser utilizados por todas las clases
@@ -304,5 +306,24 @@ public class Varios {
             }
         }
         return total.divide(cont, 2,RoundingMode.HALF_DOWN);
+    }
+    
+    /**
+     * Método encargado de tomar una lista de capas y retornar una nueva lista
+     * en la cual se encuentren las capas que tengan en el alias, el año seleccionado
+     * en el filtro que se pasa como parámetro
+     * @param cap lista de tipo Capas con las capas de una consulta 
+     * @param fj Objeto que contiene los años seleccionados por el usuario
+     * @return lista de Capas correspondiente a los años seleccionados por el usuario
+     */
+    public List<Capas> buscarCapaXfiltroAnio(List<Capas> cap, FiltroJson fj){
+        List<Capas> c = new ArrayList<>();
+        for (Capas capas : cap) {
+            for (String anio : fj.getAnios()) {
+                if(capas.getAlias().contains(anio))
+                    c.add(capas);
+            }
+        }
+        return c;
     }
 }
