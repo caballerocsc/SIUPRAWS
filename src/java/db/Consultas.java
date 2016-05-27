@@ -299,36 +299,30 @@ public class Consultas {
     }
     /**
      * Método que retorna la informacion de la consulta de precios de la base de datos 
-     * @param filtros objeto de tipo FiltroJson que contiene los filtros de la sentencia sql 
+     * @param codDepto string con el codigo dane del departamento que se desea consultar
      * @return retorna una lista de objetos del tipo Precios
      */
-    public List<Precios> consultaPrecios(FiltroJson filtros){
+    public List<Areas> consultaPrecios(String codDepto){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
-        String clausula=filtrosEntidadesToString(filtros);
         ResultSet rs=null;
         PreparedStatement ps=null;
-        List<Precios> precios=new ArrayList<>();
+        List<Areas> areas=new ArrayList<>();
         SentenciasBD sbd=new SentenciasBD();
         try {
             ps=cn.prepareStatement(sbd.getPRECIOS());
-            ps.setString(1, clausula);
+            ps.setString(1, codDepto);
             System.out.println(ps.toString());
             rs=ps.executeQuery();
-            while (rs.next()) {                
-              int i=0;
-              //System.out.println(rs.getString(i++));
-              String[] row=rs.getString(1).split(",");
-              Precios p=new Precios();
-              p.setId(row[i++].replace("(", ""));
-              p.setNombre(row[i++].replace("\"", ""));
-              p.setRango(row[i++].replace("\"", ""));
-              p.setArea(Double.parseDouble(row[i++]));
-              p.setIdDept(row[i++]);
-              p.setDepartamento(row[i++].replace("\"", ""));
-              p.setIdMun(row[i++].replace(")", ""));
-              p.setMunicipio(row[i++].replace("\"", ""));
-              precios.add(p);
+            while (rs.next()) { 
+                int i=1;
+                Areas a =new Areas();
+                a.setCodigoDane(rs.getString(i++));
+                a.setDepartamento(rs.getString(i++));
+                a.setMunicipio(rs.getString(i++));
+                a.setArea(rs.getBigDecimal(i++));
+                a.setTipo(rs.getString(i++));
+                areas.add(a);
             }
         } catch (SQLException e) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
@@ -337,8 +331,7 @@ public class Consultas {
             con.cerrar(ps);
             con.cerrar(rs);
         }
-        System.out.println(precios.size());
-        return precios;
+        return areas;
     }
     /**
      * Método que retorna la informacion de dinamicas de mercado de todos los años
@@ -639,43 +632,6 @@ public class Consultas {
             clausula = "where "+conv.addOr(lista);
         }
         return clausula;
-    }
-    
-    /**
-     * @deprecated 
-     * @param filtros
-     * @return 
-     */
-    public List<Precios> consultaSumatoriaPrecios(FiltroJson filtros){
-        Conexion con=new Conexion();
-        Connection cn=con.getConexion();
-        ResultSet rs=null;
-        //String clausula=filtrosEntidadesToString(filtros);
-        PreparedStatement ps=null;
-        List<Precios> precios=new ArrayList<>();
-        SentenciasBD sbd=new SentenciasBD();
-        try {
-            ps=cn.prepareStatement(sbd.getPRECIOSSUMATORIARANGOS());
-            ps.setString(1, filtros.getDeps()[0]+"");
-            System.out.println(ps.toString());
-            rs=ps.executeQuery();
-            while (rs.next()) {                
-              int i=1;
-              Precios p=new Precios();
-              p.setRango(rs.getString(i++));
-              p.setArea(Double.parseDouble(rs.getString(i++)));
-              p.setIdMun(rs.getString(i++));
-              p.setMunicipio(rs.getString(i++));
-              precios.add(p);
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
-        }finally{
-            con.cerrar(cn);
-            con.cerrar(ps);
-            con.cerrar(rs);
-        }
-        return precios;
     }
     
     /**

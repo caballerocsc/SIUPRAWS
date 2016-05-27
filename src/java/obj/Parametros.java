@@ -23,7 +23,10 @@ public class Parametros {
     public static final String LCI="lci";
     public static final String POLITICA_ADT="pol";
     public static final String OFERTA="of";
-    public static final String PRECIOS="pr";
+    public static final String PRECIOSBOYACA="prBoyaca";
+    public static final String PRECIOSCORDOBA="prCordoba";
+    public static final String PRECIOSTOLIMA="prTolima";
+    public static final String PRECIOSMETA="prMeta";
     public static final String DINAMICA="din";
     public static final String PARTICIPACION="part";
     public static final String CONSOLIDADO="cons";

@@ -92,9 +92,24 @@ public class Operaciones {
         Conversion conv=new Conversion();
         String resultado="";
         switch(alias){
-            case Parametros.PRECIOS:{
+            case Parametros.PRECIOSBOYACA:{
                 resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
-                        con.consultarCapasporMenuConsulta(alias), fil, con.consultaPrecios(fil),con.consultaSumatoriaPrecios(fil));
+                        con.consultarCapasporMenuConsulta(alias),con.consultaPrecios("15") );
+                break;
+            }
+            case Parametros.PRECIOSCORDOBA:{
+                resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
+                        con.consultarCapasporMenuConsulta(alias),con.consultaPrecios("23") );
+                break;
+            }
+            case Parametros.PRECIOSTOLIMA:{
+                resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
+                        con.consultarCapasporMenuConsulta(alias),con.consultaPrecios("73") );
+                break;
+            }
+            case Parametros.PRECIOSMETA:{
+                resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
+                        con.consultarCapasporMenuConsulta(alias),con.consultaPrecios("50") );
                 break;
             }
 //            case Parametros.AVALUOS:{
@@ -104,7 +119,6 @@ public class Operaciones {
 //                break;
 //            }
             case Parametros.TRANSACCIONES:{
-                //List<DinamicaMercados> dm=;
                 Varios var = new Varios();
                 resultado=conv.crearJsonDinamMerc(fil, con.consultaDinamicaMerc(fil), con.consultarTablaContenidoporMenuConsulta(alias), 
                         con.consultarServicioporMenuConsulta(alias), var.buscarCapaXfiltroAnio(con.consultarCapasporMenuConsulta(alias), fil));

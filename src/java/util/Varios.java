@@ -326,4 +326,113 @@ public class Varios {
         }
         return c;
     }
+    
+    public List<BigDecimal> sumarAreaXCategoria(List<Areas> areas, String cat, String munpio) {
+        BigDecimal total = new BigDecimal(BigInteger.ZERO);
+        BigDecimal r1 = new BigDecimal(BigInteger.ZERO); //"1 a 3 millones"
+        BigDecimal r2 = new BigDecimal(BigInteger.ZERO); // "1 a 5 millones"
+        BigDecimal r3 = new BigDecimal(BigInteger.ZERO); // "3 a 5 millones" 
+        BigDecimal r4 = new BigDecimal(BigInteger.ZERO); //  "5 a 10 millones" 
+        BigDecimal r5 = new BigDecimal(BigInteger.ZERO); // "10 a 15 millones" 
+        BigDecimal r6 = new BigDecimal(BigInteger.ZERO); //  "10 a 20 millones" 
+        BigDecimal r7 = new BigDecimal(BigInteger.ZERO); // "15 a 20 millones" 
+        BigDecimal r8 = new BigDecimal(BigInteger.ZERO); // "20 a 30 millones"
+        BigDecimal r9 = new BigDecimal(BigInteger.ZERO); //  "30 a 40 millones"
+        BigDecimal r10 = new BigDecimal(BigInteger.ZERO); // "40 a 50 millones"
+        BigDecimal r11 = new BigDecimal(BigInteger.ZERO); // "40 a 60 millones"
+        BigDecimal r12 = new BigDecimal(BigInteger.ZERO); // "50 a 60 millones"
+        BigDecimal r13 = new BigDecimal(BigInteger.ZERO); // "100 a 120 millones"
+        List<BigDecimal> lista = new ArrayList<>();
+        for (Areas a : areas) {
+            if (!munpio.equals("")) {
+                if(a.getMunicipio().equals(munpio)){
+                    switch(a.getTipo()){
+                        case "1 a 3 millones":{
+                            r1 = r1.add(a.getArea());
+                            break;
+                        }
+                        case "1 a 5 millones":{
+                            r2 = r2.add(a.getArea());
+                            break;
+                        }
+                        case "3 a 5 millones":{
+                            r3 = r3.add(a.getArea());
+                            break;
+                        }
+                        case "5 a 10 millones":{
+                            r4 = r4.add(a.getArea());
+                            break;
+                        }
+                        case "10 a 15 millones":{
+                            r5 = r5.add(a.getArea());
+                            break;
+                        }
+                        case "10 a 20 millones":{
+                            r6 = r6.add(a.getArea());
+                            break;
+                        }
+                        case "15 a 20 millones":{
+                            r7 = r7.add(a.getArea());
+                            break;
+                        }
+                        case "20 a 30 millones":{
+                            r8 = r8.add(a.getArea());
+                            break;
+                        }
+                        case "30 a 40 millones":{
+                            r9 = r9.add(a.getArea());
+                            break;
+                        }
+                        case "40 a 50 millones":{
+                            r10 = r10.add(a.getArea());
+                            break;
+                        }
+                        case "40 a 60 millones":{
+                            r11 = r11.add(a.getArea());
+                            break;
+                        }
+                        case "50 a 60 millones":{
+                            r12 = r12.add(a.getArea());
+                            break;
+                        }
+                        case "100 a 120 millones":{
+                            r13 = r13.add(a.getArea());
+                            break;
+                        }
+                    }
+                }
+            } else if (a.getTipo().equals(cat)) {
+                total = total.add(a.getArea());
+            }
+        }
+        if(total!=BigDecimal.ZERO)
+            lista.add(total);
+        if(r1!=BigDecimal.ZERO)
+            lista.add(r1);
+        if(r2!=BigDecimal.ZERO)
+            lista.add(r2);
+        if(r3!=BigDecimal.ZERO)
+            lista.add(r3);
+        if(r4!=BigDecimal.ZERO)
+            lista.add(r4);
+        if(r5!=BigDecimal.ZERO)
+            lista.add(r5);
+        if(r6!=BigDecimal.ZERO)
+            lista.add(r6);
+        if(r7!=BigDecimal.ZERO)
+            lista.add(r7);
+        if(r8!=BigDecimal.ZERO)
+            lista.add(r8);
+        if(r9!=BigDecimal.ZERO)
+            lista.add(r9);
+        if(r10!=BigDecimal.ZERO)
+            lista.add(r10);
+        if(r11!=BigDecimal.ZERO)
+            lista.add(r11);
+        if(r12!=BigDecimal.ZERO)
+            lista.add(r12);
+        if(r13!=BigDecimal.ZERO)
+            lista.add(r13);
+        return lista;
+    }
 }

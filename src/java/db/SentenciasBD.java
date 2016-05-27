@@ -72,9 +72,11 @@ public class SentenciasBD {
         "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
         "inner join adminsiupra.servicios s on c.servicioid=s.serviciosupraid\n" +
         "where mc.alias like ?";
-    private final String PRECIOS="SELECT mercado_tierras_rurales.funcion_parametros_precios=?);";
-    private final String PRECIOSSUMATORIARANGOS="SELECT  rango_precios, sum=area_hectareas;municipioid,municipio\n" +
-        "FROM mercado_tierras_rurales.v_precios_mpios P where deptoid=? group by municipio,municipioid, rango_precios order by municipioid;";
+    private final String PRECIOS="SELECT deptoid||municipioid as codeDane, departamento , municipio, area_hectareas, rango_precios \n" +
+        "FROM mercado_tierras_rurales.v_precios_mpios where deptoid like ? \n" +
+        "order by codeDane asc;";
+    /*private final String PRECIOSSUMATORIARANGOS="SELECT  rango_precios, sum(area_hectareas)municipioid,municipio\n" +
+        "FROM mercado_tierras_rurales.v_precios_mpios P where deptoid=? group by municipio,municipioid, rango_precios order by municipioid;";*/
     private final String  PLANTILLAGENERALGRAFICOS="select pe.plantelemenid, pe.alias, pe.compcg, pe.comptab, pe.indtab,pe.indgraf from mod.plantilla_elementos pe "
             + "inner join adminsiupra.areastrabajo_plantillas_menuconsultas atpmc on pe.plantillaidfk=atpmc.plantillaid where areatrabajoid=? and menuconsultaid=?";
     private final String GRAFICOSCOLUMNAS="select pc.columnas, pc.tipo from mod.plantilla_columnas pc "
@@ -193,9 +195,9 @@ public class SentenciasBD {
         return PRECIOS;
     }
 
-    public String getPRECIOSSUMATORIARANGOS() {
+    /*public String getPRECIOSSUMATORIARANGOS() {
         return PRECIOSSUMATORIARANGOS;
-    }
+    }*/
 
     public String getPLANTILLAGENERALGRAFICOS() {
         return PLANTILLAGENERALGRAFICOS;

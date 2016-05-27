@@ -42,6 +42,7 @@ public class Areas {
     private BigDecimal areaExcl;
     private BigDecimal area;
     private String tipo;
+    private String municipio;
 
     public String getCodigoDane() {
         return codigoDane;
@@ -138,5 +139,14 @@ public class Areas {
     public void setTipo(String categoria) {
         this.tipo = categoria;
     }
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
+    
     
 }
