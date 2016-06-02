@@ -93,22 +93,22 @@ public class Operaciones {
         String resultado="";
         switch(alias){
             case Parametros.PRECIOSBOYACA:{
-                resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
+                resultado=conv.crearJsonPreciosBoyaca(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
                         con.consultarCapasporMenuConsulta(alias),con.consultaPrecios("15") );
                 break;
             }
             case Parametros.PRECIOSCORDOBA:{
-                resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
+                resultado=conv.crearJsonPreciosCordoba(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
                         con.consultarCapasporMenuConsulta(alias),con.consultaPrecios("23") );
                 break;
             }
             case Parametros.PRECIOSTOLIMA:{
-                resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
+                resultado=conv.crearJsonPreciosTolima(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
                         con.consultarCapasporMenuConsulta(alias),con.consultaPrecios("73") );
                 break;
             }
             case Parametros.PRECIOSMETA:{
-                resultado=conv.crearJsonPrecios(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
+                resultado=conv.crearJsonPreciosMeta(con.consultarTablaContenidoporMenuConsulta(alias), con.consultarServicioporMenuConsulta(alias), 
                         con.consultarCapasporMenuConsulta(alias),con.consultaPrecios("50") );
                 break;
             }
@@ -189,6 +189,11 @@ public class Operaciones {
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias),
                         con.consultarIndicadoresSuperficie(6), con.consultarInfoyDocs(alias, true), con.consultarInfoyDocs(alias, false));
                 break;
+            }
+            case Parametros.AREAS_POTENCIALES_ADT:{
+                resultado=conv.crearJsonAreasPotenciales(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias), 
+                        con.consultarAreasPotenciales("Riego"), con.consultarAreasPotenciales("Drenaje"));
             }
             default:
                 if(alias.equals(Parametros.AVALUOS)||alias.equals(Parametros.AREAS_FORMALIZACION)||

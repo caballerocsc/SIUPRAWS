@@ -7,6 +7,7 @@
 package util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -507,12 +508,12 @@ public class Conversion {
     }
     
     /**
-     * @param filtro
-     * @param lista
-     * @param tc
-     * @param serv
-     * @param capas
-     * @return 
+     * @param filtro Objeto que contiene la lista de años que se deben filtrar para la consulta
+     * @param lista Información temática de la dinámica de mercados
+     * @param tc tabla de contenido asociada a la consulta
+     * @param serv servicio geográfico asociado a las consultas
+     * @param capas capas geográficas asociadas a la consulta
+     * @return String en formato json con la información de la consulta
      */
     public String crearJsonDinamMerc(FiltroJson filtro, List<DinamicaMercados> lista,Tablacontenido tc, List<Servicios> serv, List<Capas> capas){
         Varios v = new Varios();
@@ -918,18 +919,19 @@ public class Conversion {
     }
     
     /**
-     * 
-     * @param tc
-     * @param serv
-     * @param capas
-     * @param areas
-     * @return 
+     * Método encargado de crear el json con la información de la consulta de precios para el 
+     * departamento de Boyacá
+     * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
+     * @param serv Lista de tipo Servicios con los servicios asociadas la consulta
+     * @param capas Lista de tipo Capas con las capas asociadas a la consulta
+     * @param areas lista de tipo Areas con la información de los precios de Boyacá
+     * @return String de en formato Json con la información de la consulta para precios Boyacá
      */
     public String crearJsonPreciosBoyaca(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Areas> areas){
         Varios v = new Varios();
-        String iden="\"ext\":[-73.57703, 5.38009, -73.17961, 4.98548],\"orCsgs\":[\"prBoyaca\"],\n" +
+        String iden="\"ext\":[-73.57703, 5.38009, -73.17961, 4.98548],\"orCsgs\":[\"PB\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
-                    "\"al\": \"prBoyaca\",\n" +
+                    "\"al\": \"PB\",\n" +
                     "\"compCg\": \"id\",\n" +
                     "\"compTab\": \"id\",\n" +
                     "\"tab\":{\n" +
@@ -953,7 +955,7 @@ public class Conversion {
             registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getMunicipio()+"\","
-                    + r.getArea()+","
+                    + r.getArea().setScale(2,RoundingMode.HALF_UP)+","
                     + "\""+r.getTipo()+"\"]");
             k++;
         }
@@ -962,27 +964,35 @@ public class Conversion {
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
-        datGraf.add("[\"1 a 5 millones\","+v.sumarAreaXCategoria(areas, "1 a 5 millones","")+"]");
-        datGraf.add("[\"5 a 10 millones\","+v.sumarAreaXCategoria(areas, "5 a 10 millones","")+"]");
-        datGraf.add("[\"10 a 20 millones\","+v.sumarAreaXCategoria(areas, "10 a 20 millones","")+"]");
-        datGraf.add("[\"20 a 30 millones\","+v.sumarAreaXCategoria(areas, "20 a 30 millones","")+"]");
-        datGraf.add("[\"30 a 40 millones\","+v.sumarAreaXCategoria(areas, "30 a 40 millones","")+"]");
-        datGraf.add("[\"40 a 50 millones\","+v.sumarAreaXCategoria(areas, "40 a 50 millones","")+"]");
-        datGraf.add("[\"50 a 60 millones\","+v.sumarAreaXCategoria(areas, "50 a 60 millones","")+"]");
+        datGraf.add("[\"1 a 5 millones\","+v.sumarAreaXCategoria(areas, "1 a 5 millones","",null)+"]");
+        datGraf.add("[\"5 a 10 millones\","+v.sumarAreaXCategoria(areas, "5 a 10 millones","",null)+"]");
+        datGraf.add("[\"10 a 20 millones\","+v.sumarAreaXCategoria(areas, "10 a 20 millones","",null)+"]");
+        datGraf.add("[\"20 a 30 millones\","+v.sumarAreaXCategoria(areas, "20 a 30 millones","",null)+"]");
+        datGraf.add("[\"30 a 40 millones\","+v.sumarAreaXCategoria(areas, "30 a 40 millones","",null)+"]");
+        datGraf.add("[\"40 a 50 millones\","+v.sumarAreaXCategoria(areas, "40 a 50 millones","",null)+"]");
+        datGraf.add("[\"50 a 60 millones\","+v.sumarAreaXCategoria(areas, "50 a 60 millones","",null)+"]");
         graf1="{\"tGra\":\"t\","
                 + "\"tit\":\"Porcentaje de hectáreas por rango de precios\","
                 + "\"es\":{\"3d\":true,\"caLe\":true},"
                 + "\"col\":[\"#ffebaf\",\"#f5d072\",\"#edb337\",\"#e69900\",\"#bf5600\",\"#992100\",\"#720000\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
+        List<String> categorias = new ArrayList<>();
+        categorias.add("1 a 5 millones");
+        categorias.add("5 a 10 millones");
+        categorias.add("10 a 20 millones");
+        categorias.add("20 a 30 millones");
+        categorias.add("30 a 40 millones");
+        categorias.add("40 a 50 millones");
+        categorias.add("50 a 60 millones");
         String graf2;
         datGraf.clear();
-            datGraf.add("[\"TENZA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "TENZA"))+"]");
-            datGraf.add("[\"LA CAPILLA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "LA CAPILLA"))+"]");
-            datGraf.add("[\"GARAGOA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "GARAGOA"))+"]");
-            datGraf.add("[\"PACHAVITA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "PACHAVITA"))+"]");
-            datGraf.add("[\"CHINAVITA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "CHINAVITA"))+"]");
-            datGraf.add("[\"ÚMBITA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "ÚMBITA"))+"]");
-            datGraf.add("[\"TIBANÁ\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "TIBANÁ"))+"]");
+        datGraf.add("[\"TENZA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "TENZA",categorias))+"]");
+        datGraf.add("[\"LA CAPILLA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "LA CAPILLA",categorias))+"]");
+        datGraf.add("[\"GARAGOA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "GARAGOA",categorias))+"]");
+        datGraf.add("[\"PACHAVITA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "PACHAVITA",categorias))+"]");
+        datGraf.add("[\"CHINAVITA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "CHINAVITA",categorias))+"]");
+        datGraf.add("[\"ÚMBITA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "ÚMBITA",categorias))+"]");
+        datGraf.add("[\"TIBANÁ\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "TIBANÁ",categorias))+"]");
         graf2="{\"tGra\":\"c\",\"tit\":\"Total de hectáreas municipal por rango de precios\","
                 + "\"otrosDats\":{\"ejeY\":\"Área (ha)\", \"ejeX\": [\"1 a 5 millones\",\"5 a 10 millones\","
                 + "\"10 a 20 millones\",\"20 a 30 millones\",\"30 a 40 millones\",\"40 a 50 millones\",\"50 a 60 millones\"]},"
@@ -1046,9 +1056,9 @@ public class Conversion {
              + "\"es\":{\"caLe\":true,\"3d\":true},"
              + "\"cols\":[\"#FFFFB9\", \"#FFB3B3\", \"#C4E6B2\"],"
              + "\"dats\":["
-             + "[\"Condicionante\", "+v.promedioRestricciones(areas, 1)+"],"
-             + "[\"Exclusión\", "+v.promedioRestricciones(areas, 2)+"],"
-             + "[\"Sin restricción\", "+v.promedioRestricciones(areas, 3)+"]]}";
+             + "[\"Condicionante\", "+v.promedioAreas(areas, 1)+"],"
+             + "[\"Exclusión\", "+v.promedioAreas(areas, 2)+"],"
+             + "[\"Sin restricción\", "+v.promedioAreas(areas, 3)+"]]}";
         List<String> depto = new ArrayList<>();
         for (Areas r : areas) {
             depto.add("\""+r.getDepartamento()+"\"");
@@ -1132,9 +1142,9 @@ public class Conversion {
              + "\"es\":{\"caLe\":true,\"3d\":true},"
              + "\"cols\":[\"#FFAA00\", \"#FFFFBE\", \"#98E600\"],"
              + "\"dats\":["
-             + "[\"Incluido\", "+v.promedioRestricciones(areas, 4)+"],"
-             + "[\"Restringido\", "+v.promedioRestricciones(areas, 1)+"],"
-             + "[\"Excluido\", "+v.promedioRestricciones(areas, 2)+"]]}";
+             + "[\"Incluido\", "+v.promedioAreas(areas, 4)+"],"
+             + "[\"Restringido\", "+v.promedioAreas(areas, 1)+"],"
+             + "[\"Excluido\", "+v.promedioAreas(areas, 2)+"]]}";
         List<String> depto = new ArrayList<>();
         for (Areas r : areas) {
             depto.add("\""+r.getDepartamento()+"\"");
@@ -1189,7 +1199,7 @@ public class Conversion {
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getArea()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ff5500\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+"]");
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ff5500\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1486,7 +1496,7 @@ public class Conversion {
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getArea()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #009c4b\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+"]");
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #009c4b\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1552,7 +1562,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #C6E0B3\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Bajo\"]");
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #C6E0B3\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1703,7 +1713,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ED7D31\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Alto\"]");
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ED7D31\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1780,7 +1790,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Muy Bajo\"]");
+        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1856,7 +1866,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Muy Bajo\"]");
+        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1933,7 +1943,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ed7d31\">COLOMBIA</span>\", "+v.promedioRestricciones(areas, 5)+", \"Alto\"]");
+        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ed7d31\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1972,7 +1982,7 @@ public class Conversion {
      }
      
      /**
-      * método que se encarga de tomar una categoria de las consultas de indicadores y devolver
+      * Método que se encarga de tomar una categoria de las consultas de indicadores y devolver
       * el color correspondiente a esa categoria
       * @param categoria Categoria de la zona en las consultas de indicadores, los valores son: Muy Alto,
       * Alto, Medio, Bajo y Muy Bajo.
@@ -1994,4 +2004,316 @@ public class Conversion {
                 return "";
          }
      }
+     
+     /**
+     * Método encargado de crear el json con la información de la consulta de precios para el 
+     * departamento de Cordoba
+     * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
+     * @param serv Lista de tipo Servicios con los servicios asociadas la consulta
+     * @param capas Lista de tipo Capas con las capas asociadas a la consulta
+     * @param areas lista de tipo Areas con la información de los precios de Cordoba
+     * @return String de en formato Json con la información de la consulta para precios Cordoba
+     */
+    public String crearJsonPreciosCordoba(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Areas> areas){
+        Varios v = new Varios();
+        String iden="\"ext\":[-73.57703, 5.38009, -73.17961, 4.98548],\"orCsgs\":[\"PC\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"PC\",\n" +
+                    "\"compCg\": \"id\",\n" +
+                    "\"compTab\": \"id\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"Municipio\",\"Área (ha)\",\"Rango de precio\"]}\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
+        listColumnas.add("[\"Área (ha)\", \"n\", \"70px\"]");
+        listColumnas.add("[\"Rango de precio\", \"t\", \"120px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        int k = 1;
+        for (Areas r : areas) {
+            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
+                    + "\""+r.getDepartamento()+"\","
+                    + "\""+r.getMunicipio()+"\","
+                    + r.getArea().setScale(2, RoundingMode.HALF_UP)+","
+                    + "\""+r.getTipo()+"\"]");
+            k++;
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"1 a 5 millones\","+v.sumarAreaXCategoria(areas, "1 a 5 millones","",null)+"]");
+        datGraf.add("[\"10 a 15 millones\","+v.sumarAreaXCategoria(areas, "10 a 15 millones","",null)+"]");
+        datGraf.add("[\"15 a 20 millones\","+v.sumarAreaXCategoria(areas, "15 a 20 millones","",null)+"]");
+        datGraf.add("[\"20 a 30 millones\","+v.sumarAreaXCategoria(areas, "20 a 30 millones","",null)+"]");
+        datGraf.add("[\"30 a 40 millones\","+v.sumarAreaXCategoria(areas, "30 a 40 millones","",null)+"]");
+        datGraf.add("[\"40 a 60 millones\","+v.sumarAreaXCategoria(areas, "40 a 60 millones","",null)+"]");
+        datGraf.add("[\"100 a 120 millones\","+v.sumarAreaXCategoria(areas, "100 a 120 millones","",null)+"]");
+        graf1="{\"tGra\":\"t\","
+                + "\"tit\":\"Porcentaje de hectáreas por rango de precios\","
+                + "\"es\":{\"3d\":true,\"caLe\":true},"
+                + "\"col\":[\"#ffebaf\",\"#f5d072\",\"#edb337\",\"#e69900\",\"#bf5600\",\"#992100\",\"#720000\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        List<String> cate = new ArrayList<>();
+        cate.add("1 a 5 millones");
+        cate.add("10 a 15 millones");
+        cate.add("10 a 15 millones");
+        cate.add("20 a 30 millones");
+        cate.add("30 a 40 millones");
+        cate.add("40 a 60 millones");
+        cate.add("100 a 120 millones");
+        String graf2;
+        datGraf.clear();
+            datGraf.add("[\"CERETÉ\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "CERETÉ",cate))+"]");
+            datGraf.add("[\"CHIMA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "CHIMA",cate))+"]");
+            datGraf.add("[\"CIÉNAGA DE ORO\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "CIÉNAGA DE ORO",cate))+"]");
+            datGraf.add("[\"COTORRA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "COTORRA",cate))+"]");
+            datGraf.add("[\"SAHAGÚN\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "SAHAGÚN",cate))+"]");
+        graf2="{\"tGra\":\"c\",\"tit\":\"Total de hectáreas municipal por rango de precios\","
+                + "\"otrosDats\":{\"ejeY\":\"Área (ha)\", \"ejeX\": [\"5 a 10 millones\",\"10 a 15 millones\","
+                + "\"15 a 20 millones\",\"20 a 30 millones\",\"30 a 40 millones\",\"40 a 60 millones\",\"100 a 120 millones\"]},"
+                + "\"es\":{\"3d\":true, \"caLe\":true},"
+                + "\"cols\":[\"#5b9bd5\",\"#ed7d31\",\"#a5a5a5\",\"#ffc000\",\"#4472c4\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [0, 1, 1, 3, 0]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
+        return json;
+    }
+    
+    /**
+     * Método encargado de crear el json con la información de la consulta de precios para el 
+     * departamento de Tolima
+     * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
+     * @param serv Lista de tipo Servicios con los servicios asociadas la consulta
+     * @param capas Lista de tipo Capas con las capas asociadas a la consulta
+     * @param areas lista de tipo Areas con la información de los precios de Tolima
+     * @return String de en formato Json con la información de la consulta para precios Tolima
+     */
+    public String crearJsonPreciosTolima(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Areas> areas){
+        Varios v = new Varios();
+        String iden="\"ext\":[-73.57703, 5.38009, -73.17961, 4.98548],\"orCsgs\":[\"PT\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"PT\",\n" +
+                    "\"compCg\": \"id\",\n" +
+                    "\"compTab\": \"id\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"Municipio\",\"Área (ha)\",\"Rango de precio\"]}\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
+        listColumnas.add("[\"Área (ha)\", \"n\", \"70px\"]");
+        listColumnas.add("[\"Rango de precio\", \"t\", \"120px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        int k = 1;
+        for (Areas r : areas) {
+            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
+                    + "\""+r.getDepartamento()+"\","
+                    + "\""+r.getMunicipio()+"\","
+                    + r.getArea().setScale(2, RoundingMode.HALF_UP)+","
+                    + "\""+r.getTipo()+"\"]");
+            k++;
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"1 a 3 millones\","+v.sumarAreaXCategoria(areas, "1 a 3 millones","",null)+"]");
+        datGraf.add("[\"3 a 5 millones\","+v.sumarAreaXCategoria(areas, "3 a 5 millones","",null)+"]");
+        datGraf.add("[\"10 a 20 millones\","+v.sumarAreaXCategoria(areas, "10 a 20 millones","",null)+"]");
+        datGraf.add("[\"20 a 30 millones\","+v.sumarAreaXCategoria(areas, "20 a 30 millones","",null)+"]");
+        datGraf.add("[\"30 a 40 millones\","+v.sumarAreaXCategoria(areas, "30 a 40 millones","",null)+"]");
+        graf1="{\"tGra\":\"t\","
+                + "\"tit\":\"Porcentaje de hectáreas por rango de precios\","
+                + "\"es\":{\"3d\":true,\"caLe\":true},"
+                + "\"col\":[\"#ffffb0\",\"#f2e599\",\"#e69900\",\"#ab3900\",\"#720000\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        List<String> cate = new ArrayList<>();
+        cate.add("1 a 3 millones");
+        cate.add("3 a 5 millones");
+        cate.add("10 a 20 millones");
+        cate.add("20 a 30 millones");
+        cate.add("30 a 40 millones");
+        String graf2;
+        datGraf.clear();
+        datGraf.add("[\"PRADO\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "PRADO",cate))+"]");
+        datGraf.add("[\"PURIFICACIÓN\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "PURIFICACIÓN",cate))+"]");
+        datGraf.add("[\"SALDAÑA\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "SALDAÑA",cate))+"]");
+        graf2="{\"tGra\":\"c\",\"tit\":\"Total de hectáreas municipal por rango de precios\","
+                + "\"otrosDats\":{\"ejeY\":\"Área (ha)\", \"ejeX\": [\"1 a 3 millones\",\"3 a 5 millones\","
+                + "\"10 a 20 millones\",\"20 a 30 millones\",\"30 a 40 millones\"]},"
+                + "\"es\":{\"3d\":true, \"caLe\":true},"
+                + "\"cols\":[\"#5b9bd5\",\"#ed7d31\",\"#a5a5a5\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [0, 1, 1, 3, 0]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
+        return json;
+    }
+    
+    /**
+     * Método encargado de crear el json con la información de la consulta de precios para el 
+     * departamento de Meta
+     * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
+     * @param serv Lista de tipo Servicios con los servicios asociadas la consulta
+     * @param capas Lista de tipo Capas con las capas asociadas a la consulta
+     * @param areas lista de tipo Areas con la información de los precios de Meta
+     * @return String de en formato Json con la información de la consulta para precios Meta
+     */
+    public String crearJsonPreciosMeta(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Areas> areas){
+        Varios v = new Varios();
+        String iden="\"ext\":[-73.57703, 5.38009, -73.17961, 4.98548],\"orCsgs\":[\"PM\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"PM\",\n" +
+                    "\"compCg\": \"id\",\n" +
+                    "\"compTab\": \"id\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"Municipio\",\"Área (ha)\",\"Rango de precio\"]}\n" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
+        listColumnas.add("[\"Área (ha)\", \"n\", \"70px\"]");
+        listColumnas.add("[\"Rango de precio\", \"t\", \"120px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        int k = 1;
+        for (Areas r : areas) {
+            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
+                    + "\""+r.getDepartamento()+"\","
+                    + "\""+r.getMunicipio()+"\","
+                    + r.getArea().setScale(2,RoundingMode.HALF_UP)+","
+                    + "\""+r.getTipo()+"\"]");
+            k++;
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"1 a 3 millones\","+v.sumarAreaXCategoria(areas, "1 a 3 millones","",null)+"]");
+        datGraf.add("[\"3 a 5 millones\","+v.sumarAreaXCategoria(areas, "3 a 5 millones","",null)+"]");
+        datGraf.add("[\"10 a 20 millones\","+v.sumarAreaXCategoria(areas, "10 a 20 millones","",null)+"]");
+        datGraf.add("[\"20 a 30 millones\","+v.sumarAreaXCategoria(areas, "20 a 30 millones","",null)+"]");
+        graf1="{\"tGra\":\"t\","
+                + "\"tit\":\"Porcentaje de hectáreas por rango de precios\","
+                + "\"es\":{\"3d\":true,\"caLe\":true},"
+                + "\"col\":[\"#ffffb0\",\"#f2e599\",\"#e69900\",\"#ab3900\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+"]}";
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [0, 1, 1, 1, 0]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
+        return json;
+    }
+    
+    /**
+     * Método encargado de crear el json con la información de la consulta de areas potenciales de 
+     * riego y drenaje 
+     * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
+     * @param serv Lista de tipo Servicios con los servicios asociadas la consulta
+     * @param capas Lista de tipo Capas con las capas asociadas a la consulta
+     * @param riego lista de tipo Areas con la información de las areas de riego por departamento
+     * @param drenaje lista de tipo Areas con la información de las areas de drenaje por departamento
+     * @return String de en formato Json con la información de de areas potenciales de 
+     * riego y drenaje
+     */
+    public String crearJsonAreasPotenciales(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, 
+            List<Areas> riego,List<Areas> drenaje){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"Suelos con potencial para distritos de riego (ha)\",\"Suelos con potencial para distritos de drenaje (ha)\"]},"+  
+                    "\"gra\":{\"t\":\"c\",\"indTab\":0,"+
+                    "\"colums\":[\"Suelos con potencial para distritos de riego (ha)\", \"Suelos con potencial para distritos de drenaje (ha)\"],"+
+                    "\"cols\":[\"#96BADC\", \"#B3E7E6\"],\"otros\":{\"titEjeY\":\"Área (ha)\"}}" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
+        listColumnas.add("[\"Suelos con potencial para distritos de riego (ha)\", \"n\", \"300px\"]");
+        listColumnas.add("[\"Suelos con potencial para distritos de drenaje (ha)\", \"n\", \"300px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        int tam = riego.size();
+        for (int i = 0; i < tam; i++ ) {
+            registros.add("["+i+",\""+riego.get(i).getCodigoDane()+"\","
+                    + "\""+riego.get(i).getDepartamento()+"\","
+                    + riego.get(i).getArea()+","
+                    + drenaje.get(i).getArea()+"]");
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"Potencial para distritos de riego\","+v.promedioAreas(riego, 5)+"]");
+        datGraf.add("[\"Potencial para distritos de drenaje\","+v.promedioAreas(drenaje, 5)+"]");
+        graf1="{\"tGra\":\"c\","
+                + "\"tit\":\"Total de hectáreas nacional por categoría\","
+                + "\"otrosDats\":{\"ejeY\":\"Área (ha)\"},"
+                + "\"es\":{\"3d\":true},"
+                + "\"col\":[\"#96badc\",\"#b3e7e6\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String graf2;
+        datGraf.clear();
+        List<BigDecimal> r = new ArrayList<>();
+        List<BigDecimal> d = new ArrayList<>();
+        List<String> depto = new ArrayList<>();
+        for (int i = 0; i < tam; i++ ) {
+            r.add(riego.get(i).getArea());
+            d.add(drenaje.get(i).getArea());
+            depto.add("\""+riego.get(i).getDepartamento()+"\"");
+        }
+        datGraf.add("[\"Para distritos de riego\","+addCommaBigDecimal(r)+"]");
+        datGraf.add("[\"Para distritos de drenaje\","+addCommaBigDecimal(d)+"]");
+        graf2="{\"tGra\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
+                + "\"otrosDats\":{\"ejeY\":\"Área (ha)\",\"ejeX\":["+addCommaString(depto)+"]},"
+                + "\"es\":{\"3d\":true, \"caLe\":true},"
+                + "\"cols\":[\"#96badc\",\"b3e7e6\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [1, 1, 1, 3, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
+        return json;
+    }
 }

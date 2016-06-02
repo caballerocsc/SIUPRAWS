@@ -142,6 +142,9 @@ public class SentenciasBD {
     private final String SUP_SIN_CONFLICTO="SELECT cod_dane_depto, departamento, porc_superf_suelo_u_a,"
             + " categoria FROM indicadores.v_biof_e06"
             + " order by porc_superf_suelo_u_a desc";
+    private final String AREAS_POTENCIALES="SELECT codigodanedepto, departamento, round (sum(area_ha_pot_riego_drenaje),2) as riego\n" +
+            "FROM adecuacion_tierras_rurales.v_pot_riego_drenaje where descripcion like ? \n" +
+            "group by codigodanedepto,departamento order by codigodanedepto;";
     
 
     public SentenciasBD() {
@@ -293,6 +296,10 @@ public class SentenciasBD {
 
     public String getSUP_SIN_CONFLICTO() {
         return SUP_SIN_CONFLICTO;
+    }
+
+    public String getAREAS_POTENCIALES() {
+        return AREAS_POTENCIALES;
     }
     
 }

@@ -752,7 +752,7 @@ public class Consultas {
      * de las consultas de usuario de acuerdo al alias suministrado
      * @param alias alias de la consulta en la base de datos
      * @param tipo true: si es para consultar documentos, false: para consultar información adicional
-     * @return 
+     * @return objeto de tipo InfoyDocs con los documentos o información adicional según se elija
      */
     public List<InfoyDocs> consultarInfoyDocs(String alias, boolean tipo){
         Conexion con=new Conexion();
@@ -1002,8 +1002,8 @@ public class Consultas {
      * Método que se encarga de obtener de la base de datos la información de cualquiera de los indicadores
      * de superficie 
      * @param ind Indice que hace referencia al indicador que se quiere consultar.
-     * 1: SUP_SIN_REST_LEG, 2: SUP_EXC_LEG, 3: SUP_USO_COND
-     * @return 
+     * 1: SUP_SIN_REST_LEG, 2: SUP_EXC_LEG, 3: SUP_USO_COND, 4: SUP_SOBRE, 5: SUP_SUB, 6: SUP_SIN_CONFLICTO 
+     * @return lista de Tipo Areas con la información del indicador seleccionado
      */
     public List<Areas> consultarIndicadoresSuperficie(int ind){
         Conexion con=new Conexion();
@@ -1041,6 +1041,35 @@ public class Consultas {
               a.setDepartamento(rs.getString(i++));
               a.setArea(rs.getBigDecimal(i++));
               a.setTipo(rs.getString(i++));
+              list.add(a);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
+   
+     public List<Areas> consultarAreasPotenciales(String filtro){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Areas> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+             ps=cn.prepareStatement(sbd.getAREAS_POTENCIALES());
+             ps.setString(1, "%"+filtro+"%");
+             rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              Areas a = new Areas();
+              a.setCodigoDane(rs.getString(i++));
+              a.setDepartamento(rs.getString(i++));
+              a.setArea(rs.getBigDecimal(i++));
               list.add(a);
             }
         } catch (SQLException e) {

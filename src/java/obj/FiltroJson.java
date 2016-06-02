@@ -6,7 +6,7 @@
 package obj;
 
 /**
- *  Clase utilizada para mapear un json a una clase con el fin de construir los filtros de las consultas
+ * Clase utilizada para mapear un json a una clase con el fin de construir los filtros de las consultas
  * @author cesar.solano
  */
 public class FiltroJson {
