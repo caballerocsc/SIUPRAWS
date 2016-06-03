@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import obj.Actores;
 import obj.Avaluos;
 import obj.Capas;
 import obj.Departamentos;
@@ -1053,6 +1054,12 @@ public class Consultas {
         return list;
     }
    
+    /**
+     * Método que se encarga de consultar la información de las áreas potenciales de riego y drenaje
+     * @param filtro consulta las areas potenciales segun el filtro: riego, drenaje
+     * @return Lista de tipo Areas con la información de los departamentos con areas potenciales ya sea 
+     * de riego o drenaje, según se haya elejido
+     */
      public List<Areas> consultarAreasPotenciales(String filtro){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
@@ -1070,6 +1077,93 @@ public class Consultas {
               a.setCodigoDane(rs.getString(i++));
               a.setDepartamento(rs.getString(i++));
               a.setArea(rs.getBigDecimal(i++));
+              list.add(a);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
+    
+     /**
+      * Método que consulta la información de la la aptitud para la planeación forestal
+      * @param filtro categoria de zonificación: Alta, Media, Baja, No Apto
+      * @return lista con la información de la planeación forestal de todos los departamentos
+      * segun la categoria de zonificación
+      */
+      public List<Areas> consultarAptitudForestal(String filtro){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Areas> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+             ps=cn.prepareStatement(sbd.getAPTITUD_FORESTAL());
+             ps.setString(1, "%"+filtro+"%");
+             rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              Areas a = new Areas();
+              a.setCodigoDane(rs.getString(i++));
+              a.setDepartamento(rs.getString(i++));
+              a.setArea(rs.getBigDecimal(i++));
+              list.add(a);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
+     /**
+      * Método que consulta la información de la tabla de presencia de actores involucrados
+      * ya sea por departamentos u organizaciones 
+      * @param filtro permite seleccionar si se desea consultar la informacion por departamento u organizacion o consolidado
+      * 1: departamentos 2: organizaciones 3: resumen organizaciones
+      * @return lista de tipo Actores con la informacion de la presencia de actores según el filtro seleccionado
+      */
+      public List<Actores> consultarPresenciaActores(int filtro){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<Actores> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+            if(filtro==1)//
+                ps=cn.prepareStatement(sbd.getACTORES_DEPARTAMENTOS());
+            if(filtro==2)
+                ps=cn.prepareStatement(sbd.getACTORES_ORGANIZACIONES());
+            if(filtro==3)
+                ps=cn.prepareStatement(sbd.getACTORES_RESUMEN());
+             rs=ps.executeQuery();
+            while (rs.next()) {                
+              int i=1;
+              Actores a = new Actores();
+              if(filtro==1){
+                a.setCodDane(rs.getString(i++));
+                a.setDepto(rs.getString(i++));
+                a.setNumOrg(rs.getInt(i++));
+                a.setCategoria(rs.getString(i++));
+              }
+              if(filtro==2){
+                a.setOrg(rs.getString(i++));
+                a.setLocalizacion(rs.getString(i++));
+                a.setDepto(rs.getString(i++));
+                a.setMunpio(rs.getString(i++));
+              }
+              if(filtro==3){
+                  a.setDepto(rs.getString(i++));
+                  a.setNumOrg(rs.getInt(i++));
+              }
               list.add(a);
             }
         } catch (SQLException e) {

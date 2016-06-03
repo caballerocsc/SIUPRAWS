@@ -194,6 +194,14 @@ public class Operaciones {
                 resultado=conv.crearJsonAreasPotenciales(con.consultarTablaContenidoporMenuConsulta(alias),
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias), 
                         con.consultarAreasPotenciales("Riego"), con.consultarAreasPotenciales("Drenaje"));
+                break;
+            }
+            case Parametros.APTITUD_PLANEACION_FORESTAL:{
+                resultado=conv.crearJsonAptitudForestal(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias), 
+                        con.consultarAptitudForestal("Alta"), con.consultarAptitudForestal("Media"),
+                        con.consultarAptitudForestal("Baja"),con.consultarAptitudForestal("No Apta"));
+                break;
             }
             default:
                 if(alias.equals(Parametros.AVALUOS)||alias.equals(Parametros.AREAS_FORMALIZACION)||

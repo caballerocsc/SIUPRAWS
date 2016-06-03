@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import obj.Actores;
 import obj.Capas;
 import obj.Departamentos;
 import obj.DinamicaMercados;
@@ -2313,6 +2314,179 @@ public class Conversion {
         //configuracion de la consulta
         String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
                     "\"plantillas\": [1, 1, 1, 3, 1]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
+        return json;
+    }
+    
+    
+    /**
+     * Método encargado de crear el json con la información de la consulta de areas con
+     * aptitud forestal comercial 
+     * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
+     * @param serv Lista de tipo Servicios con los servicios asociadas la consulta
+     * @param capas Lista de tipo Capas con las capas asociadas a la consulta
+     * @param alto departamentos con areas potenciales de categoria alto
+     * @param medio departamentos con areas potenciales de categoria medio
+     * @param bajo  departamentos con areas potenciales de categoria bajo
+     * @param noApt departamentos con areas potenciales de categoria no apto
+     * @return String de en formato Json con la información de areas con
+     * aptitud forestal comercial
+     */
+    public String crearJsonAptitudForestal(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, 
+            List<Areas> alto,List<Areas> medio,List<Areas> bajo,List<Areas> noApt){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"Alta (ha)\",\"Media (ha)\",\"Baja (ha)\",\"No Apto (ha)\"]},"+  
+                    "\"gra\":{\"t\":\"t\",\"indTab\":0,"+
+                    "\"colums\":[\"Alta (ha)\",\"Media (ha)\",\"Baja (ha)\",\"No Apto (ha)\"],"+
+                    "\"cols\":[\"#267300\", \"#69CC66\",\"FFF86E\",\"B8B8B8\"],\"otros\":{\"texRemplazar\":\" (ha)\"}}" +
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
+        listColumnas.add("[\"Alta (ha)\", \"n\", \"150px\"]");
+        listColumnas.add("[\"Media (ha)\", \"n\", \"150px\"]");
+        listColumnas.add("[\"Baja (ha)\", \"n\", \"150px\"]");
+        listColumnas.add("[\"No Apto\", \"n\", \"150px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        int tam = alto.size();
+        for (int i = 0; i < tam; i++ ) {
+            registros.add("[{},\""+alto.get(i).getCodigoDane()+"\","
+                    + "\""+alto.get(i).getDepartamento()+"\","
+                    + alto.get(i).getArea()+","
+                    + medio.get(i).getArea()+","
+                    + bajo.get(i).getArea()+","
+                    + noApt.get(i).getArea()+"]");
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"Alta\","+v.promedioAreas(alto, 5)+"]");
+        datGraf.add("[\"Media\","+v.promedioAreas(medio, 5)+"]");
+        datGraf.add("[\"Baja\","+v.promedioAreas(bajo, 5)+"]");
+        datGraf.add("[\"No Apto\","+v.promedioAreas(noApt, 5)+"]");
+        graf1="{\"tGra\":\"t\","
+                + "\"tit\":\"Porcentaje de hectáreas nacional por categoría\","
+                + "\"otrosDats\":{\"ejeY\":\"Área (ha)\"},"
+                + "\"es\":{\"3d\":true, \"caLe\":true},"
+                + "\"col\":[\"#267300\",\"#69CC66\",\"FFF86E\",\"B8B8B8\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String graf2;
+        datGraf.clear();
+        List<BigDecimal> a = new ArrayList<>();
+        List<BigDecimal> m = new ArrayList<>();
+        List<BigDecimal> b = new ArrayList<>();
+        List<BigDecimal> na = new ArrayList<>();
+        List<String> depto = new ArrayList<>();
+        for (int i = 0; i < tam; i++ ) {
+            a.add(alto.get(i).getArea());
+            m.add(medio.get(i).getArea());
+            b.add(bajo.get(i).getArea());
+            na.add(noApt.get(i).getArea());
+            depto.add("\""+alto.get(i).getDepartamento()+"\"");
+        }
+        datGraf.add("[\"Alta\","+addCommaBigDecimal(a)+"]");
+        datGraf.add("[\"Media\","+addCommaBigDecimal(m)+"]");
+        datGraf.add("[\"Baja\","+addCommaBigDecimal(b)+"]");
+        datGraf.add("[\"No Apta\","+addCommaBigDecimal(na)+"]");
+        graf2="{\"tGra\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
+                + "\"otrosDats\":{\"ejeY\":\"Área (ha)\",\"ejeX\":["+addCommaString(depto)+"]},"
+                + "\"es\":{\"3d\":true, \"caLe\":true},"
+                + "\"cols\":[\"#267300\",\"#69CC66\",\"FFF86E\",\"B8B8B8\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+","+graf2+"]}";
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [0, 1, 1, 3, 0]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
+        return json;
+    }
+    
+    /**
+     * Método encargado de crear el json con la información de la consulta de usuario
+     * de presencia de actores involucrados 
+     * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
+     * @param serv Lista de tipo Servicios con los servicios asociadas la consulta
+     * @param capas Lista de tipo Capas con las capas asociadas a la consulta
+     * @param depto Lista con la información organizada por departamentos
+     * @param org Lista con la información organizada por organizaciones
+     * @param res  Lista con el resumen de las organizaciones por departamento
+     * @return String de en formato Json con la información de los actores involucrados
+     */
+    public String crearJsonPresenciaActores(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, 
+            List<Actores> depto,List<Actores> org,List<Actores> res){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \"cgDepartamentos\",\n" +
+                    "\"compCg\": \"codigodane\",\n" +
+                    "\"compTab\": \"Código DANE\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Departamento\",\"Categoría\"]}"+  
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
+        listColumnas.add("[\"Número de organizaciones\", \"n\", \"170px\"]");
+        listColumnas.add("[\"Categoría\", \"t\", \"160px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        for (Actores d:depto ) {
+            registros.add("[{},\""+d.getCodDane()+"\","
+                    + "\""+d.getDepto()+"\","
+                    + d.getNumOrg()+","
+                    + "\""+d.getCategoria()+"\"]");
+        }
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String column2;
+        listColumnas.clear();
+        listColumnas.add("[\"Organización\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Localización\", \"t\", \"120px\"]");
+        listColumnas.add("[\"Departamentos\", \"n\", \"170px\"]");
+        listColumnas.add("[\"Municipios\", \"t\", \"160px\"]");
+        column2 = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros2 = new ArrayList();
+        String tabla2;
+        for (Actores o:org ) {
+            registros.add("[{},\""+o.getOrg()+"\","
+                    + "\""+o.getLocalizacion()+"\","
+                    + o.getDepto()+","
+                    + "\""+o.getMunpio()+"\"]");
+        }
+        tabla2="\"dats\":["+addCommaString(registros2)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"},{"+column2+","+tabla2+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        for (Actores r : res) {
+            datGraf.add("[\""+r.getDepto()+"\","+r.getNumOrg()+"]");
+        }
+        graf1="{\"tGra\":\"c\","
+                + "\"tit\":\"Número de organizaciones por departamento\","
+                + "\"otrosDats\":{\"ejeY\":\"Número de organizaciones\"},"
+                + "\"es\":{\"3d\":true},"
+                + "\"col\":[\"#4472c4\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+"]}";
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [0, 1, 2, 1, 0]}";
          String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
         return json;
     }
