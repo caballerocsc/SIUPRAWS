@@ -61,6 +61,7 @@ public class Parametros {
     public static final String SUPERFICIE_SIN_CONFLICTO="sua";
     public static final String ZONAS_RECONV_PROD="sadis";
     public static final String APTITUD_PLANEACION_FORESTAL="apfc";
+    public static final String ACTORES="pavafba";
     
             
     public Parametros() {

@@ -199,8 +199,13 @@ public class Operaciones {
             case Parametros.APTITUD_PLANEACION_FORESTAL:{
                 resultado=conv.crearJsonAptitudForestal(con.consultarTablaContenidoporMenuConsulta(alias),
                         con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias), 
-                        con.consultarAptitudForestal("Alta"), con.consultarAptitudForestal("Media"),
-                        con.consultarAptitudForestal("Baja"),con.consultarAptitudForestal("No Apta"));
+                        con.consultarAptitudForestal());
+                break;
+            }
+            case Parametros.ACTORES:{
+                resultado=conv.crearJsonPresenciaActores(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias), 
+                        con.consultarPresenciaActores(1),con.consultarPresenciaActores(2),con.consultarPresenciaActores(3));
                 break;
             }
             default:

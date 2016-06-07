@@ -145,11 +145,8 @@ public class SentenciasBD {
     private final String AREAS_POTENCIALES="SELECT codigodanedepto, departamento, round (sum(area_ha_pot_riego_drenaje),2) as riego\n" +
             "FROM adecuacion_tierras_rurales.v_pot_riego_drenaje where descripcion like ? \n" +
             "group by codigodanedepto,departamento order by codigodanedepto;";
-    private final String APTITUD_FORESTAL="SELECT z.codigodanedepto, z.departamento,z.categoriazonificacion, sum(z.area_hectareas) AS area_hectareas\n" +
-            "FROM aptitud_uso_suelo.v_zonificacionforestalmpios z, carto_basica.departamentos d\n" +
-            "WHERE z.codigodanedepto::text = d.codigodane::text and z.categoriazonificacion like ?\n" +
-            "GROUP BY z.departamento, z.zonificacioncomercial, z.categoriazonificacion, z.codigodanedepto\n" +
-            "ORDER BY z.codigodanedepto, z.departamento, z.zonificacioncomercial;";
+    private final String APTITUD_FORESTAL="SELECT codigodanedepto, departamento, alta, media, baja, noapto\n" +
+            "FROM aptitud_uso_suelo.v_zonificacionforestaldeptoareas;";
     private final String ACTORES_DEPARTAMENTOS="SELECT cod_dane_dpto, departamento, count(departamento), categoria\n" +
             "FROM uso_suelo_rural.v_actores_vinculados_afba_departamentos\n" +
             "group by cod_dane_dpto, departamento, categoria\n" +

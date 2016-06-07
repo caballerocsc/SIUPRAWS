@@ -185,7 +185,12 @@ public class Varios {
         final int excl=2;
         final int sinRest=3;
         final int incl=4;
-        final int ifpr=5;
+        final int area=5;
+        final int alta=6;
+        final int media=7;
+        final int baja=8;
+        final int noApto=9;
+        
         for (Areas restricciones : list) {
             switch(zona){
                 case cond:{// tambien restringido
@@ -204,8 +209,24 @@ public class Varios {
                     resul=resul.add(restricciones.getIncluidas());
                     break;
                 }
-                case ifpr:{
+                case area:{
                     resul=resul.add(restricciones.getArea());
+                    break;
+                }
+                case alta:{
+                    resul=resul.add(restricciones.getZonaAlta());
+                    break;
+                }
+                case media:{
+                    resul=resul.add(restricciones.getZonaMedia());
+                    break;
+                }
+                case baja:{
+                    resul=resul.add(restricciones.getZonaBaja());
+                    break;
+                }
+                case noApto:{
+                    resul=resul.add(restricciones.getZonaNoApta());
                     break;
                 }
             }

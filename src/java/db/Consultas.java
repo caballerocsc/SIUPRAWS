@@ -6,6 +6,7 @@
 
 package db;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -1091,11 +1092,9 @@ public class Consultas {
     
      /**
       * Método que consulta la información de la la aptitud para la planeación forestal
-      * @param filtro categoria de zonificación: Alta, Media, Baja, No Apto
       * @return lista con la información de la planeación forestal de todos los departamentos
-      * segun la categoria de zonificación
       */
-      public List<Areas> consultarAptitudForestal(String filtro){
+      public List<Areas> consultarAptitudForestal(){
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
@@ -1104,14 +1103,20 @@ public class Consultas {
         SentenciasBD sbd=new SentenciasBD();
         try {
              ps=cn.prepareStatement(sbd.getAPTITUD_FORESTAL());
-             ps.setString(1, "%"+filtro+"%");
              rs=ps.executeQuery();
             while (rs.next()) {                
               int i=1;
               Areas a = new Areas();
               a.setCodigoDane(rs.getString(i++));
               a.setDepartamento(rs.getString(i++));
-              a.setArea(rs.getBigDecimal(i++));
+              BigDecimal alt=rs.getBigDecimal(i++);
+              BigDecimal med=rs.getBigDecimal(i++);
+              BigDecimal baj=rs.getBigDecimal(i++);
+              BigDecimal noap=rs.getBigDecimal(i++);
+              a.setZonaAlta((alt==null)?BigDecimal.ZERO:alt);
+              a.setZonaMedia((med==null)?BigDecimal.ZERO:med);
+              a.setZonaBaja((baj==null)?BigDecimal.ZERO:baj);
+              a.setZonaNoApta((noap==null)?BigDecimal.ZERO:noap);
               list.add(a);
             }
         } catch (SQLException e) {

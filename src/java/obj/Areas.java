@@ -43,6 +43,10 @@ public class Areas {
     private BigDecimal area;
     private String tipo;
     private String municipio;
+    private BigDecimal zonaAlta;
+    private BigDecimal zonaMedia;
+    private BigDecimal zonaBaja;
+    private BigDecimal zonaNoApta;
 
     public String getCodigoDane() {
         return codigoDane;
@@ -147,6 +151,37 @@ public class Areas {
     public void setMunicipio(String municipio) {
         this.municipio = municipio;
     }
-    
-    
+
+    public BigDecimal getZonaAlta() {
+        return zonaAlta;
+    }
+
+    public void setZonaAlta(BigDecimal zonaAlta) {
+        this.zonaAlta = zonaAlta;
+    }
+
+    public BigDecimal getZonaMedia() {
+        return zonaMedia;
+    }
+
+    public void setZonaMedia(BigDecimal zonaMedia) {
+        this.zonaMedia = zonaMedia;
+    }
+
+    public BigDecimal getZonaBaja() {
+        return zonaBaja;
+    }
+
+    public void setZonaBaja(BigDecimal zonaBaja) {
+        this.zonaBaja = zonaBaja;
+    }
+
+    public BigDecimal getZonaNoApta() {
+        return zonaNoApta;
+    }
+
+    public void setZonaNoApta(BigDecimal zonaNoApta) {
+        this.zonaNoApta = zonaNoApta;
+    }
+
 }

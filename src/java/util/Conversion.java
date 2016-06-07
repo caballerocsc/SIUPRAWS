@@ -2325,15 +2325,12 @@ public class Conversion {
      * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
      * @param serv Lista de tipo Servicios con los servicios asociadas la consulta
      * @param capas Lista de tipo Capas con las capas asociadas a la consulta
-     * @param alto departamentos con areas potenciales de categoria alto
-     * @param medio departamentos con areas potenciales de categoria medio
-     * @param bajo  departamentos con areas potenciales de categoria bajo
-     * @param noApt departamentos con areas potenciales de categoria no apto
+     * @param zonas departamentos con areas potenciales de categoria alto
      * @return String de en formato Json con la información de areas con
      * aptitud forestal comercial
      */
     public String crearJsonAptitudForestal(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, 
-            List<Areas> alto,List<Areas> medio,List<Areas> bajo,List<Areas> noApt){
+            List<Areas> zonas){
         Varios v = new Varios();
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
@@ -2359,24 +2356,23 @@ public class Conversion {
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
-        int tam = alto.size();
-        for (int i = 0; i < tam; i++ ) {
-            registros.add("[{},\""+alto.get(i).getCodigoDane()+"\","
-                    + "\""+alto.get(i).getDepartamento()+"\","
-                    + alto.get(i).getArea()+","
-                    + medio.get(i).getArea()+","
-                    + bajo.get(i).getArea()+","
-                    + noApt.get(i).getArea()+"]");
+        for (Areas a: zonas) {
+            registros.add("[{},\""+a.getCodigoDane()+"\","
+                    + "\""+a.getDepartamento()+"\","
+                    + a.getZonaAlta()+","
+                    + a.getZonaMedia()+","
+                    + a.getZonaBaja()+","
+                    + a.getZonaNoApta()+"]");
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
-        datGraf.add("[\"Alta\","+v.promedioAreas(alto, 5)+"]");
-        datGraf.add("[\"Media\","+v.promedioAreas(medio, 5)+"]");
-        datGraf.add("[\"Baja\","+v.promedioAreas(bajo, 5)+"]");
-        datGraf.add("[\"No Apto\","+v.promedioAreas(noApt, 5)+"]");
+        datGraf.add("[\"Alta\","+v.promedioAreas(zonas, 6)+"]");
+        datGraf.add("[\"Media\","+v.promedioAreas(zonas, 7)+"]");
+        datGraf.add("[\"Baja\","+v.promedioAreas(zonas, 8)+"]");
+        datGraf.add("[\"No Apto\","+v.promedioAreas(zonas, 9)+"]");
         graf1="{\"tGra\":\"t\","
                 + "\"tit\":\"Porcentaje de hectáreas nacional por categoría\","
                 + "\"otrosDats\":{\"ejeY\":\"Área (ha)\"},"
@@ -2390,12 +2386,12 @@ public class Conversion {
         List<BigDecimal> b = new ArrayList<>();
         List<BigDecimal> na = new ArrayList<>();
         List<String> depto = new ArrayList<>();
-        for (int i = 0; i < tam; i++ ) {
-            a.add(alto.get(i).getArea());
-            m.add(medio.get(i).getArea());
-            b.add(bajo.get(i).getArea());
-            na.add(noApt.get(i).getArea());
-            depto.add("\""+alto.get(i).getDepartamento()+"\"");
+        for (Areas area: zonas) {
+            a.add(area.getZonaAlta());
+            m.add(area.getZonaMedia());
+            b.add(area.getZonaBaja());
+            na.add(area.getZonaNoApta());
+            depto.add("\""+area.getDepartamento()+"\"");
         }
         datGraf.add("[\"Alta\","+addCommaBigDecimal(a)+"]");
         datGraf.add("[\"Media\","+addCommaBigDecimal(m)+"]");
@@ -2464,9 +2460,9 @@ public class Conversion {
         List<String> registros2 = new ArrayList();
         String tabla2;
         for (Actores o:org ) {
-            registros.add("[{},\""+o.getOrg()+"\","
+            registros2.add("[{},\""+o.getOrg()+"\","
                     + "\""+o.getLocalizacion()+"\","
-                    + o.getDepto()+","
+                    + "\""+o.getDepto()+"\","
                     + "\""+o.getMunpio()+"\"]");
         }
         tabla2="\"dats\":["+addCommaString(registros2)+"]";
