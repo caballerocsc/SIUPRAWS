@@ -23,7 +23,7 @@ public class BancoProyectos {
     private int numfamilias;
     private String postulante;
     private String tiempo;
-    private int costo;
+    private BigDecimal costo;
     private String subetapa;
     private String tipoProy;
     private BigDecimal areaBruta;
@@ -105,11 +105,11 @@ public class BancoProyectos {
         this.tiempo = tiempo;
     }
 
-    public int getCosto() {
+    public BigDecimal getCosto() {
         return costo;
     }
 
-    public void setCosto(int costo) {
+    public void setCosto(BigDecimal costo) {
         this.costo = costo;
     }
 

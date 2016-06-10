@@ -22,6 +22,7 @@ import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Precios;
 import obj.Areas;
+import obj.BancoProyectos;
 import obj.DistritosRiego;
 import obj.InfoyDocs;
 import obj.Servicios;
@@ -2484,6 +2485,99 @@ public class Conversion {
         String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
                     "\"plantillas\": [0, 1, 2, 1, 0]}";
          String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
+        return json;
+    }
+    /**
+     * Método encargado de crear el json con la información de la consulta de usuario
+     * de presencia de actores involucrados 
+     * @param tc objeto de tipo tablaContenido asociado a una consulta determinada
+     * @param serv Lista de tipo Servicios con los servicios asociadas la consulta
+     * @param capas Lista de tipo Capas con las capas asociadas a la consulta
+     * @param bps lista con la informacion del banco de proyectos 
+     * @param deptos Lista con los departamentos del pais
+     * @param docs Lista con los documentos asociados a la consulta del banco de proyectos
+     * @return String de en formato Json con la información del banco de proyectos
+     */
+    public String crearJsonBancoProyectos(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, 
+            List<BancoProyectos> bps, List<String> deptos,List<InfoyDocs> docs){
+        Varios v = new Varios();
+        String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\"],\n" +
+                    "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
+                    "\"al\": \""+capas.get(0).getAlias()+"\",\n" +
+                    "\"compCg\": \"id\",\n" +
+                    "\"compTab\": \"ID\",\n" +
+                    "\"tab\":{\n" +
+                    "\"ind\": 0,\n" +
+                    "\"colums\": [\"Nombre proyecto\",\"Departamento(s) beneficiados\",\"Municipio(s) beneficiados\","
+                + "\"Número de familias beneficiadas\",\"Subetapa\",\"Tipo de proyecto\",\"Área neta (ha)\"]}"+  
+                    "}]}";
+        String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
+        List<String> listColumnas = new ArrayList();
+        String column;
+        listColumnas.add("[\"ID\", \"n\", \"30px\"]");
+        listColumnas.add("[\"Nombre proyecto\", \"t\", \"115px\"]");
+        listColumnas.add("[\"Departamento(s) beneficiados\", \"t\", \"125px\"]");
+        listColumnas.add("[\"Municipio(s) beneficiados\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Fecha\", \"t\", \"50px\"]");
+        listColumnas.add("[\"Número de municipios\", \"n\", \"110px\"]");
+        listColumnas.add("[\"Número de veredas\", \"n\", \"105px\"]");
+        listColumnas.add("[\"Número de familias beneficiadas\", \"n\", \"105px\"]");
+        listColumnas.add("[\"Postulante\", \"t\", \"90px\"]");
+        listColumnas.add("[\"Tiempo Programación Obra\", \"t\", \"100px\"]");
+        listColumnas.add("[\"Costo Obra\", \"t\", \"110px\"]");
+        listColumnas.add("[\"Subetapa\", \"t\", \"120px\"]");
+        listColumnas.add("[\"Tipo de proyecto\", \"t\", \"110px\"]");
+        listColumnas.add("[\"Área bruta (ha)\", \"n\", \"90px\"]");
+        listColumnas.add("[\"Área neta (ha)\", \"n\", \"85px\"]");
+        listColumnas.add("[\"Documentos\", \"t\", \"90px\"]");
+        column = "\"colums\":[" + addCommaString(listColumnas) + "]";
+        List<String> registros = new ArrayList();
+        String tabla;
+        for (BancoProyectos b:bps ) {
+            int i=1;
+            registros.add("[{},"+i+",\""+b.getNomProyecto()+"\","
+                    + "\""+b.getDepto()+"\","
+                    + "\""+b.getMunpio()+"\","
+                    + "\""+b.getFecha()+"\","
+                    + b.getNumMunpios()+","
+                    + b.getNumveredas()+","
+                    + b.getNumfamilias()+","
+                    + "\""+b.getPostulante()+"\","
+                    + "\""+b.getTiempo()+"\","
+                    + b.getCosto()+","
+                    + "\""+b.getSubetapa()+"\","
+                    + "\""+b.getTipoProy()+"\","
+                    + b.getAreaBruta()+","
+                    + b.getAreaNeta()+","
+                    + "\""+b.getDocum()+"\"]");
+            i++;
+        }
+        registros.add("[{},0,\"<span style=\"float: left; font-weight: bold; background-color: #cccccc\">TOTALES</span>\",null,null,"
+                + "null,92,82,73371,null,null,3505607327832.0,null,null,721839.10,606831.0,null]");
+        tabla="\"dats\":["+addCommaString(registros)+"]";
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        //creacion del grafico
+        String graf1;
+        List<String> datGraf = new ArrayList<>();
+        datGraf.add("[\"Prefactibilidad\","+v.BancoProyDeptoXSubetapa(deptos, bps, "PREFACTIBILIDAD")+"]");
+        datGraf.add("[\"factibilidad\","+v.BancoProyDeptoXSubetapa(deptos, bps, "FACTIBILIDAD")+"]");
+        datGraf.add("[\"Diseño\","+v.BancoProyDeptoXSubetapa(deptos, bps, "DISEÑO")+"]");
+        for (int i = 0; i < deptos.size(); i++) {
+            deptos.set(i, "\""+deptos.get(i)+"\"");
+        }
+        graf1="{\"tGra\":\"p\","
+                + "\"tit\":\"Número de proyectos por departamento y etapa\","
+                + "\"otrosDats\":{\"ejeY\":\"Número de proyectos\",\"ejeX\":["+addCommaString(deptos)+"]},"
+                + "\"es\":{\"3d\":true,\"caLe\":true},"
+                + "\"col\":[\"#ffff99\",\"#F7D6B5\",\"#F4631F\"],"
+                + "\"dats\":["+addCommaString(datGraf)+"]}";
+        String atGraf="\"atGras\":{\"dats\":["+graf1+"]}";
+         //area de trabajo documentos
+        String atDocs=jsonDocs(docs);
+        //configuracion de la consulta
+        String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
+                    "\"plantillas\": [0, 1, 1, 1, 0]}";
+         String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+","+atDocs+"},"+conf+"})";
         return json;
     }
 }

@@ -158,6 +158,23 @@ public class SentenciasBD {
             "FROM uso_suelo_rural.v_actores_vinculados_afba_departamentos\n" +
             "group by  departamento\n" +
             "order by cant desc";
+    private final String BANCO_PROYECTOS=" SELECT \n" +
+            "    municipios_proyectos_adt_20160311.nombre_pro AS nombre_proyecto,\n" +
+            "    municipios_proyectos_adt_20160311.fecha,\n" +
+            "    municipios_proyectos_adt_20160311.nummunicip AS numero_municipios,\n" +
+            "    municipios_proyectos_adt_20160311.numveredas AS numero_veredas,\n" +
+            "    municipios_proyectos_adt_20160311.numfamilia AS numero_familias,\n" +
+            "    municipios_proyectos_adt_20160311.postulante,\n" +
+            "    municipios_proyectos_adt_20160311.programaci AS programacion_obra,\n" +
+            "    municipios_proyectos_adt_20160311.costoobra AS costo_obra,\n" +
+            "    municipios_proyectos_adt_20160311.subetapa,\n" +
+            "    municipios_proyectos_adt_20160311.tipoproyec AS tipo_proyecto,\n" +
+            "    municipios_proyectos_adt_20160311.areabrutah AS area_bruta_ha,\n" +
+            "    municipios_proyectos_adt_20160311.areanetaha AS area_neta_ha,\n" +
+            "    municipios_proyectos_adt_20160311.departamen AS departamento,\n" +
+            "    municipios_proyectos_adt_20160311.municipios AS municipio,\n" +
+            "    municipios_proyectos_adt_20160311.urldoc\n" +
+            "   FROM adecuacion_tierras_rurales.municipios_proyectos_adt_20160311;";
 
     public SentenciasBD() {
     }
@@ -209,10 +226,6 @@ public class SentenciasBD {
     public String getPRECIOS() {
         return PRECIOS;
     }
-
-    /*public String getPRECIOSSUMATORIARANGOS() {
-        return PRECIOSSUMATORIARANGOS;
-    }*/
 
     public String getPLANTILLAGENERALGRAFICOS() {
         return PLANTILLAGENERALGRAFICOS;
@@ -328,6 +341,10 @@ public class SentenciasBD {
 
     public String getACTORES_RESUMEN() {
         return ACTORES_RESUMEN;
+    }
+
+    public String getBANCO_PROYECTOS() {
+        return BANCO_PROYECTOS;
     }
     
 }

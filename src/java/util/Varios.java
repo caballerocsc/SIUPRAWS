@@ -18,6 +18,7 @@ import obj.DinamicaMercados;
 import obj.Menuconsultas;
 import obj.Precios;
 import obj.Areas;
+import obj.BancoProyectos;
 import obj.Capas;
 import obj.FiltroJson;
 
@@ -27,7 +28,6 @@ import obj.FiltroJson;
  */
 public class Varios {
 
-    //private List<Menuconsultas> listaOrdenada=new ArrayList<>();
     
     public Varios() {
     }
@@ -37,22 +37,7 @@ public class Varios {
      * el elemento del cual depende se encuentre en antes en la lista
      * @param lista objeto de tipo menuconsultas con el listado almacenado en la base de datos
      * @return objeto de tipo menuconsultas con los elementos ordenados
-     */
-//    public List<Menuconsultas> ordenarMenuConsultasPorPadre(List<Menuconsultas> lista){
-//        Menuconsultas mc =null;
-//        for(int i=0; i<lista.size(); i++){
-//            mc=lista.get(i);
-//            //Si el elemento no depende de otro lo agrega a la lista ordenada
-//            if (mc.getDependede()==0) {
-//                listaOrdenada.add(mc);
-//            }
-//            else{
-//                verificarPadreMenuConsulta(lista, mc);
-//            }
-//        }
-//        return listaOrdenada;
-//    }
-    
+     */    
     public List<Menuconsultas> ordenarMenuConsultasPorPadre(List<Menuconsultas> lista){
         List<Menuconsultas> listaOrdenada=new ArrayList<>();
         for (Menuconsultas m : lista) {
@@ -164,11 +149,6 @@ public class Varios {
           }
           map.put(key, sum);
         }
-//        while(iterator.hasNext()){
-//          String key   = (String)iterator.next();
-//          double valor=(double)map.get(key);
-//            System.out.println("llave: "+key+" valor: "+valor);
-//        }
         return map;
     }
     
@@ -266,14 +246,6 @@ public class Varios {
         return listTotal;
     }
     
-//    public BigDecimal sacarPorcentaje(float num1, BigDecimal num2){
-//        BigDecimal divisor = new BigDecimal(num1);
-//        BigDecimal mult = new BigDecimal(100);
-//        divisor=divisor.multiply(mult);
-//        divisor = divisor.divide(num2,2, RoundingMode.HALF_UP);
-//        return divisor;
-//    }
-    
     /**
      * Método que se encarga de crear una lista con los valores de todos los
      * departamentos para una zona específica. 
@@ -348,25 +320,20 @@ public class Varios {
         return c;
     }
     
+    /**
+     * 
+     * @param areas
+     * @param cat
+     * @param munpio
+     * @param listCat
+     * @return 
+     */
     public List<BigDecimal> sumarAreaXCategoria(List<Areas> areas, String cat, String munpio, List<String> listCat) {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
-        /*BigDecimal r1 = new BigDecimal(BigInteger.ZERO); //"1 a 3 millones"
-         BigDecimal r2 = new BigDecimal(BigInteger.ZERO); // "1 a 5 millones"
-         BigDecimal r3 = new BigDecimal(BigInteger.ZERO); // "3 a 5 millones" 
-         BigDecimal r4 = new BigDecimal(BigInteger.ZERO); //  "5 a 10 millones" 
-         BigDecimal r5 = new BigDecimal(BigInteger.ZERO); // "10 a 15 millones" 
-         BigDecimal r6 = new BigDecimal(BigInteger.ZERO); //  "10 a 20 millones" 
-         BigDecimal r7 = new BigDecimal(BigInteger.ZERO); // "15 a 20 millones" 
-         BigDecimal r8 = new BigDecimal(BigInteger.ZERO); // "20 a 30 millones"
-         BigDecimal r9 = new BigDecimal(BigInteger.ZERO); //  "30 a 40 millones"
-         BigDecimal r10 = new BigDecimal(BigInteger.ZERO); // "40 a 50 millones"
-         BigDecimal r11 = new BigDecimal(BigInteger.ZERO); // "40 a 60 millones"
-         BigDecimal r12 = new BigDecimal(BigInteger.ZERO); // "50 a 60 millones"
-         BigDecimal r13 = new BigDecimal(BigInteger.ZERO); // "100 a 120 millones" */
         List<BigDecimal> lista = new ArrayList<>();
         List<BigDecimal> listaResult = new ArrayList<>();
         if (!munpio.equals("")) {
-            for (String listCat1 : listCat) {
+            for (String listCat1 : listCat) {// inicializa en cero la lista
                 listaResult.add(BigDecimal.ZERO);
             }
         }
@@ -378,85 +345,36 @@ public class Varios {
                             listaResult.set(i, listaResult.get(i).add(a.getArea()).setScale(2, RoundingMode.HALF_UP));
                         }
                     }
-                    /*switch(a.getTipo()){
-                     case "1 a 3 millones":{
-                     r1 = r1.add(a.getArea());
-                     break;
-                     }
-                     case "1 a 5 millones":{
-                     r2 = r2.add(a.getArea());
-                     break;
-                     }
-                     case "3 a 5 millones":{
-                     r3 = r3.add(a.getArea());
-                     break;
-                     }
-                     case "5 a 10 millones":{
-                     r4 = r4.add(a.getArea());
-                     break;
-                     }
-                     case "10 a 15 millones":{
-                     r5 = r5.add(a.getArea());
-                     break;
-                     }
-                     case "10 a 20 millones":{
-                     r6 = r6.add(a.getArea());
-                     break;
-                     }
-                     case "15 a 20 millones":{
-                     r7 = r7.add(a.getArea());
-                     break;
-                     }
-                     case "20 a 30 millones":{
-                     r8 = r8.add(a.getArea());
-                     break;
-                     }
-                     case "30 a 40 millones":{
-                     r9 = r9.add(a.getArea());
-                     break;
-                     }
-                     case "40 a 50 millones":{
-                     r10 = r10.add(a.getArea());
-                     break;
-                     }
-                     case "40 a 60 millones":{
-                     r11 = r11.add(a.getArea());
-                     break;
-                     }
-                     case "50 a 60 millones":{
-                     r12 = r12.add(a.getArea());
-                     break;
-                     }
-                     case "100 a 120 millones":{
-                     r13 = r13.add(a.getArea());
-                     break;
-                     }
-                     }*/
                 }
             } else if (a.getTipo().equals(cat)) {
                 total = total.add(a.getArea());
             }
         }
-//        lista.add(total.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r1.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r2.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r3.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r4.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r5.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r6.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r7.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r8.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r9.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r10.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r11.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r12.setScale(2, RoundingMode.HALF_UP));
-//        lista.add(r13.setScale(2, RoundingMode.HALF_UP));
-//        return lista;
         if (munpio.equals("")) {
             lista.add(total.setScale(2, RoundingMode.HALF_UP));
             return lista;
         } else {
             return listaResult;
         }
+    }
+    /**
+     * Método que permite contar cuantos departamentos tiene proyectos en cada una de las subetapas
+     * @param deptos lista de departamentos de Colombia
+     * @param bank lista de proyectos
+     * @param subEtapa indica el filtro por el que se debe contar los departamentos
+     * @return lista de tipo Integer con la cantidad de proyectos de la subetapa seleccionada de cada uno de los departamentos
+     */
+    public List<Integer> BancoProyDeptoXSubetapa(List<String> deptos, List<BancoProyectos> bank, String subEtapa){
+        List<Integer> list = new ArrayList<>();
+        for (String d : deptos) {
+            int resultado=0;
+            for (BancoProyectos b : bank) {
+                if(b.getDepto().equals(d)&&b.getSubetapa().equals(subEtapa)){
+                    resultado++;
+                }
+            }
+            list.add(resultado);
+        }
+        return list;
     }
 }

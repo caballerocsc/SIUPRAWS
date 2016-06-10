@@ -26,6 +26,7 @@ import obj.Menuconsultas;
 import obj.Municipios;
 import obj.Precios;
 import obj.Areas;
+import obj.BancoProyectos;
 import obj.DistritosRiego;
 import obj.InfoyDocs;
 import obj.Servicios;
@@ -1170,6 +1171,50 @@ public class Consultas {
                   a.setNumOrg(rs.getInt(i++));
               }
               list.add(a);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            con.cerrar(cn);
+            con.cerrar(ps);
+            con.cerrar(rs);
+        }
+        return list;
+    }
+      /**
+      * Método que consulta la información de la tabla de banco de proyectos 
+      * @return lista de tipo BancoProyectos con la informacion de los bancos de proyectos por departamento y municipio
+      */
+      public List<BancoProyectos> consultarBancoProyectos(){
+        Conexion con=new Conexion();
+        Connection cn=con.getConexion();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        List<BancoProyectos> list=new ArrayList<>();
+        SentenciasBD sbd=new SentenciasBD();
+        try {
+             ps=cn.prepareStatement(sbd.getBANCO_PROYECTOS());
+             System.out.println("consulta: "+ps.toString());
+             rs=ps.executeQuery();
+            while (rs.next()) {
+                int i = 1;
+                BancoProyectos b = new BancoProyectos();
+                b.setNomProyecto(rs.getString(i++));
+                b.setFecha(rs.getString(i++));
+                b.setNumMunpios(rs.getInt(i++));
+                b.setNumveredas(rs.getInt(i++));
+                b.setNumfamilias(rs.getInt(i++));
+                b.setPostulante(rs.getString(i++));
+                b.setTiempo(rs.getString(i++));
+                b.setCosto(rs.getBigDecimal(i++));
+                b.setSubetapa(rs.getString(i++));
+                b.setTipoProy(rs.getString(i++));
+                b.setAreaBruta(rs.getBigDecimal(i++));
+                b.setAreaNeta(rs.getBigDecimal(i++));
+                b.setDepto(rs.getString(i++));
+                b.setMunpio(rs.getString(i++));
+                b.setDocum(rs.getString(i++));
+                list.add(b);
             }
         } catch (SQLException e) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, e);

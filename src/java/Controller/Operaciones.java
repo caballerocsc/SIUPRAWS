@@ -208,6 +208,13 @@ public class Operaciones {
                         con.consultarPresenciaActores(1),con.consultarPresenciaActores(2),con.consultarPresenciaActores(3));
                 break;
             }
+            case Parametros.BANCO_PROYECTOS:{
+                resultado=conv.crearJsonBancoProyectos(con.consultarTablaContenidoporMenuConsulta(alias),
+                        con.consultarServicioporMenuConsulta(alias), con.consultarCapasporMenuConsulta(alias), 
+                        con.consultarBancoProyectos(),con.consultarDepartamentos(),con.consultarInfoyDocs(alias, true));
+                break;
+            }
+            //para consultas que requieren sola capa
             default:
                 if(alias.equals(Parametros.AVALUOS)||alias.equals(Parametros.AREAS_FORMALIZACION)||
                         alias.equals(Parametros.INTERRELACION_CAT_REG)||alias.equals(Parametros.VIGENCIA_CATASTRAL2014)||
