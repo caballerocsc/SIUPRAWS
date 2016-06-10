@@ -1175,6 +1175,16 @@ public class Conversion {
         return json;
     }
     
+    /**
+     * Método que se encarga de crear el json para la consulta de usuario de indice de fraccionamiento de la UPRA
+     * @param tc tabla de contenido de la consulta asociada
+     * @param serv lista de servicios asociados a la consulta
+     * @param capas lista de capas asociadas a la consulta de usuario
+     * @param areas lista de areas con indice de fraccionamiento
+     * @param docs lista de documentos asociados a la consulta
+     * @param info lista de con objetos de tipo InfoyDocs con la información adicional a la consulta
+     * @return String en formato json con toda la información de la consulta de fraccionamiento.
+     */
     public String crearJsonIndiceFraccionamiento(Tablacontenido tc, List<Servicios> serv,
             List<Capas> capas, List<Areas> areas,List<InfoyDocs> docs,List<InfoyDocs> info){
         Varios v = new Varios();

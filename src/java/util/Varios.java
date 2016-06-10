@@ -321,12 +321,15 @@ public class Varios {
     }
     
     /**
-     * 
-     * @param areas
-     * @param cat
-     * @param munpio
-     * @param listCat
-     * @return 
+     * Método que se encarga de sumar todas las areas segun el caso correspondiente:
+     * caso 1: sumar todas las áreas de una única categoría para todos los municipios o
+     * caso 2: sumar las áreas de todas las categorías de un único municipio
+     * esto dependiendo de los parametros que se envien
+     * @param areas lista de tipo Areas con la información que se debe sumar 
+     * @param cat categoría para sumar en el caso 1
+     * @param munpio municipio para sumar las areas en el caso 2
+     * @param listCat lista de las categorías que debe sumar en el caso 2
+     * @return Lista de tipo BigDecimal con la información de las áreas según el filtro correspondientes
      */
     public List<BigDecimal> sumarAreaXCategoria(List<Areas> areas, String cat, String munpio, List<String> listCat) {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
@@ -339,6 +342,7 @@ public class Varios {
         }
         for (Areas a : areas) {
             if (!munpio.equals("")) {
+                //caso 2
                 if (a.getMunicipio().equals(munpio)) {
                     for (int i = 0; i < listCat.size(); i++) {
                         if (a.getTipo().equals(listCat.get(i))) {
@@ -347,6 +351,7 @@ public class Varios {
                     }
                 }
             } else if (a.getTipo().equals(cat)) {
+                //caso 1
                 total = total.add(a.getArea());
             }
         }
