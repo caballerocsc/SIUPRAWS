@@ -174,7 +174,8 @@ public class SentenciasBD {
             "    municipios_proyectos_adt_20160311.departamen AS departamento,\n" +
             "    municipios_proyectos_adt_20160311.municipios AS municipio,\n" +
             "    municipios_proyectos_adt_20160311.urldoc\n" +
-            "   FROM adecuacion_tierras_rurales.municipios_proyectos_adt_20160311;";
+            "   FROM adecuacion_tierras_rurales.municipios_proyectos_adt_20160311"
+            + " order by departamento, subetapa;";
 
     public SentenciasBD() {
     }

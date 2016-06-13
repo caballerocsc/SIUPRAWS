@@ -374,7 +374,7 @@ public class Varios {
         for (String d : deptos) {
             int resultado=0;
             for (BancoProyectos b : bank) {
-                if(b.getDepto().equals(d)&&b.getSubetapa().equals(subEtapa)){
+                if(b.getDepto().contains(d)&&b.getSubetapa().equals(subEtapa)){
                     resultado++;
                 }
             }
