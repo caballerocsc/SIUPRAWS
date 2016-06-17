@@ -22,7 +22,7 @@ public class SentenciasBD {
         "C.estado, C.autoidentificable, C.base, C.leyendacargada, C.identificable, \n" +
         "C.ordenable, C.transparente, C.visible, C.anio, C.descripcion, C.escala, \n" +
         "C.fuente, C.imagen, C.nombre, C.palabrasclave, C.orden, C.servicioid, C.accesofkid, \n" +
-        "C.formatofkid, C.crsfkid, C.tiposerviciofkid, C.tipocapafkid, C.vistageneral,tc.alias,\n" +
+        "C.formatofkid, C.crsfkid, C.tipocapafkid, C.vistageneral,tc.alias,\n" +
         "(select texto from dominios where dominioid=C.accesofkid),\n" +
         "(select texto from dominios where dominioid=C.formatofkid),\n" +
         "(select texto from dominios where dominioid=C.crsfkid),\n" +
@@ -62,7 +62,7 @@ public class SentenciasBD {
         "inner join adminsiupra.menuconsultas_tablacontenido mtc on tc.tablacontenidoupraid=mtc.tablacontenidoid\n" +
         "inner join adminsiupra.menuconsultas mc on mtc.menuconsultaid=mc.menuconsultaid\n" +
         "where mc.alias like ? ";
-    private final String CAPAS_MENUCONSULTAS="select c.alias,c.aliasgrupo,c.aliasservicio,c.resolucionmax,c.filtro,c.nombrecapa,c.opacidad,(select texto from dominios where dominioid=c.crsfkid),c.anio,c.fuente,c.nombre,\n" +
+    private final String CAPAS_MENUCONSULTAS="select C.capasupraid,c.alias,c.aliasgrupo,c.aliasservicio,c.resolucionmax,c.filtro,c.nombrecapa,c.opacidad,(select texto from dominios where dominioid=c.crsfkid),c.anio,c.fuente,c.nombre,\n" +
         "c.visible, c.identificable, c.leyendacargada, c.autoidentificable, c.titulo from adminsiupra.capas c\n" +
         "inner join adminsiupra.menuconsultas_capas mcc on mcc.capasid=c.capasupraid\n" +
         "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
@@ -176,6 +176,8 @@ public class SentenciasBD {
             "    municipios_proyectos_adt_20160311.urldoc\n" +
             "   FROM adecuacion_tierras_rurales.municipios_proyectos_adt_20160311"
             + " order by departamento, subetapa;";
+    private final String CAPAS_TIPO_SERVICIO="select texto from adminsiupra.capas_tiposervicio"
+            + " inner join public.dominios on dominioid=tiposervicioid where capasupraid = ?";
 
     public SentenciasBD() {
     }
@@ -346,6 +348,10 @@ public class SentenciasBD {
 
     public String getBANCO_PROYECTOS() {
         return BANCO_PROYECTOS;
+    }
+
+    public String getCAPAS_TIPO_SERVICIO() {
+        return CAPAS_TIPO_SERVICIO;
     }
     
 }

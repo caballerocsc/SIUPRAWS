@@ -7,6 +7,7 @@ package obj;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  *Clase en la cual se hace el mapeo de la tabla Capas de la base de datos 
@@ -28,7 +29,7 @@ public class Capas implements Serializable {
     private BigDecimal opacidad;
     private String crs;
     private String titulo;
-    private String tipo_serv;
+    private List<String> tipo_serv;
     private boolean estado;
     private Boolean autoident;
     private Boolean base;
@@ -63,18 +64,7 @@ public class Capas implements Serializable {
         this.id = capasupraid;
     }
 
-    public Capas(Integer capasupraid, String alias, String aliasgrupo, String aliasservicio, String nombrecapa, String titulo, boolean estado, String nombre, int orden, int tipo) {
-        this.id = capasupraid;
-        this.alias = alias;
-        this.aliasgrupo = aliasgrupo;
-        this.aliasservicio = aliasservicio;
-        this.nombre_capa = nombrecapa;
-        this.titulo = titulo;
-        this.estado = estado;
-        this.nombre = nombre;
-        this.orden = orden;
-        this.tipo = tipo;
-    }
+    
 
     public Integer getId() {
         return id;
@@ -188,11 +178,11 @@ public class Capas implements Serializable {
         this.titulo = titulo;
     }
 
-    public String getTipo_serv() {
+    public List<String> getTipo_serv() {
         return tipo_serv;
     }
 
-    public void setTipo_serv(String tipo_serv) {
+    public void setTipo_serv(List<String> tipo_serv) {
         this.tipo_serv = tipo_serv;
     }
 
@@ -387,31 +377,5 @@ public class Capas implements Serializable {
     public void setsTipoCapa(String sTipoCapa) {
         this.sTipoCapa = sTipoCapa;
     }
-    
-    
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Capas)) {
-            return false;
-        }
-        Capas other = (Capas) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "admin.Capas[ capasupraid=" + id + " ]";
-    }
-    
 }

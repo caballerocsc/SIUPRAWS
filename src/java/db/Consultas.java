@@ -244,7 +244,6 @@ public class Consultas {
                 c.setAcceso(rs.getBigDecimal(i++));
                 c.setFormato(rs.getString(i++));
                 c.setCrs(rs.getString(i++));
-                c.setTipo_serv(rs.getString(i++));
                 c.setTipo(rs.getInt(i++));
                 c.setVistaGeral(rs.getBoolean(i++));
                 c.setAliasTablaContendio(rs.getString(i++));
@@ -534,6 +533,7 @@ public class Consultas {
         Conexion con=new Conexion();
         Connection cn=con.getConexion();
         ResultSet rs=null;
+        ResultSet rs2=null;
         PreparedStatement ps=null;
         try {
             ps=cn.prepareStatement(sbd.getCAPAS_MENUCONSULTAS());
@@ -542,6 +542,7 @@ public class Consultas {
             int i=1;
             while (rs.next()) {
                 Capas capas=new Capas();
+                capas.setId(rs.getInt(i++));
                 capas.setAlias(rs.getString(i++));
                 capas.setAliasgrupo(rs.getString(i++));
                 capas.setAliasservicio(rs.getString(i++));
@@ -558,6 +559,15 @@ public class Consultas {
                 capas.setLeyenda_c(rs.getBoolean(i++));
                 capas.setAutoident(rs.getBoolean(i++));
                 capas.setTitulo(rs.getString(i++));
+                ps=cn.prepareStatement(sbd.getCAPAS_TIPO_SERVICIO());
+                ps.setInt(1, capas.getId());
+                rs2=ps.executeQuery();
+                List<String> tipos = new ArrayList<>();
+                while (rs2.next()) {
+                    int j=1;
+                    tipos.add("\""+rs2.getString(j++)+"\"");
+                }
+                capas.setTipo_serv(tipos);
                 lista.add(capas);
                 i=1;
             }
