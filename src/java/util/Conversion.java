@@ -524,7 +524,7 @@ public class Conversion {
         String orCsgs = (opcional)?"[\""+capas.get(0).getAlias()+"\",\""+capas.get(1).getAlias()+"\", \"cgDepartamentos\"]":"[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"]";
         String iden1="{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0 ,\n" +
+                    //"\"ind\": 0 ,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tex\": \"Transacciones "+filtro.getAnios()[0]+"\"," +    
@@ -545,7 +545,7 @@ public class Conversion {
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tex\": \"Transacciones "+filtro.getAnios()[1]+"\"," +    
                     "\"tab\":{\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"colums\": [\"Departamento\",\"compraventa2\",\"remate2\",\"permuta2\",\"embargo2\",\"hipoteca2\",\"total2\"]," +
                     "\"otros\":{\"texRemplazar\":\""+filtro.getAnios()[1]+"\"}}," +
                     "\"gra\":{\"t\": \"p\",\n" +
@@ -701,14 +701,19 @@ public class Conversion {
         List<String> lCsgs = new ArrayList<>();
         String csgs;
         for (Capas c : capas) {
-            //tmp = "";
+            String tipoS;
+            if (c.getTipo_serv().size()>1) {
+                tipoS="\"t\":[" + addCommaString(c.getTipo_serv())+ "],";
+            } else {
+                tipoS="\"t\":" + c.getTipo_serv()+ ",";
+            }
             tmp = "\"alGr\":\"" + c.getAliasgrupo() + "\",";
             tmp += "\"alSg\":\"" + c.getAliasservicio() + "\",";
             tmp += "\"conf\":{\"reMa\":" + c.getEscmax() + ","
                     + "\"fis\":\"" + c.getFiltro() + "\","
                     + "\"nom\":\"" + c.getNombre_capa() + "\","
                     + "\"opa\":" + c.getOpacidad() + ","
-                    + "\"t\":[" + addCommaString(c.getTipo_serv())+ "],"
+                    + tipoS
                     + "\"sire\":\"" + c.getCrs() + "\"},";
             tmp += "\"inf\":{\"anio\":" + c.getAnio() + ","
                     + "\"fu\":\"" + c.getFuente() + "\","
@@ -826,7 +831,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0 ,\n" +
+                    //"\"ind\": 0 ,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -905,7 +910,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0 ,\n" +
+                    //"\"ind\": 0 ,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -997,7 +1002,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0 ,\n" +
+                    //"\"ind\": 0 ,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -1295,7 +1300,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -1360,7 +1365,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -1437,7 +1442,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -1513,7 +1518,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -1591,7 +1596,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -1668,7 +1673,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -1746,7 +1751,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -2079,7 +2084,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -2161,7 +2166,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": 0,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
@@ -2255,7 +2260,7 @@ public class Conversion {
         String iden="\"ext\":[],\"orCsgs\":[\""+capas.get(0).getAlias()+"\", \"cgDepartamentos\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \"cgDepartamentos\",\n" +
-                    "\"ind\": ,\n" +
+                    //"\"ind\": 0,\n" +
                     "\"compCg\": \"codigodane\",\n" +
                     "\"compTab\": \"Código DANE\",\n" +
                     "\"tab\":{\n" +
