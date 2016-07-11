@@ -745,7 +745,7 @@ public class Conversion {
                     "\"al\": \"PB\",\n" +
                     "\"ind\": 1 ,\n" +
                     "\"compCg\": \"id\",\n" +
-                    "\"compTab\": \"id\",\n" +
+                    "\"compTab\": \"Id\",\n" +
                     "\"tab\":{\n" +
                     "\"ind\": 0,\n" +
                     "\"colums\": [\"Departamento\",\"Municipio\",\"Área (ha)\",\"Rango de precio\"]}\n" +
@@ -753,6 +753,7 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
         String column;
+        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
         listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
@@ -763,7 +764,7 @@ public class Conversion {
         String tabla;
         int k = 1;
         for (Areas r : areas) {
-            registros.add("[{},\""+r.getCodigoDane()+"\","
+            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getMunicipio()+"\","
                     + r.getArea().setScale(2,RoundingMode.HALF_UP)+","
@@ -1852,7 +1853,7 @@ public class Conversion {
                     "\"al\": \"PC\",\n" +
                     "\"ind\": 1 ,\n" +
                     "\"compCg\": \"id\",\n" +
-                    "\"compTab\": \"id\",\n" +
+                    "\"compTab\": \"Id\",\n" +
                     "\"tab\":{\n" +
                     "\"ind\": 0,\n" +
                     "\"colums\": [\"Departamento\",\"Municipio\",\"Área (ha)\",\"Rango de precio\"]}\n" +
@@ -1860,6 +1861,7 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
         String column;
+        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
         listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
@@ -1870,7 +1872,7 @@ public class Conversion {
         String tabla;
         int k = 1;
         for (Areas r : areas) {
-            registros.add("[{},\""+r.getCodigoDane()+"\","
+            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getMunicipio()+"\","
                     + r.getArea().setScale(2, RoundingMode.HALF_UP)+","
@@ -1939,7 +1941,7 @@ public class Conversion {
                     "\"al\": \"PT\",\n" +
                     "\"ind\": 1 ,\n" +
                     "\"compCg\": \"id\",\n" +
-                    "\"compTab\": \"id\",\n" +
+                    "\"compTab\": \"Id\",\n" +
                     "\"tab\":{\n" +
                     "\"ind\": 0,\n" +
                     "\"colums\": [\"Departamento\",\"Municipio\",\"Área (ha)\",\"Rango de precio\"]}\n" +
@@ -1947,6 +1949,7 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
         String column;
+        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
         listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
@@ -1957,7 +1960,7 @@ public class Conversion {
         String tabla;
         int k = 1;
         for (Areas r : areas) {
-            registros.add("[{},\""+r.getCodigoDane()+"\","
+            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getMunicipio()+"\","
                     + r.getArea().setScale(2, RoundingMode.HALF_UP)+","
@@ -2020,7 +2023,7 @@ public class Conversion {
                     "\"al\": \"PM\",\n" +
                     "\"ind\": 1 ,\n" +
                     "\"compCg\": \"id\",\n" +
-                    "\"compTab\": \"id\",\n" +
+                    "\"compTab\": \"Id\",\n" +
                     "\"tab\":{\n" +
                     "\"ind\": 0,\n" +
                     "\"colums\": [\"Departamento\",\"Municipio\",\"Área (ha)\",\"Rango de precio\"]}\n" +
@@ -2028,6 +2031,7 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
         String column;
+        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
         listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
@@ -2038,7 +2042,7 @@ public class Conversion {
         String tabla;
         int k = 1;
         for (Areas r : areas) {
-            registros.add("[{},\""+r.getCodigoDane()+"\","
+            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getMunicipio()+"\","
                     + r.getArea().setScale(2,RoundingMode.HALF_UP)+","
