@@ -559,6 +559,8 @@ public class Consultas {
                 capas.setLeyenda_c(rs.getBoolean(i++));
                 capas.setAutoident(rs.getBoolean(i++));
                 capas.setTitulo(rs.getString(i++));
+                capas.setAlCj(rs.getString(i++));
+                capas.setColsCluster(rs.getString(i++));
                 ps=cn.prepareStatement(sbd.getCAPAS_TIPO_SERVICIO());
                 ps.setInt(1, capas.getId());
                 rs2=ps.executeQuery();
@@ -1209,6 +1211,7 @@ public class Consultas {
             while (rs.next()) {
                 int i = 1;
                 BancoProyectos b = new BancoProyectos();
+                b.setProyectoid(rs.getInt(i++));
                 b.setNomProyecto(rs.getString(i++));
                 b.setFecha(rs.getString(i++));
                 b.setNumMunpios(rs.getInt(i++));

@@ -9,8 +9,6 @@ package util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import obj.Actores;
 import obj.Capas;
@@ -20,7 +18,6 @@ import obj.FiltroJson;
 import obj.Filtros;
 import obj.Menuconsultas;
 import obj.Municipios;
-import obj.Precios;
 import obj.Areas;
 import obj.BancoProyectos;
 import obj.DistritosRiego;
@@ -700,20 +697,28 @@ public class Conversion {
         //(capas )
         List<String> lCsgs = new ArrayList<>();
         String csgs;
+        String alCj="";
         for (Capas c : capas) {
             String tipoS;
             if (c.getTipo_serv().size()>1) {
                 tipoS="\"t\":[" + addCommaString(c.getTipo_serv())+ "],";
             } else {
-                tipoS="\"t\":" + c.getTipo_serv()+ ",";
+                tipoS="\"t\":" + c.getTipo_serv().get(0)+ ",";
             }
+            String colCluster="";
+            if(c.getColsCluster()!=null)
+                colCluster="\"cols\":["+c.getColsCluster()+"],";
+            if(c.getAlCj()!=null)
+                alCj="\"alCj\":\""+c.getAlCj()+"\",";
             tmp = "\"alGr\":\"" + c.getAliasgrupo() + "\",";
             tmp += "\"alSg\":\"" + c.getAliasservicio() + "\",";
+            tmp += alCj;
             tmp += "\"conf\":{\"reMa\":" + c.getEscmax() + ","
                     + "\"fis\":\"" + c.getFiltro() + "\","
                     + "\"nom\":\"" + c.getNombre_capa() + "\","
                     + "\"opa\":" + c.getOpacidad() + ","
                     + tipoS
+                    + colCluster
                     + "\"sire\":\"" + c.getCrs() + "\"},";
             tmp += "\"inf\":{\"anio\":" + c.getAnio() + ","
                     + "\"fu\":\"" + c.getFuente() + "\","
@@ -753,18 +758,18 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
         String column;
-        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
+        listColumnas.add("[\"Id\", \"t\", \"20px\"]");
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
         listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Área (ha)\", \"n\", \"70px\"]");
+        listColumnas.add("[\"Área (ha)\", \"n:0\", \"70px\"]");
         listColumnas.add("[\"Rango de precio\", \"t\", \"120px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
         int k = 1;
         for (Areas r : areas) {
-            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
+            registros.add("[{},\""+k+"\",\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getMunicipio()+"\","
                     + r.getArea().setScale(2,RoundingMode.HALF_UP)+","
@@ -784,9 +789,10 @@ public class Conversion {
         datGraf.add("[\"40 a 50 millones\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "40 a 50 millones","",null))+"]");
         datGraf.add("[\"50 a 60 millones\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "50 a 60 millones","",null))+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje de hectáreas por rango de precios\","
                 + "\"es\":{\"3d\":true,\"caLe\":true},"
-                + "\"col\":[\"#ffebaf\",\"#f5d072\",\"#edb337\",\"#e69900\",\"#bf5600\",\"#992100\",\"#720000\"],"
+                + "\"cols\":[\"#ffebaf\",\"#f5d072\",\"#edb337\",\"#e69900\",\"#bf5600\",\"#992100\",\"#720000\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         List<String> categorias = new ArrayList<>();
         categorias.add("1 a 5 millones");
@@ -805,7 +811,9 @@ public class Conversion {
         datGraf.add("[\"CHINAVITA\",["+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "CHINAVITA",categorias))+"]]");
         datGraf.add("[\"ÚMBITA\",["+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "ÚMBITA",categorias))+"]]");
         datGraf.add("[\"TIBANÁ\",["+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "TIBANÁ",categorias))+"]]");
-        graf2="{\"t\":\"c\",\"tit\":\"Total de hectáreas municipal por rango de precios\","
+        graf2="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Total de hectáreas municipal por rango de precios\","
                 + "\"otrosDats\":{\"ejeY\":\"Área (ha)\", \"ejeX\": [\"1 a 5 millones\",\"5 a 10 millones\","
                 + "\"10 a 20 millones\",\"20 a 30 millones\",\"30 a 40 millones\",\"40 a 50 millones\",\"50 a 60 millones\"]},"
                 + "\"es\":{\"3d\":true, \"caLe\":true},"
@@ -847,10 +855,10 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"150px\"]");
-        listColumnas.add("[\"Condicionante\", \"p\", \"100px\"]");
-        listColumnas.add("[\"Exclusión\", \"p\", \"100px\"]");
-        listColumnas.add("[\"Sin Restricción\", \"p\", \"100px\"]");
-        listColumnas.add("[\"Área Depto (ha)\", \"n\", \"110px\"]");
+        listColumnas.add("[\"Condicionante\", \"p:1\", \"100px\"]");
+        listColumnas.add("[\"Exclusión\", \"p:1\", \"100px\"]");
+        listColumnas.add("[\"Sin Restricción\", \"p:1\", \"100px\"]");
+        listColumnas.add("[\"Área Depto (ha)\", \"n:0\", \"110px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
@@ -865,6 +873,7 @@ public class Conversion {
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion de los graficos
         String graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
              + "\"tit\":\"Porcentaje de hectáreas nacional por categoría\","
              + "\"es\":{\"caLe\":true,\"3d\":true},"
              + "\"cols\":[\"#FFFFB9\", \"#FFB3B3\", \"#C4E6B2\"],"
@@ -880,7 +889,9 @@ public class Conversion {
         String cond="["+addCommaBigDecimal(v.PorcentajeAreaxZonaRestricciones(areas, 1))+"]";
         String exc="["+addCommaBigDecimal(v.PorcentajeAreaxZonaRestricciones(areas, 2))+"]";
         String SinRes="["+addCommaBigDecimal(v.PorcentajeAreaxZonaRestricciones(areas, 3))+"]";
-        String graf2="{\"t\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
+        String graf2="{\"t\":\"p\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Total de hectáreas departamental por categoría\","
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#FFFFB9\", \"#FFB3B3\", \"#C4E6B2\"],"
                 + "\"otrosDats\":{\"ejeX\":"+ejeX+",\"ejeY\":\"Área (ha)\"},"
@@ -928,13 +939,13 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"150px\"]");
-        listColumnas.add("[\"Territorio Incluido (ha)\", \"n\", \"150px\"]");
-        listColumnas.add("[\"Incluido\", \"p\", \"100px\"]");
-        listColumnas.add("[\"Territorio Restringido (ha)\", \"n\", \"170px\"]");
-        listColumnas.add("[\"Restringido\", \"p\", \"100px\"]");
-        listColumnas.add("[\"Territorio Excluido (ha)\", \"n\", \"150px\"]");
-        listColumnas.add("[\"Excluido\", \"p\", \"100px\"]");
-        listColumnas.add("[\"Área Depto (ha)\", \"n\", \"110px\"]");
+        listColumnas.add("[\"Territorio Incluido (ha)\", \"n:0\", \"150px\"]");
+        listColumnas.add("[\"Incluido\", \"p:1\", \"100px\"]");
+        listColumnas.add("[\"Territorio Restringido (ha)\", \"n:0\", \"170px\"]");
+        listColumnas.add("[\"Restringido\", \"p:1\", \"100px\"]");
+        listColumnas.add("[\"Territorio Excluido (ha)\", \"n:0\", \"150px\"]");
+        listColumnas.add("[\"Excluido\", \"p:1\", \"100px\"]");
+        listColumnas.add("[\"Área Depto (ha)\", \"n:0\", \"110px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
@@ -952,6 +963,7 @@ public class Conversion {
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion de los graficos
         String graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
              + "\"tit\":\"Porcentaje de hectáreas nacional por categoría\","
              + "\"es\":{\"caLe\":true,\"3d\":true},"
              + "\"cols\":[\"#FFAA00\", \"#FFFFBE\", \"#98E600\"],"
@@ -967,7 +979,9 @@ public class Conversion {
         String incl="["+addCommaBigDecimal(v.totalSepararExclusiones(areas, 1))+"]";
         String exc="["+addCommaBigDecimal(v.totalSepararExclusiones(areas, 2))+"]";
         String restr="["+addCommaBigDecimal(v.totalSepararExclusiones(areas, 3))+"]";
-        String graf2="{\"t\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
+        String graf2="{\"t\":\"p\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Total de hectáreas departamental por categoría\","
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#FFAA00\", \"#FFFFBE\", \"#98E600\"],"
                 + "\"otrosDats\":{\"ejeX\":"+ejeX+",\"ejeY\":\"Área (ha)\"},"
@@ -1015,7 +1029,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Índice de Fraccionamiento\", \"n\", \"165px\"]");
+        listColumnas.add("[\"Índice de Fraccionamiento\", \"n:0\", \"165px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
@@ -1024,7 +1038,7 @@ public class Conversion {
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getArea()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ff5500\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
+        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #ff5500'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1035,10 +1049,11 @@ public class Conversion {
         }
         graf1="\"dats\":["+addCommaString(datGraf)+"]";
         String atGraf="\"atGras\":{\"dats\":[{\"t\":\"c\","
+                + "\"numDecimales\":0,"
                 + "\"tit\":\"\","
                 + "\"otrosDats\":{\"ejeY\":\"Índice de Fraccionamiento\"},"
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#4472c4\"],"
+                + "\"cols\":[\"#4472c4\"],"
                 + graf1+"}]}";
         //area de trabajo documentos
         String atDocs=jsonDocs(docs);
@@ -1108,7 +1123,8 @@ public class Conversion {
         }
         String iden="\"ext\":[],\"orCsgs\":["+addCommaString(temCap)+"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
-                    "\"al\": [\"distGranPolCg\",\"distMedianaPolCg\",\"distPequenaPolCg\"],\n" +
+                    "\"al\": [\"DRDGE\", \"DRDME\", \"DRDPE\"],\n" +
+                    "\"ind\":[0,0,0]," +
                     "\"compCg\": \"id_incoder\",\n" +
                     "\"compTab\": \"ID INCODER\",\n" +
                     "\"tab\":{\n" +
@@ -1122,26 +1138,26 @@ public class Conversion {
         List<String> listColumnas = new ArrayList();
         String column;
         listColumnas.add("[\"ID UPRA\", \"t\", \"10%\"]");
-        listColumnas.add("[\"ID INCODER\", \"n\", \"10%\"]");
+        listColumnas.add("[\"ID INCODER\", \"n:0\", \"10%\"]");
         listColumnas.add("[\"Nombre Distrito\", \"t\", \"10%\"]");
         listColumnas.add("[\"Código DANE Depto\", \"t\", \"10%\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"10%\"]");
         listColumnas.add("[\"Código DANE Mpio\", \"t\", \"10%\"]");
         listColumnas.add("[\"Municipio\", \"t\", \"10%\"]");
         listColumnas.add("[\"Vereda\", \"t\", \"10%\"]");
-        listColumnas.add("[\"Área Neta\", \"n\", \"10%\"]");
-        listColumnas.add("[\"Área Bruta\", \"n\", \"10%\"]");
-        listColumnas.add("[\"Escala\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Área Neta\", \"n:0\", \"10%\"]");
+        listColumnas.add("[\"Área Bruta\", \"n:0\", \"10%\"]");
+        listColumnas.add("[\"Escala\", \"n:0\", \"10%\"]");
         listColumnas.add("[\"Coordenada 1\", \"t\", \"10%\"]");
         listColumnas.add("[\"Coordenada 2\", \"t\", \"10%\"]");
         listColumnas.add("[\"Coordenada 3\", \"t\", \"10%\"]");
         listColumnas.add("[\"Coordenada 4\", \"t\", \"10%\"]");
-        listColumnas.add("[\"Altitud\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Altitud\", \"n:0\", \"10%\"]");
         listColumnas.add("[\"Tipo\", \"t\", \"10%\"]");
         listColumnas.add("[\"Etapa\", \"t\", \"10%\"]");
         listColumnas.add("[\"¿Funciona?\", \"t\", \"10%\"]");
-        listColumnas.add("[\"Usuarios\", \"n\", \"10%\"]");
-        listColumnas.add("[\"Inversión\", \"n\", \"10%\"]");
+        listColumnas.add("[\"Usuarios\", \"n:0\", \"10%\"]");
+        listColumnas.add("[\"Inversión\", \"n:0\", \"10%\"]");
         listColumnas.add("[\"Administrador\", \"t\", \"10%\"]");
         listColumnas.add("[\"Asociación de Usuarios\", \"t\", \"10%\"]");
         listColumnas.add("[\"Resolución de la Asociación\", \"t\", \"10%\"]");
@@ -1250,13 +1266,14 @@ public class Conversion {
             dpto.set(i, "\""+dpto.get(i)+"\"");
         }
         String atGraf="\"atGras\":{\"dats\":[{\"t\":\"p\","
+                + "\"numDecimales\":0,"
                 + "\"tit\":\"Número de distritos de riego y drenaje por departamento y escala\","
                 + "\"es\":{\"3d\":true, \"caLe\":true},"
-                + "\"col\":[\"#ab4d6b\",\"#d593a7\",\"#40ff40\"],"
+                + "\"cols\":[\"#ab4d6b\",\"#d593a7\",\"#40ff40\"],"
                 + "\"otrosDats\":{\"ejeX\":["+addCommaString(dpto)+"],\"ejeY\":\"Número de distritos\"},"
-                + "\"dats\":[ [\"Gran escala\","+addCommaInteger(datGrafGran)+"],"
-                + "[\"Mediana escala\","+addCommaInteger(datGrafMed)+"],"
-                + "[\"Pequeña escala\","+addCommaInteger(datGrafPeq)+"] ]"
+                + "\"dats\":[ [\"Gran escala\",["+addCommaInteger(datGrafGran)+"]],"
+                + "[\"Mediana escala\",["+addCommaInteger(datGrafMed)+"]],"
+                + "[\"Pequeña escala\",["+addCommaInteger(datGrafPeq)+"] ]]"
                 + "}]}";
         //configuracion de la consulta
         String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
@@ -1313,7 +1330,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Indicador de Concentración\", \"n\", \"175px\"]");
+        listColumnas.add("[\"Indicador de Concentración\", \"n:0\", \"175px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
@@ -1322,7 +1339,7 @@ public class Conversion {
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getArea()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #009c4b\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
+        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #009c4b'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1333,10 +1350,11 @@ public class Conversion {
         }
         graf1="\"dats\":["+addCommaString(datGraf)+"]";
         String atGraf="\"atGras\":{\"dats\":[{\"t\":\"c\","
+                + "\"numDecimales\":0,"
                 + "\"tit\":\"\","
                 + "\"otrosDats\":{\"ejeY\":\"Indicador de Concentración\"},"
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#4472c4\"],"
+                + "\"cols\":[\"#4472c4\"],"
                 + graf1+"}]}";
         //area de trabajo documentos
         String atDocs=jsonDocs(docs);
@@ -1378,7 +1396,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Indicador de Concentración\", \"n\", \"175px\"]");
+        listColumnas.add("[\"Indicador de Concentración\", \"n:0\", \"175px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1389,7 +1407,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #C6E0B3\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Bajo\"]");
+        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #C6E0B3'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1400,16 +1418,19 @@ public class Conversion {
         datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
         datGraf.add("[\"Muy Bajo\","+v.promedioCategoriaZonas(areas, "Muy Bajo")+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje del suelo nacional sin restricción legal\","
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#ED7D31\",\"#FFFF00\",\"#C6E0B3\",\"#70AD46\"],"
+                + "\"cols\":[\"#ED7D31\",\"#FFFF00\",\"#C6E0B3\",\"#70AD46\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String graf2;
         datGraf.clear();
         for (Areas r : areas) {
             datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
         }
-        graf2="{\"t\":\"c\",\"tit\":\"Porcentaje del suelo departamental sin restricción legal\","
+        graf2="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Porcentaje del suelo departamental sin restricción legal\","
                 + "\"otrosDats\":{\"ejeY\":\"Porcentaje del suelo departamental sin restricción legal\"},"
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#4472c4\"],"
@@ -1455,7 +1476,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con exclusión legal\", \"n\", \"240px\"]");
+        listColumnas.add("[\"% del suelo deptal con exclusión legal\", \"n:0\", \"240px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1474,16 +1495,19 @@ public class Conversion {
         datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
         datGraf.add("[\"Muy Bajo\","+v.promedioCategoriaZonas(areas, "Muy Bajo")+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje del suelo nacional con exclusión legal\","
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#C6E0B3\",\"#70AD46\"],"
+                + "\"cols\":[\"#C6E0B3\",\"#70AD46\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String graf2;
         datGraf.clear();
         for (Areas r : areas) {
             datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
         }
-        graf2="{\"t\":\"c\",\"tit\":\"Porcentaje del suelo departamental con exclusión legal\","
+        graf2="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Porcentaje del suelo departamental con exclusión legal\","
                 + "\"otrosDats\":{\"ejeY\":\"Porcentaje del suelo departamental con exclusión legal\"},"
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#4472c4\"],"
@@ -1531,7 +1555,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con uso condicionado\", \"n\", \"250px\"]");
+        listColumnas.add("[\"% del suelo deptal con uso condicionado\", \"n:0\", \"250px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1542,7 +1566,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ED7D31\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
+        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #ED7D31'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1553,16 +1577,19 @@ public class Conversion {
         datGraf.add("[\"Medio\","+v.promedioCategoriaZonas(areas, "Medio")+"]");
         datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje del suelo nacional con uso condicionado\","
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#FF0000\",\"#ED7D31\",\"#FFFF00\",\"#C6E0B4\"],"
+                + "\"cols\":[\"#FF0000\",\"#ED7D31\",\"#FFFF00\",\"#C6E0B4\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String graf2;
         datGraf.clear();
         for (Areas r : areas) {
             datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
         }
-        graf2="{\"t\":\"c\",\"tit\":\"Porcentaje del suelo departamental con uso condicionado\","
+        graf2="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Porcentaje del suelo departamental con uso condicionado\","
                 + "\"otrosDats\":{\"ejeY\":\"Porcentaje del suelo departamental con uso condicionado\"},"
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#4472c4\"],"
@@ -1609,7 +1636,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con conflicto por sobreutilización\", \"n\", \"315px\"]");
+        listColumnas.add("[\"% del suelo deptal con conflicto por sobreutilización\", \"n:0\", \"315px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1620,7 +1647,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
+        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #70AD46'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1630,16 +1657,19 @@ public class Conversion {
         datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
         datGraf.add("[\"Muy Bajo\","+v.promedioCategoriaZonas(areas, "Muy Bajo")+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje del suelo nacional con conflicto de uso por sobreutilización\","
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#FF0000\",\"#C6E0B3\",\"#70AD46\"],"
+                + "\"cols\":[\"#FF0000\",\"#C6E0B3\",\"#70AD46\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String graf2;
         datGraf.clear();
         for (Areas r : areas) {
             datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
         }
-        graf2="{\"t\":\"c\",\"tit\":\"Porcentaje del suelo departamental con conflicto de uso por sobreutilización\","
+        graf2="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Porcentaje del suelo departamental con conflicto de uso por sobreutilización\","
                 + "\"otrosDats\":{\"ejeY\":\"% del suelo departamental con conflicto de uso por sobreutilización\"},"
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#4472c4\"],"
@@ -1686,7 +1716,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con conflicto por subutilización\", \"n\", \"300px\"]");
+        listColumnas.add("[\"% del suelo deptal con conflicto por subutilización\", \"n:0\", \"300px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1697,7 +1727,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #70AD46\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
+        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style='float: center; font-weight: bold; background-color: #70AD46'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1708,16 +1738,19 @@ public class Conversion {
         datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
         datGraf.add("[\"Muy Bajo\","+v.promedioCategoriaZonas(areas, "Muy Bajo")+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje del suelo nacional con conflicto de uso por subutilización\","
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#FF0000\",\"#FFFF00\",\"#C6E0B4\",\"#70AD4F\"],"
+                + "\"cols\":[\"#FF0000\",\"#FFFF00\",\"#C6E0B4\",\"#70AD4F\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String graf2;
         datGraf.clear();
         for (Areas r : areas) {
             datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
         }
-        graf2="{\"t\":\"c\",\"tit\":\"Porcentaje del suelo departamental con conflicto de uso por subutilización\","
+        graf2="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Porcentaje del suelo departamental con conflicto de uso por subutilización\","
                 + "\"otrosDats\":{\"ejeY\":\"% del suelo departamental con conflicto de uso por subutilización\"},"
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#4472c4\"],"
@@ -1764,7 +1797,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con uso adecuado\", \"n\", \"230px\"]");
+        listColumnas.add("[\"% del suelo deptal con uso adecuado\", \"n:0\", \"230px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1775,7 +1808,7 @@ public class Conversion {
                     + r.getArea()+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style=\"float: center; font-weight: bold; background-color: #ed7d31\">COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
+        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style='float: center; font-weight: bold; background-color: #ed7d31'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
         //creacion del grafico
@@ -1787,16 +1820,19 @@ public class Conversion {
         datGraf.add("[\"Bajo\","+v.promedioCategoriaZonas(areas, "Bajo")+"]");
         datGraf.add("[\"Muy Bajo\","+v.promedioCategoriaZonas(areas, "Muy Bajo")+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje del suelo nacional con uso adecuado de la tierra\","
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#FF0000\",\"#ED7D31\",\"#FFFF00\",\"#C6E0B4\",\"#70AD4F\"],"
+                + "\"cols\":[\"#FF0000\",\"#ED7D31\",\"#FFFF00\",\"#C6E0B4\",\"#70AD4F\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String graf2;
         datGraf.clear();
         for (Areas r : areas) {
             datGraf.add("[\""+r.getDepartamento()+"\","+r.getArea()+"]");
         }
-        graf2="{\"t\":\"c\",\"tit\":\"Porcentaje del suelo departamental con uso adecuado de la tierra\","
+        graf2="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Porcentaje del suelo departamental con uso adecuado de la tierra\","
                 + "\"otrosDats\":{\"ejeY\":\"Porcentaje del suelo departamental con uso adecuado de la tierra\"},"
                 + "\"es\":{\"3d\":true},"
                 + "\"cols\":[\"#4472c4\"],"
@@ -1861,18 +1897,18 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
         String column;
-        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
+        listColumnas.add("[\"Id\", \"t\", \"20px\"]");
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
         listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Área (ha)\", \"n\", \"70px\"]");
+        listColumnas.add("[\"Área (ha)\", \"n:0\", \"70px\"]");
         listColumnas.add("[\"Rango de precio\", \"t\", \"120px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
         int k = 1;
         for (Areas r : areas) {
-            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
+            registros.add("[{},\""+k+"\",\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getMunicipio()+"\","
                     + r.getArea().setScale(2, RoundingMode.HALF_UP)+","
@@ -1892,9 +1928,10 @@ public class Conversion {
         datGraf.add("[\"40 a 60 millones\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "40 a 60 millones","",null))+"]");
         datGraf.add("[\"100 a 120 millones\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "100 a 120 millones","",null))+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje de hectáreas por rango de precios\","
                 + "\"es\":{\"3d\":true,\"caLe\":true},"
-                + "\"col\":[\"#ffebaf\",\"#f5d072\",\"#edb337\",\"#e69900\",\"#bf5600\",\"#992100\",\"#720000\"],"
+                + "\"cols\":[\"#ffebaf\",\"#f5d072\",\"#edb337\",\"#e69900\",\"#bf5600\",\"#992100\",\"#720000\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         List<String> cate = new ArrayList<>();
         cate.add("1 a 5 millones");
@@ -1911,7 +1948,9 @@ public class Conversion {
             datGraf.add("[\"CIÉNAGA DE ORO\",["+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "CIÉNAGA DE ORO",cate))+"]]");
             datGraf.add("[\"COTORRA\",["+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "COTORRA",cate))+"]]");
             datGraf.add("[\"SAHAGÚN\",["+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "SAHAGÚN",cate))+"]]");
-        graf2="{\"t\":\"c\",\"tit\":\"Total de hectáreas municipal por rango de precios\","
+        graf2="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Total de hectáreas municipal por rango de precios\","
                 + "\"otrosDats\":{\"ejeY\":\"Área (ha)\", \"ejeX\": [\"5 a 10 millones\",\"10 a 15 millones\","
                 + "\"15 a 20 millones\",\"20 a 30 millones\",\"30 a 40 millones\",\"40 a 60 millones\",\"100 a 120 millones\"]},"
                 + "\"es\":{\"3d\":true, \"caLe\":true},"
@@ -1949,18 +1988,18 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
         String column;
-        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
+        listColumnas.add("[\"Id\", \"t\", \"20px\"]");
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
         listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Área (ha)\", \"n\", \"70px\"]");
+        listColumnas.add("[\"Área (ha)\", \"n:0\", \"70px\"]");
         listColumnas.add("[\"Rango de precio\", \"t\", \"120px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
         int k = 1;
         for (Areas r : areas) {
-            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
+            registros.add("[{},\""+k+"\",\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getMunicipio()+"\","
                     + r.getArea().setScale(2, RoundingMode.HALF_UP)+","
@@ -1978,9 +2017,10 @@ public class Conversion {
         datGraf.add("[\"20 a 30 millones\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "20 a 30 millones","",null))+"]");
         datGraf.add("[\"30 a 40 millones\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "30 a 40 millones","",null))+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje de hectáreas por rango de precios\","
                 + "\"es\":{\"3d\":true,\"caLe\":true},"
-                + "\"col\":[\"#ffffb0\",\"#f2e599\",\"#e69900\",\"#ab3900\",\"#720000\"],"
+                + "\"cols\":[\"#ffffb0\",\"#f2e599\",\"#e69900\",\"#ab3900\",\"#720000\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         List<String> cate = new ArrayList<>();
         cate.add("1 a 3 millones");
@@ -1993,7 +2033,9 @@ public class Conversion {
         datGraf.add("[\"PRADO\",["+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "PRADO",cate))+"]]");
         datGraf.add("[\"PURIFICACIÓN\",["+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "PURIFICACIÓN",cate))+"]]");
         datGraf.add("[\"SALDAÑA\",["+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "", "SALDAÑA",cate))+"]]");
-        graf2="{\"t\":\"c\",\"tit\":\"Total de hectáreas municipal por rango de precios\","
+        graf2="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Total de hectáreas municipal por rango de precios\","
                 + "\"otrosDats\":{\"ejeY\":\"Área (ha)\", \"ejeX\": [\"1 a 3 millones\",\"3 a 5 millones\","
                 + "\"10 a 20 millones\",\"20 a 30 millones\",\"30 a 40 millones\"]},"
                 + "\"es\":{\"3d\":true, \"caLe\":true},"
@@ -2018,10 +2060,10 @@ public class Conversion {
      */
     public String crearJsonPreciosMeta(Tablacontenido tc, List<Servicios> serv, List<Capas> capas, List<Areas> areas){
         Varios v = new Varios();
-        String iden="\"ext\":[-73.7875124577786,3.23848574686818,-72.2792437665612,3.8110734306383],\"orCsgs\":[\"PM\"],\n" +
+        String iden="\"ext\":[-73.7875124577786,3.23848574686818,-72.2792437665612,3.8110734306383],\"orCsgs\":[\""+capas.get(0).getAlias()+"\"],\n" +
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
-                    "\"al\": \"PM\",\n" +
-                    "\"ind\": 1 ,\n" +
+                    "\"al\": \""+capas.get(0).getAlias()+"\",\n" +
+                    "\"ind\": 0 ,\n" +
                     "\"compCg\": \"id\",\n" +
                     "\"compTab\": \"Id\",\n" +
                     "\"tab\":{\n" +
@@ -2031,18 +2073,18 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
         String column;
-        listColumnas.add("[\"Id\", \"n\", \"20px\"]");
+        listColumnas.add("[\"Id\", \"t\", \"20px\"]");
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"100px\"]");
         listColumnas.add("[\"Municipio\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Área (ha)\", \"n\", \"70px\"]");
+        listColumnas.add("[\"Área (ha)\", \"n:0\", \"70px\"]");
         listColumnas.add("[\"Rango de precio\", \"t\", \"120px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
         int k = 1;
         for (Areas r : areas) {
-            registros.add("[{},"+k+",\""+r.getCodigoDane()+"\","
+            registros.add("[{},\""+k+"\",\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getMunicipio()+"\","
                     + r.getArea().setScale(2,RoundingMode.HALF_UP)+","
@@ -2059,14 +2101,15 @@ public class Conversion {
         datGraf.add("[\"10 a 20 millones\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "10 a 20 millones","",null))+"]");
         datGraf.add("[\"20 a 30 millones\","+addCommaBigDecimal(v.sumarAreaXCategoria(areas, "20 a 30 millones","",null))+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":0,"
                 + "\"tit\":\"Porcentaje de hectáreas por rango de precios\","
                 + "\"es\":{\"3d\":true,\"caLe\":true},"
-                + "\"col\":[\"#ffffb0\",\"#f2e599\",\"#e69900\",\"#ab3900\"],"
+                + "\"cols\":[\"#ffffb0\",\"#f2e599\",\"#e69900\",\"#ab3900\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String atGraf="\"atGras\":{\"dats\":["+graf1+"]}";
         //configuracion de la consulta
         String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
-                    "\"plantillas\": [0, 1, 1, 1, 0]}";
+                    "\"plantillas\": [1, 1, 1, 1, 1]}";
          String json="resp({\"ast\":{"+atMaps+","+atTabs+","+atGraf+"},"+conf+"})";
         return json;
     }
@@ -2103,14 +2146,14 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Suelos con potencial para distritos de riego (ha)\", \"n\", \"300px\"]");
-        listColumnas.add("[\"Suelos con potencial para distritos de drenaje (ha)\", \"n\", \"320px\"]");
+        listColumnas.add("[\"Suelos con potencial para distritos de riego (ha)\", \"n:0\", \"300px\"]");
+        listColumnas.add("[\"Suelos con potencial para distritos de drenaje (ha)\", \"n:0\", \"320px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
         int tam = riego.size();
         for (int i = 0; i < tam; i++ ) {
-            registros.add("["+i+",\""+riego.get(i).getCodigoDane()+"\","
+            registros.add("[\""+riego.get(i).getCodigoDane()+"\","
                     + "\""+riego.get(i).getDepartamento()+"\","
                     + riego.get(i).getArea()+","
                     + drenaje.get(i).getArea()+"]");
@@ -2123,10 +2166,11 @@ public class Conversion {
         datGraf.add("[\"Potencial para distritos de riego\","+v.promedioAreas(riego, 5)+"]");
         datGraf.add("[\"Potencial para distritos de drenaje\","+v.promedioAreas(drenaje, 5)+"]");
         graf1="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
                 + "\"tit\":\"Total de hectáreas nacional por categoría\","
                 + "\"otrosDats\":{\"ejeY\":\"Área (ha)\"},"
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#96badc\",\"#b3e7e6\"],"
+                + "\"cols\":[\"#96badc\",\"#b3e7e6\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String graf2;
         datGraf.clear();
@@ -2140,7 +2184,9 @@ public class Conversion {
         }
         datGraf.add("[\"Para distritos de riego\","+addCommaBigDecimal(r)+"]");
         datGraf.add("[\"Para distritos de drenaje\","+addCommaBigDecimal(d)+"]");
-        graf2="{\"t\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
+        graf2="{\"t\":\"p\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Total de hectáreas departamental por categoría\","
                 + "\"otrosDats\":{\"ejeY\":\"Área (ha)\",\"ejeX\":["+addCommaString(depto)+"]},"
                 + "\"es\":{\"3d\":true, \"caLe\":true},"
                 + "\"cols\":[\"#96badc\",\"b3e7e6\"],"
@@ -2185,10 +2231,10 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Alta (ha)\", \"n\", \"150px\"]");
-        listColumnas.add("[\"Media (ha)\", \"n\", \"150px\"]");
-        listColumnas.add("[\"Baja (ha)\", \"n\", \"150px\"]");
-        listColumnas.add("[\"No Apto\", \"n\", \"150px\"]");
+        listColumnas.add("[\"Alta (ha)\", \"n:0\", \"150px\"]");
+        listColumnas.add("[\"Media (ha)\", \"n:0\", \"150px\"]");
+        listColumnas.add("[\"Baja (ha)\", \"n:0\", \"150px\"]");
+        listColumnas.add("[\"No Apto\", \"n:0\", \"150px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
@@ -2211,10 +2257,11 @@ public class Conversion {
         datGraf.add("[\"Baja\","+v.promedioAreas(zonas, 8)+"]");
         datGraf.add("[\"No Apto\","+v.promedioAreas(zonas, 9)+"]");
         graf1="{\"t\":\"t\","
+                + "\"numDecimales\":1,"
                 + "\"tit\":\"Porcentaje de hectáreas nacional por categoría\","
                 + "\"otrosDats\":{\"ejeY\":\"Área (ha)\"},"
                 + "\"es\":{\"3d\":true, \"caLe\":true},"
-                + "\"col\":[\"#267300\",\"#69CC66\",\"FFF86E\",\"B8B8B8\"],"
+                + "\"cols\":[\"#267300\",\"#69CC66\",\"FFF86E\",\"B8B8B8\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String graf2;
         datGraf.clear();
@@ -2234,7 +2281,9 @@ public class Conversion {
         datGraf.add("[\"Media\","+addCommaBigDecimal(m)+"]");
         datGraf.add("[\"Baja\","+addCommaBigDecimal(b)+"]");
         datGraf.add("[\"No Apta\","+addCommaBigDecimal(na)+"]");
-        graf2="{\"t\":\"p\",\"tit\":\"Total de hectáreas departamental por categoría\","
+        graf2="{\"t\":\"p\","
+                + "\"numDecimales\":0,"
+                + "\"tit\":\"Total de hectáreas departamental por categoría\","
                 + "\"otrosDats\":{\"ejeY\":\"Área (ha)\",\"ejeX\":["+addCommaString(depto)+"]},"
                 + "\"es\":{\"3d\":true, \"caLe\":true},"
                 + "\"cols\":[\"#267300\",\"#69CC66\",\"FFF86E\",\"B8B8B8\"],"
@@ -2276,7 +2325,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Número de organizaciones\", \"n\", \"170px\"]");
+        listColumnas.add("[\"Número de organizaciones\", \"n:0\", \"170px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"160px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -2312,10 +2361,11 @@ public class Conversion {
             datGraf.add("[\""+r.getDepto()+"\","+r.getNumOrg()+"]");
         }
         graf1="{\"t\":\"c\","
+                + "\"numDecimales\":0,"
                 + "\"tit\":\"Número de organizaciones por departamento\","
                 + "\"otrosDats\":{\"ejeY\":\"Número de organizaciones\"},"
                 + "\"es\":{\"3d\":true},"
-                + "\"col\":[\"#4472c4\"],"
+                + "\"cols\":[\"#4472c4\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String atGraf="\"atGras\":{\"dats\":["+graf1+"]}";
         //configuracion de la consulta
@@ -2342,8 +2392,8 @@ public class Conversion {
                     "\"identificacion\":{\"t\": \"auto\",\"dats\": [{\n" +
                     "\"al\": \""+capas.get(0).getAlias()+"\",\n" +
                     "\"ind\": 0,\n" +
-                    "\"compCg\": \"id\",\n" +
-                    "\"compTab\": \"ID\",\n" +
+                    "\"compCg\": \"proyectoid\",\n" +
+                    "\"compTab\": \"proyectoId\",\n" +
                     "\"tab\":{\n" +
                     "\"ind\": 0,\n" +
                     "\"colums\": [\"Nombre proyecto\",\"Departamento(s) beneficiados\",\"Municipio(s) beneficiados\","
@@ -2352,28 +2402,28 @@ public class Conversion {
         String atMaps=crearJsonInfGeoConsultas(tc, serv, capas,iden);
         List<String> listColumnas = new ArrayList();
         String column;
-        listColumnas.add("[\"ID\", \"n\", \"30px\"]");
+        listColumnas.add("[\"proyectoId\", \"t\", \"30px\"]");
         listColumnas.add("[\"Nombre proyecto\", \"t\", \"115px\"]");
         listColumnas.add("[\"Departamento(s) beneficiados\", \"t\", \"125px\"]");
         listColumnas.add("[\"Municipio(s) beneficiados\", \"t\", \"100px\"]");
         listColumnas.add("[\"Fecha\", \"t\", \"50px\"]");
-        listColumnas.add("[\"Número de municipios\", \"n\", \"110px\"]");
-        listColumnas.add("[\"Número de veredas\", \"n\", \"105px\"]");
-        listColumnas.add("[\"Número de familias beneficiadas\", \"n\", \"105px\"]");
+        listColumnas.add("[\"Número de municipios\", \"n:0\", \"110px\"]");
+        listColumnas.add("[\"Número de veredas\", \"n:0\", \"105px\"]");
+        listColumnas.add("[\"Número de familias beneficiadas\", \"n:0\", \"105px\"]");
         listColumnas.add("[\"Postulante\", \"t\", \"90px\"]");
         listColumnas.add("[\"Tiempo Programación Obra\", \"t\", \"100px\"]");
         listColumnas.add("[\"Costo Obra\", \"t\", \"110px\"]");
         listColumnas.add("[\"Subetapa\", \"t\", \"120px\"]");
         listColumnas.add("[\"Tipo de proyecto\", \"t\", \"110px\"]");
-        listColumnas.add("[\"Área bruta (ha)\", \"n\", \"90px\"]");
-        listColumnas.add("[\"Área neta (ha)\", \"n\", \"85px\"]");
+        listColumnas.add("[\"Área bruta (ha)\", \"n:0\", \"90px\"]");
+        listColumnas.add("[\"Área neta (ha)\", \"n:0\", \"85px\"]");
         listColumnas.add("[\"Documentos\", \"t\", \"90px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
         String tabla;
+        int j=1;
         for (BancoProyectos b:bps ) {
-            int i=1;
-            registros.add("[{},"+i+",\""+b.getNomProyecto()+"\","
+            registros.add("[{},"+b.getProyectoid()+",\""+b.getNomProyecto()+"\","
                     + "\""+b.getDepto()+"\","
                     + "\""+b.getMunpio()+"\","
                     + "\""+b.getFecha()+"\","
@@ -2388,9 +2438,9 @@ public class Conversion {
                     + b.getAreaBruta()+","
                     + b.getAreaNeta()+","
                     + "\""+b.getDocum()+"\"]");
-            i++;
+            j++;
         }
-        registros.add("[{},0,\"<span style=\"float: left; font-weight: bold; background-color: #cccccc\">TOTALES</span>\",null,null,"
+        registros.add("[{},0,\"<span style='float: left; font-weight: bold; background-color: #cccccc'>TOTALES</span>\",null,null,"
                 + "null,92,82,73371,null,null,3505607327832.0,null,null,721839.10,606831.0,null]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
@@ -2404,10 +2454,11 @@ public class Conversion {
             deptos.set(i, "\""+deptos.get(i)+"\"");
         }
         graf1="{\"t\":\"p\","
+                + "\"numDecimales\":0,"
                 + "\"tit\":\"Número de proyectos por departamento y etapa\","
                 + "\"otrosDats\":{\"ejeY\":\"Número de proyectos\",\"ejeX\":["+addCommaString(deptos)+"]},"
                 + "\"es\":{\"3d\":true,\"caLe\":true},"
-                + "\"col\":[\"#ffff99\",\"#F7D6B5\",\"#F4631F\"],"
+                + "\"cols\":[\"#ffff99\",\"#F7D6B5\",\"#F4631F\"],"
                 + "\"dats\":["+addCommaString(datGraf)+"]}";
         String atGraf="\"atGras\":{\"dats\":["+graf1+"]}";
          //area de trabajo documentos

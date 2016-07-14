@@ -54,6 +54,8 @@ public class Capas implements Serializable {
     private String sTipoFormato;
     private String sTipocrs;
     private String sTipoCapa;
+    private String alCj;
+    private String colsCluster;
     
     
 
@@ -378,4 +380,20 @@ public class Capas implements Serializable {
         this.sTipoCapa = sTipoCapa;
     }
 
+    public String getAlCj() {
+        return alCj;
+    }
+
+    public void setAlCj(String alCj) {
+        this.alCj = alCj;
+    }
+
+    public String getColsCluster() {
+        return colsCluster;
+    }
+
+    public void setColsCluster(String colsCluster) {
+        this.colsCluster = colsCluster;
+    }
+    
 }

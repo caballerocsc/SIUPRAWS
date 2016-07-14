@@ -63,7 +63,8 @@ public class SentenciasBD {
         "inner join adminsiupra.menuconsultas mc on mtc.menuconsultaid=mc.menuconsultaid\n" +
         "where mc.alias like ? ";
     private final String CAPAS_MENUCONSULTAS="select C.capasupraid,c.alias,c.aliasgrupo,c.aliasservicio,c.resolucionmax,c.filtro,c.nombrecapa,c.opacidad,(select texto from dominios where dominioid=c.crsfkid),c.anio,c.fuente,c.nombre,\n" +
-        "c.visible, c.identificable, c.leyendacargada, c.autoidentificable, c.titulo from adminsiupra.capas c\n" +
+        "c.visible, c.identificable, c.leyendacargada, c.autoidentificable, c.titulo, " +
+        "c.alias_conjunto, color_cluster from adminsiupra.capas c\n" +
         "inner join adminsiupra.menuconsultas_capas mcc on mcc.capasid=c.capasupraid\n" +
         "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
         "where mc.alias like ?";
@@ -159,6 +160,7 @@ public class SentenciasBD {
             "group by  departamento\n" +
             "order by cant desc";
     private final String BANCO_PROYECTOS=" SELECT \n" +
+            "    municipios_proyectos_adt_20160311.proyectoid,\n" +
             "    municipios_proyectos_adt_20160311.nombre_pro AS nombre_proyecto,\n" +
             "    municipios_proyectos_adt_20160311.fecha,\n" +
             "    municipios_proyectos_adt_20160311.nummunicip AS numero_municipios,\n" +

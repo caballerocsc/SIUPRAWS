@@ -29,6 +29,7 @@ public class BancoProyectos {
     private BigDecimal areaBruta;
     private BigDecimal areaNeta;
     private String docum;
+    int proyectoid;
 
     public BancoProyectos() {
     }
@@ -151,6 +152,14 @@ public class BancoProyectos {
 
     public void setDocum(String docum) {
         this.docum = docum;
+    }
+
+    public int getProyectoid() {
+        return proyectoid;
+    }
+
+    public void setProyectoid(int proyectoid) {
+        this.proyectoid = proyectoid;
     }
     
     

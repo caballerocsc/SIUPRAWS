@@ -23,6 +23,7 @@ public class Conexion {
 
     String driver = "org.postgresql.Driver";
     String connectString = "jdbc:postgresql://10.10.30.11:5432/siupra";
+    String connectStringTESTProd = "jdbc:postgresql://10.10.150.10:5432/sipra_test";
     String user = "upramisional";
     String password = "upr4m1s10n4l";
 
@@ -30,7 +31,7 @@ public class Conexion {
         Connection con = null;
         try {
             Class.forName(driver);
-            con = DriverManager.getConnection(connectString, user, password);
+            con = DriverManager.getConnection(connectStringTESTProd, user, password);
         } catch (SQLException e) {
             System.out.println("sqlexcepcion");
         } catch (ClassNotFoundException e) {
