@@ -22,6 +22,7 @@ public class Tablacontenido implements Serializable {
     private String capas;
     private int orden;
     private boolean desplegado;
+    private boolean descTabla;
 
     public Tablacontenido() {
     }
@@ -108,6 +109,14 @@ public class Tablacontenido implements Serializable {
 
     public void setDesplegado(boolean desplegado) {
         this.desplegado = desplegado;
+    }
+
+    public boolean isDescTabla() {
+        return descTabla;
+    }
+
+    public void setDescTabla(boolean descTabla) {
+        this.descTabla = descTabla;
     }
 
     

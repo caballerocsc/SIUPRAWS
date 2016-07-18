@@ -58,13 +58,13 @@ public class SentenciasBD {
         "inner join adminsiupra.menuconsultas mc on mc.menuconsultaid=fvm.menuconsultaid\n" +
         "where mc.alias like ?";
     private final String DINAMICAMERCADO="SELECT mercado_tierras_rurales.funcion_parametros_dinamica_mercados(?);";
-    private final String TABLACONTENIDO_MENUCONSULTAS="select tc.alias,tc.nombre, tc.palabrasclave from adminsiupra.tablacontenido tc\n" +
+    private final String TABLACONTENIDO_MENUCONSULTAS="select tc.alias,tc.nombre, tc.palabrasclave, tc.descargar_tabla from adminsiupra.tablacontenido tc\n" +
         "inner join adminsiupra.menuconsultas_tablacontenido mtc on tc.tablacontenidoupraid=mtc.tablacontenidoid\n" +
         "inner join adminsiupra.menuconsultas mc on mtc.menuconsultaid=mc.menuconsultaid\n" +
         "where mc.alias like ? ";
     private final String CAPAS_MENUCONSULTAS="select C.capasupraid,c.alias,c.aliasgrupo,c.aliasservicio,c.resolucionmax,c.filtro,c.nombrecapa,c.opacidad,(select texto from dominios where dominioid=c.crsfkid),c.anio,c.fuente,c.nombre,\n" +
         "c.visible, c.identificable, c.leyendacargada, c.autoidentificable, c.titulo, " +
-        "c.alias_conjunto, color_cluster from adminsiupra.capas c\n" +
+        "c.alias_conjunto, c.color_cluster, c.descargar_capa from adminsiupra.capas c\n" +
         "inner join adminsiupra.menuconsultas_capas mcc on mcc.capasid=c.capasupraid\n" +
         "inner join adminsiupra.menuconsultas mc on mcc.menuconsultasid=mc.menuconsultaid\n" +
         "where mc.alias like ?";

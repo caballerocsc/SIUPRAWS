@@ -634,7 +634,7 @@ public class Conversion {
             subReg.clear();
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //configuracion de la consulta
         String conf="\"conf\":{	\"atSel\": \"atMaps\"," +
                     "\"plantillas\": [1, 1, 1, 1, 1]}";
@@ -724,6 +724,7 @@ public class Conversion {
                     + "\"fu\":\"" + c.getFuente() + "\","
                     + "\"nom\":\"" + c.getTitulo() + "\"},";
             tmp+="\"es\":{\"vi\":"+c.getVisible()+","
+                    + "\"exp\":"+c.isDescCapa()+","
                     + "\"iden\":"+c.getIdentific()+","
                     + "\"caLe\":"+c.getLeyenda_c()+"}";
             tmp = "\"" + c.getAlias() + "\":{" + tmp + "}";
@@ -777,7 +778,7 @@ public class Conversion {
             k++;
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -870,7 +871,7 @@ public class Conversion {
                     ","+r.getAreaDepto()+"]");
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion de los graficos
         String graf1="{\"t\":\"t\","
                 + "\"numDecimales\":1,"
@@ -960,7 +961,7 @@ public class Conversion {
                     ","+r.getAreaDepto()+"]");
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion de los graficos
         String graf1="{\"t\":\"t\","
                 + "\"numDecimales\":1,"
@@ -1040,7 +1041,7 @@ public class Conversion {
         }
         registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #ff5500'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -1161,10 +1162,6 @@ public class Conversion {
         listColumnas.add("[\"Administrador\", \"t\", \"10%\"]");
         listColumnas.add("[\"Asociación de Usuarios\", \"t\", \"10%\"]");
         listColumnas.add("[\"Resolución de la Asociación\", \"t\", \"10%\"]");
-        listColumnas.add("[\"Representante de la Asociación\", \"t\", \"10%\"]");
-        listColumnas.add("[\"Teléfono de la Asociación\", \"t\", \"10%\"]");
-        listColumnas.add("[\"E-mail de la Asociación\", \"t\", \"10%\"]");
-        listColumnas.add("[\"Dirección de la Asociación\", \"t\", \"10%\"]");
         listColumnas.add("[\"Cultivos\", \"t\", \"10%\"]");
         listColumnas.add("[\"CAR\", \"t\", \"10%\"]");
         listColumnas.add("[\"Fuente Hídrica\", \"t\", \"10%\"]");
@@ -1204,10 +1201,6 @@ public class Conversion {
                     + "\""+dr.getAdmin()+"\","
                     + "\""+dr.getAsoUsuarios()+"\","
                     + "\""+dr.getResolucion()+"\","
-                    + "\""+dr.getRepresentante()+"\","
-                    + "\""+dr.getTel()+"\","
-                    + "\""+dr.getEmail()+"\","
-                    + "\""+dr.getDir()+"\","
                     + "\""+dr.getCultivos()+"\","
                     + "\""+dr.getCar()+"\","
                     + "\""+dr.getFuenteHid()+"\","
@@ -1220,7 +1213,7 @@ public class Conversion {
                     + "\""+dr.getObser()+"\"]");
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         List<Integer> datGrafPeq = new ArrayList<>();
         List<Integer> datGrafMed = new ArrayList<>();
@@ -1341,7 +1334,7 @@ public class Conversion {
         }
         registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #009c4b'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -1409,7 +1402,7 @@ public class Conversion {
         }
         registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #C6E0B3'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -1488,7 +1481,7 @@ public class Conversion {
                     + "\""+r.getTipo()+"\"]");
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -1568,7 +1561,7 @@ public class Conversion {
         }
         registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #ED7D31'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -1649,7 +1642,7 @@ public class Conversion {
         }
         registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #70AD46'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -1729,7 +1722,7 @@ public class Conversion {
         }
         registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style='float: center; font-weight: bold; background-color: #70AD46'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -1810,7 +1803,7 @@ public class Conversion {
         }
         registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style='float: center; font-weight: bold; background-color: #ed7d31'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -1916,7 +1909,7 @@ public class Conversion {
             k++;
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -2007,7 +2000,7 @@ public class Conversion {
             k++;
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -2092,7 +2085,7 @@ public class Conversion {
             k++;
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -2159,7 +2152,7 @@ public class Conversion {
                     + drenaje.get(i).getArea()+"]");
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -2248,7 +2241,7 @@ public class Conversion {
         }
         registros.add("[{},\"\",\"TOTALES\",7507862.21,6593516.57,11829609.45,88054807.68]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -2353,7 +2346,7 @@ public class Conversion {
                     + "\""+o.getMunpio()+"\"]");
         }
         tabla2="\"dats\":["+addCommaString(registros2)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"},{"+column2+","+tabla2+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"},{"+column2+","+tabla2+"},\"exp\":"+tc.isDescTabla()+"]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();
@@ -2443,7 +2436,7 @@ public class Conversion {
         registros.add("[{},0,\"<span style='float: left; font-weight: bold; background-color: #cccccc'>TOTALES</span>\",null,null,"
                 + "null,92,82,73371,null,null,3505607327832.0,null,null,721839.10,606831.0,null]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
-        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+"}]}" ;
+        String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"exp\":"+tc.isDescTabla()+"}]}" ;
         //creacion del grafico
         String graf1;
         List<String> datGraf = new ArrayList<>();

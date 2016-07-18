@@ -509,6 +509,7 @@ public class Consultas {
                 tablacontenido.setAlias(rs.getString(i++));
                 tablacontenido.setNombre(rs.getString(i++));
                 tablacontenido.setPalabrasclave(rs.getString(i++));
+                tablacontenido.setDescTabla(rs.getBoolean(i++));
                 i=1;
             }
         } catch (Exception e) {
@@ -561,6 +562,7 @@ public class Consultas {
                 capas.setTitulo(rs.getString(i++));
                 capas.setAlCj(rs.getString(i++));
                 capas.setColsCluster(rs.getString(i++));
+                capas.setDescCapa(rs.getBoolean(i++));
                 ps=cn.prepareStatement(sbd.getCAPAS_TIPO_SERVICIO());
                 ps.setInt(1, capas.getId());
                 rs2=ps.executeQuery();
