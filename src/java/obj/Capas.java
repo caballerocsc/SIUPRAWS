@@ -56,7 +56,7 @@ public class Capas implements Serializable {
     private String sTipoCapa;
     private String alCj;
     private String colsCluster;
-    
+    boolean descCapa;
     
 
     public Capas() {
@@ -395,5 +395,14 @@ public class Capas implements Serializable {
     public void setColsCluster(String colsCluster) {
         this.colsCluster = colsCluster;
     }
+
+    public boolean isDescCapa() {
+        return descCapa;
+    }
+
+    public void setDescCapa(boolean descCapa) {
+        this.descCapa = descCapa;
+    }
+
     
 }
