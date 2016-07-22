@@ -113,7 +113,7 @@ public class Varios {
         String res;
         if (valor1!=0) {
             //DecimalFormat formateador = new DecimalFormat("#,##");
-            double op=((valor2-valor1)/valor1)*100;
+            double op=((valor2-valor1)/valor1);
             DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
             simbolos.setDecimalSeparator('.');
             DecimalFormat formateador = new DecimalFormat("####.##",simbolos);

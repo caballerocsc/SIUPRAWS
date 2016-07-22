@@ -563,25 +563,25 @@ public class Conversion {
         if (opcional) {
             listColumnas.add("[\"Compraventa2\", \"n\", \"120px\"]");
             listColumnas.add("[\"Variación Compraventa\", \"n\", \"120px\"]");
-            listColumnas.add("[\"Variación Porcentual Compraventa\", \"p\", \"50px\"]");
+            listColumnas.add("[\"Variación Porcentual Compraventa\", \"p:1\", \"50px\"]");
         }
         listColumnas.add("[\"Remate1\", \"n\", \"120px\"]");
         if (opcional) {
             listColumnas.add("[\"Remate2\", \"n\", \"120px\"]");
             listColumnas.add("[\"Variación Remate\", \"n\", \"120px\"]");
-            listColumnas.add("[\"Variación Porcentual Remate\", \"p\", \"50px\"]");
+            listColumnas.add("[\"Variación Porcentual Remate\", \"p:1\", \"50px\"]");
         }
         listColumnas.add("[\"Permuta1\", \"n\", \"120px\"]");
         if (opcional) {
             listColumnas.add("[\"Permuta2\", \"n\", \"120px\"]");
             listColumnas.add("[\"Variación Permuta\", \"n\", \"120px\"]");
-            listColumnas.add("[\"Variación Porcentual Permuta\", \"p\", \"50px\"]");
+            listColumnas.add("[\"Variación Porcentual Permuta\", \"p:1\", \"50px\"]");
         }
         listColumnas.add("[\"Hipoteca1\", \"n\", \"120px\"]");
         if (opcional) {
             listColumnas.add("[\"Hipoteca2\", \"n\", \"120px\"]");
             listColumnas.add("[\"Variación Hipoteca\", \"n\", \"120px\"]");
-            listColumnas.add("[\"Variación Porcentual Hipoteca\", \"p\", \"50px\"]");
+            listColumnas.add("[\"Variación Porcentual Hipoteca\", \"p:1\", \"50px\"]");
         }
         listColumnas.add("[\"Total Transacciones\", \"n\", \"150px\"]");
         if (opcional) {
@@ -865,9 +865,9 @@ public class Conversion {
         String tabla;
         for (Areas r : areas) {
             registros.add("[{},\""+r.getCodigoDane()+"\",\""+r.getDepartamento()+
-                    "\","+r.getCondicionante()+
-                    ","+r.getExclusion()+
-                    ","+r.getSinRestriccion()+
+                    "\","+r.getCondicionante().divide(new BigDecimal(100))+
+                    ","+r.getExclusion().divide(new BigDecimal(100))+
+                    ","+r.getSinRestriccion().divide(new BigDecimal(100))+
                     ","+r.getAreaDepto()+"]");
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
@@ -953,11 +953,11 @@ public class Conversion {
         for (Areas r : areas) {
             registros.add("[{},\""+r.getCodigoDane()+"\",\""+r.getDepartamento()+
                     "\","+r.getAreaIncl()+
-                    ","+r.getIncluidas()+
+                    ","+r.getIncluidas().divide(new BigDecimal(100))+
                     ","+r.getAreaCond()+
-                    ","+r.getCondicionante()+
+                    ","+r.getCondicionante().divide(new BigDecimal(100))+
                     ","+r.getAreaExcl()+
-                    ","+r.getExclusion()+
+                    ","+r.getExclusion().divide(new BigDecimal(100))+
                     ","+r.getAreaDepto()+"]");
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
@@ -1039,7 +1039,6 @@ public class Conversion {
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getArea()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #ff5500'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"es\":{\"exp\":"+tc.isDescTabla()+"}}]}" ;
         //creacion del grafico
@@ -1332,7 +1331,6 @@ public class Conversion {
                     + "\""+r.getDepartamento()+"\","
                     + "\""+r.getArea()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #009c4b'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"es\":{\"exp\":"+tc.isDescTabla()+"}}]}" ;
         //creacion del grafico
@@ -1389,7 +1387,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"Indicador de Concentración\", \"n:0\", \"175px\"]");
+        listColumnas.add("[\"Indicador de Concentración\", \"p:1\", \"175px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1397,10 +1395,9 @@ public class Conversion {
         for (Areas r : areas) {
             registros.add("[{},\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
-                    + r.getArea()+","
+                    + r.getArea().divide(new BigDecimal(100))+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #C6E0B3'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"es\":{\"exp\":"+tc.isDescTabla()+"}}]}" ;
         //creacion del grafico
@@ -1469,7 +1466,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con exclusión legal\", \"n:0\", \"240px\"]");
+        listColumnas.add("[\"% del suelo deptal con exclusión legal\", \"p:1\", \"240px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1477,7 +1474,7 @@ public class Conversion {
         for (Areas r : areas) {
             registros.add("[{},\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
-                    + r.getArea()+","
+                    + r.getArea().divide(new BigDecimal(100))+","
                     + "\""+r.getTipo()+"\"]");
         }
         tabla="\"dats\":["+addCommaString(registros)+"]";
@@ -1548,7 +1545,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con uso condicionado\", \"n:0\", \"250px\"]");
+        listColumnas.add("[\"% del suelo deptal con uso condicionado\", \"p:1\", \"250px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1556,10 +1553,9 @@ public class Conversion {
         for (Areas r : areas) {
             registros.add("[{},\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
-                    + r.getArea()+","
+                    + r.getArea().divide(new BigDecimal(100))+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #ED7D31'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"es\":{\"exp\":"+tc.isDescTabla()+"}}]}" ;
         //creacion del grafico
@@ -1629,7 +1625,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con conflicto por sobreutilización\", \"n:0\", \"315px\"]");
+        listColumnas.add("[\"% del suelo deptal con conflicto por sobreutilización\", \"p:1\", \"315px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1637,10 +1633,9 @@ public class Conversion {
         for (Areas r : areas) {
             registros.add("[{},\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
-                    + r.getArea()+","
+                    + r.getArea().divide(new BigDecimal(100))+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{}, \"\", \"<span style='float: center; font-weight: bold; background-color: #70AD46'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"es\":{\"exp\":"+tc.isDescTabla()+"}}]}" ;
         //creacion del grafico
@@ -1709,7 +1704,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con conflicto por subutilización\", \"n:0\", \"300px\"]");
+        listColumnas.add("[\"% del suelo deptal con conflicto por subutilización\", \"p:1\", \"300px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1717,10 +1712,9 @@ public class Conversion {
         for (Areas r : areas) {
             registros.add("[{\"c\":\"#"+coloresCategorias(r.getTipo())+"\"},\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
-                    + r.getArea()+","
+                    + r.getArea().divide(new BigDecimal(100))+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style='float: center; font-weight: bold; background-color: #70AD46'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Muy Bajo\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"es\":{\"exp\":"+tc.isDescTabla()+"}}]}" ;
         //creacion del grafico
@@ -1790,7 +1784,7 @@ public class Conversion {
         String column;
         listColumnas.add("[\"Código DANE\", \"t\", \"100px\"]");
         listColumnas.add("[\"Departamento\", \"t\", \"120px\"]");
-        listColumnas.add("[\"% del suelo deptal con uso adecuado\", \"n:0\", \"230px\"]");
+        listColumnas.add("[\"% del suelo deptal con uso adecuado\", \"p:1\", \"230px\"]");
         listColumnas.add("[\"Categoría\", \"t\", \"80px\"]");
         column = "\"colums\":[" + addCommaString(listColumnas) + "]";
         List<String> registros = new ArrayList();
@@ -1798,10 +1792,9 @@ public class Conversion {
         for (Areas r : areas) {
             registros.add("[{\"c\":\"#"+coloresCategorias(r.getTipo())+"\"},\""+r.getCodigoDane()+"\","
                     + "\""+r.getDepartamento()+"\","
-                    + r.getArea()+","
+                    + r.getArea().divide(new BigDecimal(100))+","
                     + "\""+r.getTipo()+"\"]");
         }
-        registros.add("[{\"c\": \"#ED7D31\"}, \"\", \"<span style='float: center; font-weight: bold; background-color: #ed7d31'>COLOMBIA</span>\", "+v.promedioAreas(areas, 5)+", \"Alto\"]");
         tabla="\"dats\":["+addCommaString(registros)+"]";
         String atTabs="\"atTabs\":{\"dats\":[{"+column+","+tabla+",\"es\":{\"exp\":"+tc.isDescTabla()+"}}]}" ;
         //creacion del grafico
